@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Coach Simulator</title>
+    <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/simulator.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Coach Simulator</span></h1>
+    <div class="toolbar-actions">
+      <button class="btn" id="fetchScenariosBtn" onclick="fetchScenariosFromSupabase()">Scarica scenari</button>
+      <button class="btn" onclick="showLog()">Log</button>
+      <button class="btn" id="backBtn" style="display:none" onclick="goBack()">Indietro</button>
+    </div>
+  </div>
+
+  <!-- Step 0: Scenario list -->
+  <div class="view active" id="view-scenarios">
+    <div class="step-title">Scegli uno scenario</div>
+    <div class="difficulty-filter" id="diffFilter"></div>
+    <div id="resumeBox" style="display:none; margin-bottom:16px;"></div>
+    <div class="scenario-list" id="scenarioList"></div>
+  </div>
+
+  <!-- Step 1: Emotion -->
+  <div class="view" id="view-emotion">
+    <div class="step-bar" id="stepBar1"></div>
+    <div class="client-quote" id="clientText1"></div>
+    <div class="step-title">Quale emozione riconosci?</div>
+    <div class="e-view-toggle" id="eViewToggle">
+      <button id="btnCompact" class="active" onclick="setEView('compact')">Compatta</button>
+      <button id="btnDetail" onclick="setEView('detail')">Dettagli</button>
+    </div>
+    <div class="e-grid compact" id="eGrid"></div>
+    <div id="feedbackE"></div>
+    <div class="nav-buttons" id="navE" style="display:none">
+      <button class="btn" onclick="goBack()">Indietro</button>
+      <button class="btn primary" onclick="goToStep(2)">Avanti</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Pattern -->
+  <div class="view" id="view-pattern">
+    <div class="step-bar" id="stepBar2"></div>
+    <div class="client-quote" id="clientText2"></div>
+    <div class="step-title">Quale pattern esplori?</div>
+    <div class="p-list" id="pList"></div>
+    <div id="feedbackP"></div>
+    <div class="nav-buttons" id="navP" style="display:none">
+      <button class="btn" onclick="goBack()">Indietro</button>
+      <button class="btn primary" onclick="goToStep(3)">Avanti</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Intervention (cross) -->
+  <div class="view" id="view-intervention">
+    <div class="step-bar" id="stepBar3"></div>
+    <div class="client-quote" id="clientText3"></div>
+    <div class="step-title">Quale intervento scegli?</div>
+    <div class="e-view-toggle" id="iViewToggle">
+      <button id="btnICompact" class="active" onclick="setIView('compact')">Compatta</button>
+      <button id="btnIDetail" onclick="setIView('detail')">Croce</button>
+    </div>
+    <div id="iCompactView" class="i-compact-view"></div>
+    <div class="cross-container" id="crossContainer" style="display:none">
+      <div class="cross-layout" id="crossLayout"></div>
+    </div>
+    <div id="feedbackI"></div>
+    <div class="nav-buttons" id="navI" style="display:none">
+      <button class="btn" onclick="goBack()">Indietro</button>
+      <button class="btn primary" onclick="saveTurn()">Salva turno</button>
+    </div>
+  </div>
+
+  <!-- Step 4: Result -->
+  <div class="view" id="view-result">
+    <div class="step-title" style="text-align:center">Risultato</div>
+    <div class="client-quote" id="clientTextResult"></div>
+    <div class="total-score" id="totalScore"></div>
+    <div class="result-summary" id="resultSummary"></div>
+    <div class="solution-toggle"><button class="btn" id="solToggleBtn" onclick="toggleSolution()">Vedi soluzione</button></div>
+    <div class="solution-panel" id="solutionPanel"></div>
+    <div class="notes-section">
+      <label for="turnNotes">Note e ragionamenti</label>
+      <textarea id="turnNotes" placeholder="Es. &quot;Perch&eacute; non Cog?&quot;, &quot;Ansia non andava bene?&quot;..."></textarea>
+      <div class="notes-hint">Le note vengono salvate nel log insieme al punteggio</div>
+    </div>
+    <div class="result-actions">
+      <button class="btn" onclick="tryAlternatives()">Prova alternative</button>
+      <button class="btn primary" onclick="newScenario()">Nuovo scenario</button>
+    </div>
+  </div>
+
+  <!-- Log overlay -->
+  <div class="log-overlay" id="logOverlay" onclick="if(event.target===this)closeLog()">
+    <div class="log-panel">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+        <h2>Log sessioni</h2>
+        <button class="btn" onclick="closeLog()" style="padding:4px 10px">Chiudi</button>
+      </div>
+      <div id="logContent"></div>
+      <div style="display:flex; gap:8px; margin-top:16px; flex-wrap:wrap;">
+        <button class="btn" onclick="exportJSON()">Esporta JSON</button>
+        <button class="btn" onclick="exportCSV()">Esporta CSV</button>
+        <button class="btn" onclick="clearLog()" style="color:#dc2626; border-color:#fca5a5;">Pulisci log</button>
+      </div>
+    </div>
+  </div>
+
+    <script src="data/EPIC_data.js"></script>
+  <script src="data/scenarios.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/simulator.js"></script>
+</body>
+</html>
