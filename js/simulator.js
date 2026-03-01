@@ -181,11 +181,13 @@
       const list = document.getElementById('scenarioList');
       list.innerHTML = filtered.map(s => {
         const teaser = s.client_text.length > 120 ? s.client_text.slice(0, 120) + '...' : s.client_text;
-        const diffLabel = s.difficulty ? '<div class="sc-diff diff-' + s.difficulty + '">' + s.difficulty + '</div>' : '';
+        const scenarioId = s.id ? '<span class="sc-id">ID: ' + esc(s.id) + '</span>' : '';
+        const diffLabel = s.difficulty ? '<span class="sc-diff diff-' + s.difficulty + '">' + esc(s.difficulty) + '</span>' : '';
+        const meta = (scenarioId || diffLabel) ? '<div class="sc-meta">' + scenarioId + diffLabel + '</div>' : '';
         return '<div class="scenario-card" onclick="selectScenario(\'' + s.id + '\')">' +
           '<div class="sc-title">' + esc(s.title) + '</div>' +
           '<div class="sc-teaser">' + esc(teaser) + '</div>' +
-          diffLabel +
+          meta +
         '</div>';
       }).join('');
     }
