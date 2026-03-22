@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Explorer</title>
+    <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/explorer.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Explorer</span></h1>
+    <div class="toolbar-actions">
+      <a class="btn" href="index.html">Home</a>
+      <button class="btn" id="backBtn" style="display:none" onclick="goBack()">Indietro</button>
+    </div>
+  </div>
+
+  <!-- Step 0: Home / E + Intent -->
+  <div class="view active" id="view-emotion">
+    <div class="step-bar" id="stepBar1"></div>
+    <div class="step-title">Scegli un'emozione</div>
+    <div class="e-view-toggle" id="eViewToggle">
+      <button id="btnCompact" class="active" onclick="setEView('compact')">Compatta</button>
+      <button id="btnDetail" onclick="setEView('detail')">Dettagli</button>
+    </div>
+    <div class="e-grid compact" id="eGrid"></div>
+
+    <div class="intent-section" id="intentSection">
+      <div class="intent-label">Cosa vuoi fare? (opzionale)</div>
+      <div class="intent-chips" id="intentChips">
+        <div class="intent-chip" data-intent="fare" onclick="toggleIntent('fare')">Fare</div>
+        <div class="intent-chip" data-intent="capire" onclick="toggleIntent('capire')">Capire</div>
+        <div class="intent-chip" data-intent="allinearsi" onclick="toggleIntent('allinearsi')">Allinearsi</div>
+      </div>
+    </div>
+
+    <div class="nav-buttons" id="navE" style="display:none">
+      <button class="btn primary" onclick="goToStep(2)">Avanti</button>
+    </div>
+  </div>
+
+  <!-- Step 2: Pattern -->
+  <div class="view" id="view-pattern">
+    <div class="step-bar" id="stepBar2"></div>
+    <div class="step-title">Quale pattern esplori?</div>
+    <div class="p-list" id="pList"></div>
+    <div class="nav-buttons">
+      <button class="btn" onclick="goBack()">Indietro</button>
+    </div>
+  </div>
+
+  <!-- Step 3: Interventions -->
+  <div class="view" id="view-intervention">
+    <div class="step-bar" id="stepBar3"></div>
+    <div class="step-title">Interventi</div>
+    <div class="e-view-toggle" id="iViewToggle">
+      <button id="btnICompact" class="active" onclick="setIView('compact')">Compatta</button>
+      <button id="btnIDetail" onclick="setIView('detail')">Croce</button>
+    </div>
+    <div id="iCompactView" class="i-compact-view"></div>
+    <div class="cross-container" id="crossContainer" style="display:none">
+      <div class="cross-layout" id="crossLayout"></div>
+    </div>
+    <div class="nav-buttons">
+      <button class="btn" onclick="goBack()">Indietro</button>
+      <button class="btn primary" onclick="newExploration()">Nuova esplorazione</button>
+    </div>
+  </div>
+
+    <script src="data/EPIC_data.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="js/explorer.js"></script>
+</body>
+</html>

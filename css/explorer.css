@@ -1,0 +1,76 @@
+/* ---- EXPLORER-SPECIFIC CSS ---- */
+
+    /* ---- STEP INDICATOR ---- */
+    .step-bar{ display: flex; gap: 4px; margin-bottom: 24px; align-items: center; }
+    .step-dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.3s; }
+    .step-dot.done{ background: var(--score-high); }
+    .step-dot.current{ background: var(--fg); }
+    .step-line{ flex: 1; height: 2px; background: var(--border); }
+    .step-label{ font-size: var(--fs-xs); color: var(--muted); margin-left: 8px; }
+
+    /* ---- INTENT SELECTOR ---- */
+    .intent-section{ margin-bottom: 24px; }
+    .intent-label{ font-size: var(--fs-sm); font-weight: 600; color: var(--muted); margin-bottom: 10px; }
+
+    .intent-chips{ display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .intent-chip{
+      padding: 10px 20px;
+      border-radius: 24px;
+      border: 2px solid var(--border);
+      background: #fff;
+      cursor: pointer;
+      font-size: var(--fs-md);
+      font-weight: 600;
+      transition: all 0.2s ease;
+      user-select: none;
+    }
+
+    .intent-chip:hover{ border-color: var(--muted-light); transform: translateY(-1px); }
+
+    .intent-chip.active-fare{
+      background: rgba(16,185,129,0.1);
+      border-color: var(--type-comp);
+      color: var(--type-comp);
+    }
+    .intent-chip.active-capire{
+      background: rgba(59,130,246,0.1);
+      border-color: var(--type-cog);
+      color: var(--type-cog);
+    }
+    .intent-chip.active-allinearsi{
+      background: rgba(251,146,60,0.1);
+      border-color: var(--type-emo);
+      color: var(--type-emo);
+    }
+
+    /* ---- I HIGHLIGHT (intent match) ---- */
+    .i-compact-card.intent-match{
+      border-color: var(--fg);
+      background: rgba(0,0,0,0.02);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .i-compact-card .intent-badge{
+      display: none;
+      font-size: var(--fs-xxs);
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .i-compact-card.intent-match .intent-badge{ display: inline-block; }
+
+    .intent-badge.badge-fare{ background: rgba(16,185,129,0.15); color: #059669; }
+    .intent-badge.badge-capire{ background: rgba(59,130,246,0.15); color: #2563eb; }
+    .intent-badge.badge-allinearsi{ background: rgba(251,146,60,0.15); color: #ea580c; }
+
+    /* Cross view intent highlight */
+    .i-selectable.intent-match{
+      border-color: var(--fg) !important;
+      box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    }

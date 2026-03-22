@@ -1,0 +1,1386 @@
+{
+"E": [
+{
+"id": "E1",
+"label": "Ansia",
+"subtypes": [
+"Prestazionale",
+"Relazionale",
+"Anticipatoria"
+],
+"patterns_high": [
+"P1",
+"P6"
+],
+"patterns_medium": [
+"P2",
+"P9",
+"P4",
+"P7"
+],
+"aliases": [
+"agitazione",
+"tensione",
+"preoccupazione",
+"nodo allo stomaco"
+],
+"red_flags": [
+"assenza di attivazione",
+"apatia marcata",
+"indifferenza",
+"assenza di focus sul futuro"
+],
+"non_e_questa_se": [
+"energia bassa → possibile E6",
+"nessuna anticipazione → possibile E2/P7"
+],
+"quando_la_vedi": [
+"attivazione alta",
+"focus sul futuro → scenari negativi",
+"spinta a preparare molto"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+},
+{
+"id": "E2",
+"label": "Paura",
+"subtypes": [
+"Esposizione",
+"Incertezza",
+"Conseguenze"
+],
+"patterns_high": [
+"P2",
+"P5",
+"P7"
+],
+"patterns_medium": [
+"P9",
+"P11",
+"P10"
+],
+"aliases": [
+"evitamento",
+"blocco",
+"allarme interno",
+"mi tiro indietro"
+],
+"red_flags": [
+"assenza minaccia",
+"confusione diffusa",
+"apatia profonda",
+"ritiro totale"
+],
+"non_e_questa_se": [
+"assenza di minaccia percepita → possibile E1",
+"autocritica focalizzata su sé → possibile P9"
+],
+"quando_la_vedi": [
+"orientamento alla minaccia",
+"evitamento forte"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+},
+{
+"id": "E3",
+"label": "Frustrazione",
+"subtypes": [
+"Blocco",
+"Ingiustizia percepita",
+"Attesa prolungata"
+],
+"patterns_high": [
+"P3",
+"P4",
+"P11"
+],
+"patterns_medium": [
+"P12",
+"P7",
+"P10"
+],
+"aliases": [
+"impotenza",
+"irritazione",
+"stallo",
+"non va avanti"
+],
+"red_flags": [
+"assenza tensione",
+"assenza obiettivo",
+"stanchezza marcata"
+],
+"non_e_questa_se": [
+"molta energia verso fuori → possibile E5",
+"energia molto bassa → possibile E6"
+],
+"quando_la_vedi": [
+"tentativi senza progresso",
+"sensazione di 'non è giusto'"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+},
+{
+"id": "E4",
+"label": "Stress / Sfinimento",
+"subtypes": [
+"Sovraccarico",
+"Recupero insufficiente",
+"Mancanza di chiarezza"
+],
+"patterns_high": [
+"P4",
+"P1"
+],
+"patterns_medium": [
+"P6",
+"P2",
+"P7",
+"P10"
+],
+"aliases": [
+"sovraccarico",
+"sfinimento",
+"pressione",
+"troppo da reggere"
+],
+"red_flags": [
+"assenza sovraccarico",
+"alta energia arrabbiata",
+"trance",
+"immobilità non motivata"
+],
+"non_e_questa_se": [
+"segni fisici significativi / compromissione → valutare sanitario",
+"energia orientata all'esterno → possibile E5"
+],
+"quando_la_vedi": [
+"troppe cose → nessuna chiara",
+"fatica + difficoltà a scegliere"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+},
+{
+"id": "E5",
+"label": "Rabbia / Irritazione",
+"subtypes": [
+"Opposizione/resistenza",
+"Attrito interpersonale",
+"Ostacolo inatteso"
+],
+"patterns_high": [
+"P3",
+"P4",
+"P12"
+],
+"patterns_medium": [
+"P7",
+"P10",
+"P5"
+],
+"aliases": [
+"fastidio",
+"risentimento",
+"esplodo dentro",
+"mi sale"
+],
+"red_flags": [
+"energia bassa",
+"tristezza predominante",
+"evitamento passivo",
+"azione inesistente"
+],
+"non_e_questa_se": [
+"energia molto bassa → E6",
+"rivolta verso sé → possibile P9"
+],
+"quando_la_vedi": [
+"energia alta",
+"spinta verso l'esterno"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+},
+{
+"id": "E6",
+"label": "Apatia / Tristezza",
+"subtypes": [
+"Demotivazione",
+"Ritiro",
+"Sfiducia"
+],
+"patterns_high": [
+"P5",
+"P8",
+"P11"
+],
+"patterns_medium": [
+"P2",
+"P6",
+"P10"
+],
+"aliases": [
+"vuoto",
+"disconnessione",
+"spento",
+"senza energia"
+],
+"red_flags": [
+"alta energia",
+"agitazione",
+"lotta",
+"tentativi ripetuti senza ritiro"
+],
+"non_e_questa_se": "attivazione alta → E3/E5",
+"quando_la_vedi": [
+"energia bassa",
+"perdita di spinta → 'tanto non serve'"
+],
+"hint": "",
+"porta_I": "",
+"note": ""
+}
+],
+"P": [
+{
+"id": "P1",
+"label": "Perfezione",
+"aliases": [
+"standard impossibili",
+"bisogno di controllo",
+"mai-abbastanza"
+],
+"shorts": [
+"Non è mai abbastanza",
+"Non è ancora pronto",
+"Mi manca qualcosa"
+],
+"why": "Blocca l’azione perché nulla sembra abbastanza buono.",
+"segnali": [
+"standard irrealistici",
+"autocritica costante",
+"paura errore",
+"iper-preparazione"
+],
+"hint": "definisci 'abbastanza buono'",
+"non_e_questo_se": "0/100 → probabile P11",
+"porta_I": "I-P1-Cog"
+},
+{
+"id": "P2",
+"label": "Sfiducia",
+"aliases": [
+"bassa autoefficacia",
+"autosvalutazione",
+"senso di inadeguatezza"
+],
+"shorts": [
+"Mi sento incapace",
+"Non io",
+"Cosa ho io da dare?"
+],
+"why": "Riduce l’iniziativa e aumenta dipendenza da conferme esterne.",
+"segnali": [
+"sfiducia nelle risorse",
+"minimizzazione successi",
+"auto-svalutazione",
+"dipendenza guida"
+],
+"hint": "mostra evidenza che già puoi",
+"non_e_questo_se": "timore di perdere → probabile P7",
+"porta_I": "I-P2-Cog"
+},
+{
+"id": "P3",
+"label": "Attribuzione",
+"aliases": [
+"bias relazionale",
+"lettura della mente",
+"attribuzione ostile"
+],
+"shorts": [
+"Lo fa contro di me",
+"Pensa che io...",
+"Lo fa apposta",
+"So già cosa pensa"
+],
+"why": "Complica relazioni e genera conflitti evitabili.",
+"segnali": [
+"attribuzione intenzioni",
+"rigidità percettiva",
+"lettura della mente",
+"giudizio rapido"
+],
+"hint": "cerca bisogno → riduci attribuzione",
+"non_e_questo_se": "eviti per piacere → probabile P4",
+"porta_I": "I-P3-Comp"
+},
+{
+"id": "P4",
+"label": "Confini",
+"aliases": [
+"compiacenza",
+"accomodamento eccessivo",
+"fusione relazionale"
+],
+"shorts": [
+"Non riesco a dire no",
+"Mi adatto",
+"Faccio io"
+],
+"why": "Porta sovraccarico, risentimento e perdita di identità.",
+"segnali": [
+"difficoltà dire no",
+"sovraccarico",
+"paura giudizio",
+"fusione identitaria"
+],
+"hint": "porta al bisogno → formula richiesta",
+"non_e_questo_se": "vedi cattiva intenzione → probabile P3",
+"porta_I": "I-P4-Comp"
+},
+{
+"id": "P5",
+"label": "Evitamento",
+"aliases": [
+"status quo",
+"procrastinazione",
+"blocco decisionale"
+],
+"shorts": [
+"Non adesso",
+"Ci penso",
+"Vediamo"
+],
+"why": "Protegge dal rischio ma blocca crescita e cambiamento.",
+"segnali": [
+"procrastinazione",
+"congelamento",
+"minimizzazione rischio"
+],
+"hint": "micro → aggancio",
+"non_e_questo_se": "non fai per rischio perdita → P7",
+"porta_I": "I-P5-Comp"
+},
+{
+"id": "P6",
+"label": "Ruminazione",
+"aliases": [
+"rimuginio cognitivo",
+"overthinking",
+"iper-analisi"
+],
+"shorts": [
+"Ci devo pensare ancora",
+"Devo capirlo bene",
+"Non sono sicuro"
+],
+"why": "Consuma energia e impedisce scelte utili.",
+"segnali": [
+"loop analitici",
+"iper-analisi",
+"blocco decisionale"
+],
+"hint": "separa: pensiero → evento mentale",
+"non_e_questo_se": "tema merito/vergogna → P9",
+"porta_I": "I-P6-Emo"
+},
+{
+"id": "P7",
+"label": "Perdita",
+"aliases": [
+"loss aversion",
+"sovraprotezione",
+"prudenza eccessiva"
+],
+"shorts": [
+"E se poi va male?",
+"Non voglio rischiare"
+],
+"why": "Mantiene abitudini sicure e frena opportunità.",
+"segnali": [
+"prudenza eccessiva",
+"focalizzazione perdita"
+],
+"hint": "micro-test reversibile",
+"non_e_questo_se": "incapace → P2",
+"porta_I": "I-P7-Comp"
+},
+{
+"id": "P8",
+"label": "Miopia",
+"aliases": [
+"sconto del futuro",
+"separato dal sé futuro",
+"breve termine"
+],
+"shorts": [
+"Ci penserò",
+"Viviamo oggi",
+"Si vive una volta sola"
+],
+"why": "Compromette scelte strategiche e disciplina utile.",
+"segnali": [
+"scarsa visione",
+"difficoltà investimento"
+],
+"hint": "allinea al sé del futuro",
+"non_e_questo_se": "tema identità/metro esterno → P10",
+"porta_I": "I-P8-Cog"
+},
+{
+"id": "P9",
+"label": "Impostura",
+"aliases": [
+"sindrome dell'impostore",
+"percezione di frode",
+"svalutazione competenza"
+],
+"shorts": [
+"Non me lo merito",
+"È stato solo fortuna",
+"Prima o poi mi sgamano"
+],
+"why": "Erode sicurezza e visibilità del proprio valore.",
+"segnali": [
+"attribuzione fortuna",
+"paura di essere smascherato",
+"autosabotaggio"
+],
+"hint": "riconosci merito → normalizza",
+"non_e_questo_se": "pensiero in loop → P6",
+"porta_I": "I-P9-Cog"
+},
+{
+"id": "P10",
+"label": "Conformità",
+"aliases": [
+"approval seeking",
+"validazione esterna",
+"dipendenza dal giudizio"
+],
+"shorts": [
+"Mi serve che piaccia",
+"Dimmi se va bene",
+"Se non va bene?"
+],
+"why": "Porta a scelte guidate dagli altri, non da ciò che conta per sé.",
+"segnali": [
+"ricerca approvazione",
+"ipersensibilità al giudizio",
+"insicurezza",
+"conformismo relazionale",
+"paura del successo"
+],
+"hint": "porta al metro interno",
+"non_e_questo_se": "evitare attrito → P4",
+"porta_I": "I-P10-Cog"
+},
+{
+"id": "P11",
+"label": "Rigidità",
+"aliases": [
+"pensiero tutto-o-niente",
+"polarizzazione",
+"binarismo"
+],
+"shorts": [
+"O così o niente",
+"Se non ho questo non parto nemmeno"
+],
+"why": "Ostacola progressi graduali.",
+"segnali": [
+"rigidità binaria",
+"catastrofizzazione",
+"polarizzazione"
+],
+"hint": "trova la zona grigia",
+"non_e_questo_se": "standard altissimi → P1",
+"porta_I": "I-P11-Cog"
+},
+{
+"id": "P12",
+"label": "Conferma",
+"aliases": [
+"confirmation bias",
+"selezione confermativa",
+"filtro informativo"
+],
+"shorts": [
+"Ho già capito",
+"Lo so già"
+],
+"why": "Limita apprendimento e blocca nuove possibilità.",
+"segnali": [
+"resistenza alla disconferma",
+"visione parziale",
+"filtraggio informativo"
+],
+"hint": "porta 2a ipotesi",
+"non_e_questo_se": "non agisce per paura → P2/P7",
+"porta_I": "I-P12-Cog"
+}
+],
+"I": [
+{
+"id": "I-P1-Cog",
+"pattern": "P1",
+"type": "cognitive",
+"label": "Scegliere il “buono abbastanza”",
+"aka": [
+"standard sostenibili",
+"qualità sufficiente"
+],
+"principle": "Esplorare il minimo accettabile e sostenibile.",
+"why": "Aiuta a ridurre rigidità e pressione interna.",
+"serve_a": "definire uno standard minimo praticabile",
+"verbo_mentale": "RIDIMENSIONARE",
+"how_to": "definisci il requisito minimo utile → scegli l’opzione che lo soddisfa.",
+"example_q": "Qual è un risultato “abbastanza buono” per te qui?",
+"example_C": "Scegli uno standard “abbastanza buono” da applicare a un compito reale.",
+"fallback": "Reframing: perfezione → “abbastanza bene”",
+"tags": [
+"perfezionismo",
+"standard",
+"soglia"
+],
+"note": ""
+},
+{
+"id": "I-P1-Comp",
+"pattern": "P1",
+"type": "behavioral",
+"label": "Riduci il costo della perfezione",
+"aka": [
+"semplificare",
+"delegare"
+],
+"principle": "Ridurre lo standard per agire.",
+"why": "Permette di procedere con risorse realistiche.",
+"serve_a": "ridurre sprechi nel perseguire la perfezione",
+"verbo_mentale": "ALLEGERIRE",
+"how_to": "elenca cosa serve per farlo “perfetto” → tieni solo ciò che crea valore e agisci.",
+"example_q": "Dove il 100% ti sta rallentando inutilmente?",
+"example_C": "Togli un singolo requisito non essenziale.",
+"fallback": "Come puoi rendere questo passo più leggero, ora?",
+"tags": [
+"micro_azione",
+"standard_minimo"
+],
+"note": ""
+},
+{
+"id": "I-P1-Emo",
+"pattern": "P1",
+"type": "emotional",
+"label": "Disaccoppiare la scelta dalla tensione",
+"aka": [
+"tensione ≠ criterio",
+"scelta valida",
+"pressione interna"
+],
+"principle": "La tensione segnala uno standard interno attivo, non un divieto di agire.",
+"why": "Permette di scegliere senza aspettare che la tensione sparisca.",
+"serve_a": "ridurre la pressione interna quel tanto che basta per poter scegliere",
+"verbo_mentale": "DISACCOPPIARE",
+"how_to": "riconosci la tensione legata allo “standard ideale” e concediti di non doverla risolvere ora",
+"example_q": "Se la tensione resta, quale scelta rimane comunque valida per te?",
+"example_C": "Nota la sensazione di “non è abbastanza” e fai comunque il passo minimo previsto",
+"fallback": "Fai un respiro lento e scegli comunque un micro-passo.",
+"tags": [
+"perfezionismo",
+"pressione",
+"scelta"
+],
+"note": ""
+},
+{
+"id": "I-P2-Cog",
+"pattern": "P2",
+"type": "cognitive",
+"label": "Riconoscere competenze già dimostrate",
+"aka": [
+"riconoscere capacità",
+"mettere a fuoco risorse"
+],
+"principle": "Riscoprire competenze già usate con successo.",
+"why": "Evidenzia capacità esistenti, facilitando la scelta.",
+"serve_a": "riconoscere risorse e capacità già presenti",
+"verbo_mentale": "RICONOSCERE CAPACITÀ",
+"how_to": "identifica un risultato già ottenuto → collegalo all’azione imminente come prova.",
+"example_q": "Quando hai gestito qualcosa di simile con successo?",
+"example_C": "Riconosci una capacità già usata in situazioni simili e decidi come riattivarla.",
+"fallback": "Quale pezzo puoi riusare subito?",
+"tags": [
+"autoefficacia",
+"risorse"
+],
+"note": ""
+},
+{
+"id": "I-P2-Comp",
+"pattern": "P2",
+"type": "behavioral",
+"label": "Agire subito con un passo semplice",
+"aka": [
+"prime mosse",
+"prove rapide"
+],
+"principle": "Scegliere un'azione a basso rischio e alta utilità.",
+"why": "Costruisce autoefficacia tramite prove rapide.",
+"serve_a": "ricostruire auto-efficacia con prove rapide",
+"verbo_mentale": "DIMOSTRARE",
+"how_to": "scegli un micro-passo che puoi fare ora → fallo subito per generare prova.",
+"example_q": "Qual è un’azione minima, dimostrativa, che potresti provare ora?",
+"example_C": "Prova una versione ridotta dell’azione che avevi in mente.",
+"fallback": "Come puoi fare un passo ancora più piccolo, adesso?",
+"tags": [
+"autoefficacia",
+"azione"
+],
+"note": ""
+},
+{
+"id": "I-P2-Emo",
+"pattern": "P2",
+"type": "emotional",
+"label": "Riconoscere momenti di padronanza",
+"aka": [
+"familiarità",
+"tracce di riuscita"
+],
+"principle": "I piccoli successi mostrano capacità già presenti.",
+"why": "Richiama esperienze riuscite, riducendo l’incertezza e facilitando l’avvio.",
+"serve_a": "ridurre l’insicurezza richiamando esperienze riuscite",
+"verbo_mentale": "RIATTIVARE",
+"how_to": "ricorda un momento in cui hai gestito qualcosa di simile → nota cosa avevi fatto",
+"example_q": "Quando ti sei sentito capace in qualcosa di simile?",
+"example_C": "Identifica un elemento di quel successo che puoi riusare ora",
+"fallback": "Reframing: incapace → capace-abbastanza",
+"tags": [
+"successo_passato",
+"auto_efficacia"
+],
+"note": ""
+},
+{
+"id": "I-P3-Cog",
+"pattern": "P3",
+"type": "cognitive",
+"label": "Vedere l’altra prospettiva",
+"aka": [
+"metaposizione",
+"seconda lettura",
+"occhi dell’altro"
+],
+"principle": "Rileggere le intenzioni altrui.",
+"why": "Riduce attribuzioni negative automatiche.",
+"serve_a": "vedere intenzioni e prospettive alternative",
+"verbo_mentale": "CONSIDERARE ALTERNATIVE",
+"how_to": "formula almeno una seconda possibile interpretazione dell’intenzione altrui.",
+"example_q": "Che altra intenzione potresti ipotizzare?",
+"example_C": "Formula e annota un’interpretazione alternativa plausibile.",
+"fallback": "Quale intenzione alternativa potresti ipotizzare?",
+"tags": [
+"relazione",
+"prospettiva"
+],
+"note": ""
+},
+{
+"id": "I-P3-Comp",
+"pattern": "P3",
+"type": "behavioral",
+"label": "Chiarire il punto di vista altrui",
+"aka": [
+"domande di chiarimento",
+"empatia strategica"
+],
+"principle": "Comprendere strategicamente la posizione altrui.",
+"why": "Chiarisce interessi e limiti, permettendo passi utili anche nel disaccordo.",
+"serve_a": "agire comprendendo meglio il punto di vista altrui",
+"verbo_mentale": "COINVOLGERE",
+"how_to": "formula una domanda che esplori il significato o l’intenzione dietro la loro azione.",
+"example_q": "Cosa ti serve capire meglio della loro prospettiva?",
+"example_C": "Poni una domanda genuina per chiarire la loro intenzione.",
+"fallback": "Come puoi fare una domanda che chiarisca la loro intenzione?",
+"tags": [
+"relazione",
+"empatia"
+],
+"note": ""
+},
+{
+"id": "I-P3-Emo",
+"pattern": "P3",
+"type": "emotional",
+"label": "Riconosci il bisogno alla base",
+"aka": [
+"bisogno",
+"legittimare"
+],
+"principle": "Riconoscere il bisogno dietro l’emozione protettiva.",
+"why": "Sposta l'attenzione da \"colpa loro\" a \"cosa mi serve\".",
+"serve_a": "riconoscere il bisogno emotivo coinvolto per ridurre la reattività",
+"verbo_mentale": "RICONOSCERE",
+"how_to": "nomina l’emozione → identifica il bisogno correlato.",
+"example_q": "Quale tuo bisogno importante senti toccato qui?",
+"example_C": "Riconosci e formula il tuo bisogno legittimo.",
+"fallback": "Reframing: colpa loro → bisogno mio",
+"tags": [
+"bisogno",
+"legittimazione"
+],
+"note": ""
+},
+{
+"id": "I-P4-Cog",
+"pattern": "P4",
+"type": "cognitive",
+"label": "Proteggere i propri valori chiave",
+"aka": [
+"valori guida",
+"priorità interne"
+],
+"principle": "Riconoscere i costi nascosti protegge ciò che è importante.",
+"why": "Rende esplicite le priorità e i valori, facilitando prese di posizione autonome.",
+"serve_a": "chiarire valori e costi del dire “sì”",
+"verbo_mentale": "SELEZIONARE",
+"how_to": "identifica a cosa diresti “no” per difendere un valore chiave.",
+"example_q": "Cosa vai a sacrificare quando dici “sì”?",
+"example_C": "Identifica un valore personale a rischio quando dici “sì”.",
+"fallback": "Reframing: No → protettivo",
+"tags": [
+"confini",
+"valori"
+],
+"note": ""
+},
+{
+"id": "I-P4-Comp",
+"pattern": "P4",
+"type": "behavioral",
+"label": "Dire “no” in modo assertivo",
+"aka": [
+"assertività",
+"negoziare confini"
+],
+"principle": "Dire “no” tutela valori e priorità.",
+"why": "Definisce confini chiari, proteggendo ciò che conta senza danneggiare la relazione.",
+"serve_a": "costruire comunicazioni di “no” efficaci",
+"verbo_mentale": "DEFINIRE CONFINI",
+"how_to": "allena formulazione di un “no” rispettoso",
+"example_q": "Come puoi dire “no” proteggendo te e la relazione?",
+"example_C": "Prepara una frase di “no” che rispetti te e l’altro.",
+"fallback": "Come puoi esprimere il tuo “no” con chiarezza e rispetto?",
+"tags": [
+"confini",
+"assertività"
+],
+"note": ""
+},
+{
+"id": "I-P4-Emo",
+"pattern": "P4",
+"type": "emotional",
+"label": "Onorare la propria dignità",
+"aka": [
+"rispetto di sé",
+"limite interno"
+],
+"principle": "La dignità precede l’adattamento.",
+"why": "Fa emergere il confine prima di spiegare.",
+"serve_a": "sentirsi autorizzati ad avere un limite",
+"verbo_mentale": "ONORARE",
+"how_to": "nota cosa stai accettando e chiediti se è ok per te",
+"example_q": "Questo, così com’è, è davvero ok per te?",
+"example_C": "Fermati un attimo prima di adattarti e verifica se stai rispettando te.",
+"fallback": "Qual è il limite minimo che tieni ora?",
+"tags": [
+"dignità",
+"confini",
+"rispetto_di_sé"
+],
+"note": ""
+},
+{
+"id": "I-P5-Cog",
+"pattern": "P5",
+"type": "cognitive",
+"label": "Valutare il costo di non agire",
+"aka": [
+"costo inazione",
+"proiezione nel tempo"
+],
+"principle": "Rendere visibili le conseguenze future.",
+"why": "Avvicina il costo di “poi”, facilitando la scelta ora.",
+"serve_a": "rendere evidente il costo della non-azione",
+"verbo_mentale": "VALUTARE CONSEGUENZE",
+"how_to": "considera gli effetti futuri del non agire.",
+"example_q": "Quanto vale quello che stai perdendo?",
+"example_C": "Considera le conseguenze di restare fermi rispetto al tema attuale.",
+"fallback": "Reframing: inazione → costo elevato",
+"tags": [
+"costo_rimando",
+"scelta"
+],
+"note": ""
+},
+{
+"id": "I-P5-Comp",
+"pattern": "P5",
+"type": "behavioral",
+"label": "Rompere il blocco con micro-azione",
+"aka": [
+"micro-passo",
+"azione minima"
+],
+"principle": "Definire un micro-passo sostenibile.",
+"why": "Riduce lo stallo con passi ridicolmente piccoli.",
+"serve_a": "rimuovere blocchi con passi ridicolmente piccoli",
+"verbo_mentale": "SBLOCCARE",
+"how_to": "scegli un’azione minima che puoi fare subito e falla.",
+"example_q": "Qual è un primo movimento semplice?",
+"example_C": "Definisci il primo passo utile per sciogliere lo stallo.",
+"fallback": "Come puoi rendere il primo passo ancora più semplice?",
+"tags": [
+"evitamento",
+"azione"
+],
+"note": ""
+},
+{
+"id": "I-P5-Emo",
+"pattern": "P5",
+"type": "emotional",
+"label": "Consentire l’avvio senza slancio",
+"aka": [
+"partire senza voglia",
+"permesso interno"
+],
+"principle": "L’azione può iniziare senza motivazione.",
+"why": "Riduce l’attesa di “sentirsi pronti”.",
+"serve_a": "sentire che si può partire anche senza slancio",
+"verbo_mentale": "CONSENTIRE",
+"how_to": "nota la spinta a rimandare e consenti un primo passo minimo",
+"example_q": "Se non servisse sentirti pronto, quale passo faresti ora?",
+"example_C": "Avvia un gesto minimo anche mentre senti resistenza.",
+"fallback": "Reframing: non pronto → posso iniziare",
+"tags": [
+"evitamento",
+"avvio",
+"permesso"
+],
+"note": ""
+},
+{
+"id": "I-P6-Cog",
+"pattern": "P6",
+"type": "cognitive",
+"label": "Distinguere pensieri utili da rumore",
+"aka": [
+"distinguere utile",
+"disinnescare rumore"
+],
+"principle": "Valutare l'utilità reale del pensiero.",
+"why": "Riduce il rumore e allenta la presa del pensiero ripetitivo.",
+"serve_a": "distinguere pensiero utile da rumore",
+"verbo_mentale": "VALUTARE UTILITÀ",
+"how_to": "chiediti se il pensiero ti è utile per la scelta attuale.",
+"example_q": "Se ti vedessi da fuori, cosa penseresti di questa preoccupazione?",
+"example_C": "Se ti vedessi da fuori, cosa ti diresti di fare ora?",
+"fallback": "Reframing: pensiero → evento mentale",
+"tags": [
+"ruminazione",
+"distanza_cognitiva"
+],
+"note": ""
+},
+{
+"id": "I-P6-Comp",
+"pattern": "P6",
+"type": "behavioral",
+"label": "Interrompere il loop con il corpo",
+"aka": [
+"pausa corporea",
+"radicamento"
+],
+"principle": "Interrompere tramite il corpo.",
+"why": "Riporta al presente, riducendo rumore mentale e aprendo spazio decisionale.",
+"serve_a": "interrompere il loop cognitivo e tornare al presente",
+"verbo_mentale": "INTERROMPERE",
+"how_to": "fai un gesto fisico semplice (respiro, movimento) per spezzare il loop.",
+"example_q": "Cosa potrebbe aiutare il tuo corpo a tornare presente?",
+"example_C": "Usa un gesto o respiro per riportare presenza quando serve.",
+"fallback": "Come puoi usare il corpo per tornare presente, ora?",
+"tags": [
+"ruminazione",
+"presenza"
+],
+"note": ""
+},
+{
+"id": "I-P6-Emo",
+"pattern": "P6",
+"type": "emotional",
+"label": "Accorgersi della presenza",
+"aka": [
+"esserci",
+"contatto col qui"
+],
+"principle": "Accorgersi del presente interrompe l’identificazione.",
+"why": "Crea spazio dal loop mentale, rendendo possibile la scelta.",
+"serve_a": "creare distanza emotiva dal pensiero",
+"verbo_mentale": "ACCORGERSI",
+"how_to": "nota il loop mentale e senti un punto del corpo",
+"example_q": "Dove sei adesso, proprio in questo momento?",
+"example_C": "Nota cosa stai facendo — o non facendo — mentre il pensiero gira.",
+"fallback": "Nota tre cose che vedi ora.",
+"tags": [
+"regolazione_emotiva",
+"presenza"
+],
+"note": ""
+},
+{
+"id": "I-P7-Cog",
+"pattern": "P7",
+"type": "cognitive",
+"label": "Valutare rischi e benefici",
+"aka": [
+"valutazione rischio",
+"pro-contro"
+],
+"principle": "Valutare realisticamente rischi e benefici.",
+"why": "Riporta la percezione da minaccia a rischio valutabile.",
+"serve_a": "valutare realisticamente rischi e benefici",
+"verbo_mentale": "PESARE RISCHI E BENEFICI",
+"how_to": "confronta cosa rischi davvero e cosa puoi invece ottenere",
+"example_q": "Qual è il rischio reale?",
+"example_C": "Scrivi un rischio reale e un possibile beneficio concreto.",
+"fallback": "Reframing: perdita → possibilità",
+"tags": [
+"avversione_perdita",
+"valutazione_rischio"
+],
+"note": ""
+},
+{
+"id": "I-P7-Emo",
+"pattern": "P7",
+"type": "emotional",
+"label": "Contattare ciò che conta davvero",
+"aka": [
+"valore",
+"scelta",
+"protezione"
+],
+"principle": "Sentire ciò che conta riduce la paura.",
+"why": "Collega l’emozione a un valore personale.",
+"serve_a": "ricordare ciò che conta",
+"verbo_mentale": "RICONNETTERE",
+"how_to": "collega l’emozione a ciò che potresti ottenere o far crescere.",
+"example_q": "Per cosa vale la pena provarci?",
+"example_C": "Nomina il valore che rende questa scelta significativa.",
+"fallback": "Reframing: perdita → valore",
+"tags": [
+"valore",
+"priorità"
+],
+"note": ""
+},
+{
+"id": "I-P7-Comp",
+"pattern": "P7",
+"type": "behavioral",
+"label": "Micro-test reversibile",
+"aka": [
+"prova minima",
+"esperimento rapido"
+],
+"principle": "Stimolare una micro-azione reversibile.",
+"why": "Riduce incertezza e rassicura attraverso feedback reale a basso costo.",
+"serve_a": "testare possibilità riducendo il rischio",
+"verbo_mentale": "SONDARE",
+"how_to": "definisci una prova piccola e reversibile per raccogliere un primo feedback.",
+"example_q": "Qual è una prova piccola e reversibile che puoi fare?",
+"example_C": "Fai una prova ridotta e osserva cosa impari.",
+"fallback": "Come puoi renderlo ancora più piccolo e reversibile?",
+"tags": [
+"micro_prova",
+"rischio_controllato"
+],
+"note": ""
+},
+{
+"id": "I-P8-Cog",
+"pattern": "P8",
+"type": "cognitive",
+"label": "Consultare il proprio Sé futuro",
+"aka": [
+"Io futuro",
+"retro-proiezione"
+],
+"principle": "Immaginare il sé futuro.",
+"why": "Amplia la prospettiva temporale.",
+"serve_a": "guarda questa scelta dal punto di vista del tuo sé futuro",
+"verbo_mentale": "COLLEGARE FUTURO",
+"how_to": "proietta la tua vita dopo aver agito e nota cosa cambia.",
+"example_q": "Che consiglio ti darebbe il tuo “io futuro”?",
+"example_C": "Guarda questa scelta come il tuo sé futuro e scrivi cosa faresti.",
+"fallback": "Se fossi il tuo sé futuro, cosa sceglieresti ora?",
+"tags": [
+"sé_futuro",
+"prospettiva"
+],
+"note": ""
+},
+{
+"id": "I-P8-Comp",
+"pattern": "P8",
+"type": "behavioral",
+"label": "Agire oggi per l’obiettivo futuro",
+"aka": [
+"azione quotidiana",
+"allineamento"
+],
+"principle": "Agire in coerenza con il sé futuro.",
+"why": "Rende il futuro rilevante nel presente.",
+"serve_a": "agire come il proprio sé futuro",
+"verbo_mentale": "ALLINEARE",
+"how_to": "guida la scelta di un gesto allineato al tuo futuro",
+"example_q": "Qual è il gesto più piccolo che puoi fare ora?",
+"example_C": "Scegli un’azione che ti permetta di avvicinarti, anche poco, al tuo futuro.",
+"fallback": "Qual è l’azione più semplice, allineata?",
+"tags": [
+"sé_futuro",
+"allineamento"
+],
+"note": ""
+},
+{
+"id": "I-P8-Emo",
+"pattern": "P8",
+"type": "emotional",
+"label": "Ritrovarsi nel sé futuro",
+"aka": [
+"continuità personale",
+"identità nel tempo"
+],
+"principle": "Sentire continuità con il sé futuro.",
+"why": "Rafforza il legame emotivo con il proprio futuro.",
+"serve_a": "rendere emotivamente rilevante una scelta che oggi sembra lontana",
+"verbo_mentale": "RITROVARSI",
+"how_to": "richiama il tuo sé futuro e nota se questa scelta ti rappresenta",
+"example_q": "Questo passo è qualcosa in cui ti ritrovi davvero?",
+"example_C": "Porta alla mente il tuo sé futuro e verifica se questa scelta ti somiglia.",
+"fallback": "Che scelta fai oggi che ti semplifica il futuro?",
+"tags": [
+"futuro",
+"identità",
+"continuità"
+],
+"note": ""
+},
+{
+"id": "I-P9-Cog",
+"pattern": "P9",
+"type": "cognitive",
+"label": "Riconoscere meriti",
+"aka": [
+"attribuzione interna",
+"riconoscimento"
+],
+"principle": "Appropriarsi del proprio contributo ai risultati.",
+"why": "Riduce il dubbio restituendo la paternità ai propri successi.",
+"serve_a": "appropriarsi dei propri meriti",
+"verbo_mentale": "ATTRIBUIRE",
+"how_to": "identifica azioni/decisioni proprie che hanno portato al risultato",
+"example_q": "Quali tue scelte/azioni hanno contribuito a questo risultato?",
+"example_C": "Identifica almeno un’azione concreta che ha prodotto il risultato",
+"fallback": "Reframing: fortuna → competenza",
+"tags": [
+"responsabilità",
+"merito"
+],
+"note": ""
+},
+{
+"id": "I-P9-Emo",
+"pattern": "P9",
+"type": "emotional",
+"label": "Accogliere l’emozione senza giudizio",
+"aka": [
+"accettare",
+"funzione"
+],
+"principle": "L’emozione è un segnale, non un verdetto.",
+"why": "Normalizza l’emozione, riconoscendola, mantenendo accesso alla scelta.",
+"serve_a": "ridurre l’auto-giudizio normalizzando l’emozione",
+"verbo_mentale": "NOTARE EMOZIONE",
+"how_to": "riconosci l’emozione senza giudicarla, poi resta un attimo con essa",
+"example_q": "Cosa ti sta proteggendo questa emozione, proprio adesso?",
+"example_C": "Nomina l’emozione e concedile spazio per un attimo.",
+"fallback": "Datti il permesso di sentire questo, poi scegli un passo piccolo.",
+"tags": [
+"vergogna",
+"funzione",
+"accoglienza"
+],
+"note": ""
+},
+{
+"id": "I-P9-Comp",
+"pattern": "P9",
+"type": "behavioral",
+"label": "Esporsi con contributo concreto",
+"aka": [
+"visibilità",
+"presenza attiva"
+],
+"principle": "Esporsi con un contributo reale.",
+"why": "Trasforma la paura di “non meritare” in azione.",
+"serve_a": "ridurre l’auto-sabotaggio",
+"verbo_mentale": "ESPORSI",
+"how_to": "condividi un contributo concreto senza giustificarlo o sminuirlo",
+"example_q": "Cosa potresti portare ora, senza spiegarti?",
+"example_C": "Fai una proposta concreta senza premettere scuse o giustificazioni.",
+"fallback": "Reframing: ritiro → presenza attiva",
+"tags": [
+"impostura",
+"azione",
+"visibilità"
+],
+"note": ""
+},
+{
+"id": "I-P10-Cog",
+"pattern": "P10",
+"type": "cognitive",
+"label": "Spostare la sorgente del valore",
+"aka": [
+"sorgente interna",
+"criteri propri"
+],
+"principle": "Spostare il valore dall’esterno all’interno.",
+"why": "Riorienta il criterio di valore.",
+"serve_a": "chiarire la propria sorgente interna di valore",
+"verbo_mentale": "DISTINGUERE",
+"how_to": "separa ciò che pensi tu da ciò che pensano gli altri e nota la differenza.",
+"example_q": "Qual è il tuo criterio, qui?",
+"example_C": "Definisci almeno un \"criterio interno\" per valutare il risultato dell’azione",
+"fallback": "Reframing: esterno → interno",
+"tags": [
+"valore_interno",
+"identità"
+],
+"note": ""
+},
+{
+"id": "I-P10-Comp",
+"pattern": "P10",
+"type": "behavioral",
+"label": "Autorizzarsi all’azione",
+"aka": [
+"iniziativa personale",
+"permesso interno"
+],
+"principle": "Agire senza conferma rafforza l’autonomia.",
+"why": "Trasforma la dipendenza dal giudizio esterno in scelta attiva.",
+"serve_a": "ridurre la dipendenza dal giudizio esterno attraverso azione autonoma",
+"verbo_mentale": "AUTORIZZARSI",
+"how_to": "fai una scelta concreta senza chiedere conferma",
+"example_q": "Se non dovessi chiedere a nessuno, cosa faresti ora?",
+"example_C": "Prendi una piccola decisione senza consultare altri.",
+"fallback": "Reframing: approvazione → iniziativa",
+"tags": [
+"conformità",
+"autonomia",
+"azione"
+],
+"note": ""
+},
+{
+"id": "I-P10-Emo",
+"pattern": "P10",
+"type": "emotional",
+"label": "Riconnettersi al proprio metro interno",
+"aka": [
+"autenticità",
+"fiducia in se stessi"
+],
+"principle": "Riconnettersi ai segnali interni.",
+"why": "Rende sicuro affidarsi a sé perché il corpo segnala quando qualcosa è giusto.",
+"serve_a": "riconnettersi ai segnali interni che guidano le scelte",
+"verbo_mentale": "VERIFICARE CONGRUENZA",
+"how_to": "identifica un segnale interno che ti indica “Ok per me”.",
+"example_q": "Come ti accorgi nel corpo che qualcosa è davvero ‘a posto’ per te?",
+"example_C": "Nota un segnale fisico che per te significa “ok”.",
+"fallback": "Se segui il tuo sì interno, cosa fai?",
+"tags": [
+"fiducia_interna",
+"autonomia"
+],
+"note": ""
+},
+{
+"id": "I-P11-Cog",
+"pattern": "P11",
+"type": "cognitive",
+"label": "Riconoscere la zona grigia",
+"aka": [
+"gradiente",
+"spettro intermedio"
+],
+"principle": "Riconoscere progressi parziali.",
+"why": "Apre spazio per apprendere dai progressi.",
+"serve_a": "riconoscere progressi intermedi",
+"verbo_mentale": "SFUMARE",
+"how_to": "trasforma l'obiettivo da binario a scalare (0-100)",
+"example_q": "Quali risultati intermedi esistono tra il fallimento totale e il successo pieno?",
+"example_C": "Definisci almeno un criterio intermedio che ti dica che stai avanzando.",
+"fallback": "Reframing: giusto/sbagliato → utile/inutile",
+"tags": [
+"tutto_o_niente",
+"zona_grigia"
+],
+"note": ""
+},
+{
+"id": "I-P11-Comp",
+"pattern": "P11",
+"type": "behavioral",
+"label": "Agire nella zona grigia",
+"aka": [
+"passo non-perfetto",
+"compromesso utile"
+],
+"principle": "Spostare l’azione da “tutto o nulla” a “un passo”.",
+"why": "Abbassa la soglia d’azione, permettendo il movimento anche senza perfezione.",
+"serve_a": "procedere tramite azioni non perfette",
+"verbo_mentale": "PROCEDERE",
+"how_to": "definisci una micro-azione che porti un vantaggio parziale.",
+"example_q": "Qual è un passo piccolo che è comunque meglio di zero?",
+"example_C": "Esegui un’azione minima che crea un avanzamento reale.",
+"fallback": "Qual è un passo utile, anche imperfetto?",
+"tags": [
+"binario",
+"zona_grigia",
+"microazione"
+],
+"note": ""
+},
+{
+"id": "I-P11-Emo",
+"pattern": "P11",
+"type": "emotional",
+"label": "Aprire uno spazio intermedio",
+"aka": [
+"apertura",
+"via di mezzo"
+],
+"principle": "Un minimo di apertura emotiva rende tollerabile un’opzione non estrema.",
+"why": "Riduce la rigidità emotiva davanti all’incertezza.",
+"serve_a": "rendere possibile una via di mezzo",
+"verbo_mentale": "APRIRE",
+"how_to": "nota la rigidità interna e cerca una posizione più morbida",
+"example_q": "Quale via di mezzo sarebbe accettabile adesso?",
+"example_C": "Scegli un passo di mezzo, anche imperfetto.",
+"fallback": "Reframing: estremo → intermedio",
+"tags": [
+"rigidità",
+"apertura",
+"via_di_mezzo"
+],
+"note": ""
+},
+{
+"id": "I-P12-Cog",
+"pattern": "P12",
+"type": "cognitive",
+"label": "Raccogliere contro-evidenze",
+"aka": [
+"seconda ipotesi",
+"prova contraria"
+],
+"principle": "Cercare dati contrari alla propria idea.",
+"why": "Libera nuove opzioni.",
+"serve_a": "mettere alla prova la propria idea",
+"verbo_mentale": "FALSIFICARE",
+"how_to": "formula l’ipotesi opposta e cerca dati o prospettive che la supportano.",
+"example_q": "Quali elementi indicano che la tua idea non è completa o è errata?",
+"example_C": "Annota un dato che contraddice la tua idea.",
+"fallback": "Quale verifica concreta fai adesso?",
+"tags": [
+"bias_conferma",
+"contro_evidenza"
+],
+"note": ""
+},
+{
+"id": "I-P12-Comp",
+"pattern": "P12",
+"type": "behavioral",
+"label": "Testare la realtà con piccoli esperimenti",
+"aka": [
+"mini-esperimento",
+"test realtà"
+],
+"principle": "Testare attivamente l'ipotesi opposta.",
+"why": "Riduce la rigidità attraverso l’azione.",
+"serve_a": "testare nella realtà l’ipotesi opposta",
+"verbo_mentale": "TESTARE",
+"how_to": "esegui un test che potrebbe falsificare l’idea → osserva il risultato.",
+"example_q": "Che piccolo esperimento puoi fare per verificare?",
+"example_C": "Progetta un mini-test che possa smentire la tua ipotesi.",
+"fallback": "Come puoi renderlo ancora più semplice da provare?",
+"tags": [
+"conferma",
+"esperimento"
+],
+"note": ""
+},
+{
+"id": "I-P12-Emo",
+"pattern": "P12",
+"type": "emotional",
+"label": "Ammettere il dubbio",
+"aka": [
+"tolleranza al forse",
+"apertura alla disconferma"
+],
+"principle": "Sostenere il dubbio per verificare.",
+"why": "Riduce la chiusura difensiva, aprendo alla verifica.",
+"serve_a": "permettere l’ingresso di un’informazione che contraddice",
+"verbo_mentale": "AMMETTERE",
+"how_to": "nota la chiusura e resta un attimo nel dubbio",
+"example_q": "Quale dubbio puoi sostenere per un attimo?",
+"example_C": "Lascia aperta un’ipotesi diversa per un momento.",
+"fallback": "Resta un attimo nel dubbio, poi fai una domanda.",
+"tags": [
+"dubbio",
+"apertura"
+],
+"note": ""
+}
+],
+"meta": [
+{
+"key": "version",
+"value": 0.1
+},
+{
+"key": "last_update",
+"value": "2024-12-31T23:00:00.000Z"
+}
+]
+}

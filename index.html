@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC App</title>
+  <link rel="stylesheet" href="css/home.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero">
+      <div class="eyebrow">EPiC App</div>
+      <h1>Quattro strumenti, un solo ingresso.</h1>
+      <p>Versione web dell'ecosistema EPiC. Qui dentro trovi simulazione, tavolo carte, explorer guidato e cross trainer, ognuno come strumento separato.</p>
+    </section>
+
+    <section class="grid" aria-label="Strumenti EPiC">
+      <a class="tool-card" data-tone="simulator" href="epic-simulator.html">
+        <div class="card-head">
+          <div class="tool-id">01</div>
+          <div class="tool-type">Coach Simulator</div>
+        </div>
+        <h2>Simulator</h2>
+        <p>Allenamento su scenari con scoring: scegli E, P e I e ottieni feedback immediato.</p>
+        <ul>
+          <li>Scenari con score</li>
+          <li>Log locale</li>
+          <li>Scarico scenari da Supabase</li>
+        </ul>
+        <div class="cta">Apri lo strumento <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="tool-card" data-tone="cards" href="epic-all-cards.html">
+        <div class="card-head">
+          <div class="tool-id">02</div>
+          <div class="tool-type">Cards Table</div>
+        </div>
+        <h2>All Cards</h2>
+        <p>Vista completa del mazzo, come sul tavolo: filtro, ricerca, flip e navigazione tra riferimenti.</p>
+        <ul>
+          <li>Tutte le carte in griglia</li>
+          <li>Filtro E / P / I</li>
+          <li>Esplorazione libera</li>
+        </ul>
+        <div class="cta">Apri lo strumento <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="tool-card" data-tone="explorer" href="epic-explorer.html">
+        <div class="card-head">
+          <div class="tool-id">03</div>
+          <div class="tool-type">Flow Explorer</div>
+        </div>
+        <h2>Explorer</h2>
+        <p>Entrata guidata dall'emozione e dall'intento, per scendere verso pattern e interventi coerenti.</p>
+        <ul>
+          <li>E + intento</li>
+          <li>Selezione pattern</li>
+          <li>Croce finale degli interventi</li>
+        </ul>
+        <div class="cta">Apri lo strumento <span aria-hidden="true">→</span></div>
+      </a>
+
+      <a class="tool-card" data-tone="cross" href="epic-cross.html">
+        <div class="card-head">
+          <div class="tool-id">04</div>
+          <div class="tool-type">Cross Trainer</div>
+        </div>
+        <h2>Cross</h2>
+        <p>Allenamento centrato su un pattern: centro P, ali Cog / Emo / Comp, come esercizio tattico.</p>
+        <ul>
+          <li>Selezione pattern</li>
+          <li>Apertura ali della croce</li>
+          <li>Focus sulle tre leve</li>
+        </ul>
+        <div class="cta">Apri lo strumento <span aria-hidden="true">→</span></div>
+      </a>
+    </section>
+
+    <section class="note">
+      Questa cartella <code>app/</code> contiene solo le versioni web non embedded. Gli HTML monolitici standalone restano nella root del progetto.
+    </section>
+  </main>
+</body>
+</html>
