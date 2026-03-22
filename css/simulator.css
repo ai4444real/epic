@@ -20,9 +20,7 @@
 
     .scenario-card .sc-title{ font-size: var(--fs-lg); font-weight: 600; margin-bottom: 6px; }
     .scenario-card .sc-teaser{ font-size: var(--fs-sm); color: var(--muted); line-height: 1.5; }
-    .scenario-card .sc-meta{ display: flex; gap: 8px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
-    .scenario-card .sc-id{ display: inline-block; font-size: 10px; padding: 0; border: 0; color: var(--muted-light); background: transparent; font-weight: 500; letter-spacing: 0; }
-    .scenario-card .sc-diff{ display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+    .scenario-card .sc-diff{ display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 10px; margin-top: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
     .sc-diff.diff-easy{ background: #e8f5e9; color: #2e7d32; }
     .sc-diff.diff-middle{ background: #fff3e0; color: #e65100; }
     .sc-diff.diff-difficult, .sc-diff.diff-hard{ background: #fce4ec; color: #c62828; }

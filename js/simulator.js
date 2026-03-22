@@ -2,7 +2,7 @@
 
     // ---- Supabase ----
     const SUPABASE_URL = 'https://afbecjijvzalkycttqtj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmYmVjamlqdnphbGt5Y3R0cXRqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc1MjkyMDU0MywiZXhwIjoyMDY4NDk2NTQzfQ.y7e4V6JUUIRAtbK6uvEthpF8zArzwqphoUhOELMceFc';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmYmVjamlqdnphbGt5Y3R0cXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjA1NDMsImV4cCI6MjA2ODQ5NjU0M30.xVn-2xeYMuq230CPizJxn5ac8fcO2siFWAIj0gSDeB0';
 
     async function fetchScenariosFromSupabase() {
       const btn = document.getElementById('fetchScenariosBtn');
@@ -181,13 +181,11 @@
       const list = document.getElementById('scenarioList');
       list.innerHTML = filtered.map(s => {
         const teaser = s.client_text.length > 120 ? s.client_text.slice(0, 120) + '...' : s.client_text;
-        const scenarioId = s.id ? '<span class="sc-id">#' + esc(s.id) + '</span>' : '';
-        const diffLabel = s.difficulty ? '<span class="sc-diff diff-' + s.difficulty + '">' + esc(s.difficulty) + '</span>' : '';
-        const meta = (scenarioId || diffLabel) ? '<div class="sc-meta">' + scenarioId + diffLabel + '</div>' : '';
+        const diffLabel = s.difficulty ? '<div class="sc-diff diff-' + s.difficulty + '">' + s.difficulty + '</div>' : '';
         return '<div class="scenario-card" onclick="selectScenario(\'' + s.id + '\')">' +
           '<div class="sc-title">' + esc(s.title) + '</div>' +
           '<div class="sc-teaser">' + esc(teaser) + '</div>' +
-          meta +
+          diffLabel +
         '</div>';
       }).join('');
     }
