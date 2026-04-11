@@ -84,6 +84,10 @@
     return session;
   }
 
+  function getSessionEmail(session) {
+    return session && session.user && session.user.email ? session.user.email : 'utente-sconosciuto';
+  }
+
   async function logEvent(action, meta) {
     if (!loggingEnabled) return;
     try {
@@ -160,11 +164,13 @@
     const session = await getValidatedSession(client);
 
     if (!session) {
+      console.log('[EPIC auth] Nessuna sessione valida su', pageName, '-> redirect a login.html');
       setPostLoginTarget(getRequestedPath());
       navigateTo('login.html');
       return null;
     }
 
+    console.log('[EPIC auth] Sessione valida su', pageName, 'come', getSessionEmail(session));
     mountLogout(session);
     return session;
   }
@@ -175,10 +181,13 @@
 
     const session = await getValidatedSession(client);
     if (session) {
-      navigateTo(consumePostLoginTarget());
+      const target = consumePostLoginTarget();
+      console.log('[EPIC auth] Sei gia loggato come', getSessionEmail(session), '-> redirect a', target);
+      navigateTo(target);
       return;
     }
 
+    console.log('[EPIC auth] Nessuna sessione valida su login.html, mostro il pulsante Google');
     const loginBtn = document.getElementById('loginBtn');
     if (!loginBtn) return;
 
@@ -186,7 +195,9 @@
     loginBtn.addEventListener('click', async () => {
       loginBtn.disabled = true;
       loginBtn.textContent = 'Reindirizzamento...';
-      setPostLoginTarget(new URLSearchParams(window.location.search).get('redirect') || postLoginDefaultPath);
+      const requestedTarget = new URLSearchParams(window.location.search).get('redirect') || postLoginDefaultPath;
+      setPostLoginTarget(requestedTarget);
+      console.log('[EPIC auth] Avvio login Google, target post-login =', sanitizeTarget(requestedTarget));
       const { error } = await client.auth.signInWithOAuth({
         provider: loginProvider,
         options: {
@@ -194,6 +205,7 @@
         }
       });
       if (error) {
+        console.warn('[EPIC auth] Errore avvio login Google:', error);
         loginBtn.disabled = false;
         loginBtn.textContent = 'Entra con Google';
         const errorBox = document.getElementById('loginError');
@@ -205,6 +217,7 @@
   async function handleCallbackPage() {
     const client = createClientOrNull();
     if (!client || !authEnabled) {
+      console.log('[EPIC auth] Callback aperto con auth disabilitata -> redirect a', postLoginDefaultPath);
       navigateTo(postLoginDefaultPath);
       return;
     }
@@ -214,11 +227,14 @@
 
     const session = await getValidatedSession(client);
     if (session) {
+      const target = consumePostLoginTarget();
+      console.log('[EPIC auth] Callback completato, sessione valida come', getSessionEmail(session), '-> redirect a', target);
       await logEvent('login_success');
-      navigateTo(consumePostLoginTarget());
+      navigateTo(target);
       return;
     }
 
+    console.warn('[EPIC auth] Callback senza sessione valida, torno a login.html');
     if (status) status.textContent = 'Sessione non trovata. Riprova.';
     window.setTimeout(() => {
       navigateTo('login.html');
