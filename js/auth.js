@@ -8,8 +8,8 @@
   const appEventsTable = config.appEventsTable || 'app_events';
 
   const pageName = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
-  const isLoginPage = pageName === 'login.html';
-  const isCallbackPage = pageName === 'auth-callback.html';
+  const isLoginPage = pageName === 'login' || pageName === 'login.html';
+  const isCallbackPage = pageName === 'auth-callback' || pageName === 'auth-callback.html';
   const isProtectedPage = !isLoginPage && !isCallbackPage;
 
   let supabaseClient = null;
@@ -23,7 +23,7 @@
   }
 
   function getRequestedPath() {
-    return window.location.pathname.split('/').pop() || postLoginDefaultPath;
+    return window.location.pathname.replace(/^\/+/, '') || postLoginDefaultPath;
   }
 
   function sanitizeTarget(target) {
@@ -35,7 +35,7 @@
     if (/^https?:\/\//i.test(value) || value.startsWith('/')) return fallback;
 
     const clean = value.split('?')[0].split('#')[0] || fallback;
-    if (clean === 'login.html' || clean === loginRedirectPath) return fallback;
+    if (clean === 'login' || clean === 'login.html' || clean === 'auth-callback' || clean === loginRedirectPath) return fallback;
     return clean;
   }
 
