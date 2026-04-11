@@ -3,8 +3,10 @@
   const authEnabled = !!config.authEnabled;
   const loggingEnabled = !!config.eventLoggingEnabled;
   const loginProvider = config.loginProvider || 'google';
-  const loginRedirectPath = config.loginRedirectPath || 'auth-callback.html';
-  const postLoginDefaultPath = config.postLoginDefaultPath || 'index.html';
+  const loginRedirectPath = config.loginRedirectPath || 'auth-callback';
+  const postLoginDefaultPath = Object.prototype.hasOwnProperty.call(config, 'postLoginDefaultPath')
+    ? config.postLoginDefaultPath
+    : '';
   const appEventsTable = config.appEventsTable || 'app_events';
 
   const pageName = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
@@ -19,7 +21,7 @@
   }
 
   function getRedirectUrl() {
-    return getBaseUrl() + loginRedirectPath;
+    return window.location.origin + '/' + loginRedirectPath;
   }
 
   function getRequestedPath() {
@@ -35,7 +37,7 @@
     if (/^https?:\/\//i.test(value) || value.startsWith('/')) return fallback;
 
     const clean = value.split('?')[0].split('#')[0] || fallback;
-    if (clean === 'login' || clean === 'login.html' || clean === 'auth-callback' || clean === loginRedirectPath) return fallback;
+    if (clean === 'login' || clean === 'login.html' || clean === 'auth-callback' || clean === 'auth-callback.html' || clean === loginRedirectPath) return fallback;
     return clean;
   }
 
@@ -43,7 +45,7 @@
     const next = sanitizeTarget(target);
     const current = getRequestedPath();
     if (current === next) return;
-    window.location.replace(next);
+    window.location.replace(next ? '/' + next.replace(/^\/+/, '') : '/');
   }
 
   function setPostLoginTarget(target) {
@@ -130,7 +132,7 @@
       if (!client) return;
       await logEvent('logout_click');
       await client.auth.signOut();
-      window.location.href = 'login.html';
+      navigateTo('login');
     });
     logoutBtn.id = 'epicLogoutBtn';
 
@@ -164,9 +166,9 @@
     const session = await getValidatedSession(client);
 
     if (!session) {
-      console.log('[EPIC auth] Nessuna sessione valida su', pageName, '-> redirect a login.html');
+      console.log('[EPIC auth] Nessuna sessione valida su', pageName, '-> redirect a login');
       setPostLoginTarget(getRequestedPath());
-      navigateTo('login.html');
+      navigateTo('login');
       return null;
     }
 
@@ -187,7 +189,7 @@
       return;
     }
 
-    console.log('[EPIC auth] Nessuna sessione valida su login.html, mostro il pulsante Google');
+    console.log('[EPIC auth] Nessuna sessione valida su login, mostro il pulsante Google');
     const loginBtn = document.getElementById('loginBtn');
     if (!loginBtn) return;
 
@@ -234,10 +236,10 @@
       return;
     }
 
-    console.warn('[EPIC auth] Callback senza sessione valida, torno a login.html');
+    console.warn('[EPIC auth] Callback senza sessione valida, torno a login');
     if (status) status.textContent = 'Sessione non trovata. Riprova.';
     window.setTimeout(() => {
-      navigateTo('login.html');
+      navigateTo('login');
     }, 1500);
   }
 
