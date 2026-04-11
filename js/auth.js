@@ -26,12 +26,32 @@
     return window.location.pathname.split('/').pop() || postLoginDefaultPath;
   }
 
+  function sanitizeTarget(target) {
+    const fallback = postLoginDefaultPath;
+    const value = (target || '').trim();
+    if (!value) return fallback;
+
+    // Only allow same-folder relative pages and never bounce back into auth pages.
+    if (/^https?:\/\//i.test(value) || value.startsWith('/')) return fallback;
+
+    const clean = value.split('?')[0].split('#')[0] || fallback;
+    if (clean === 'login.html' || clean === loginRedirectPath) return fallback;
+    return clean;
+  }
+
+  function navigateTo(target) {
+    const next = sanitizeTarget(target);
+    const current = getRequestedPath();
+    if (current === next) return;
+    window.location.replace(next);
+  }
+
   function setPostLoginTarget(target) {
-    window.sessionStorage.setItem('epic_post_login_target', target || postLoginDefaultPath);
+    window.sessionStorage.setItem('epic_post_login_target', sanitizeTarget(target));
   }
 
   function consumePostLoginTarget() {
-    const target = window.sessionStorage.getItem('epic_post_login_target') || postLoginDefaultPath;
+    const target = sanitizeTarget(window.sessionStorage.getItem('epic_post_login_target'));
     window.sessionStorage.removeItem('epic_post_login_target');
     return target;
   }
@@ -48,6 +68,20 @@
       });
     }
     return supabaseClient;
+  }
+
+  async function getValidatedSession(client) {
+    const { data } = await client.auth.getSession();
+    const session = data && data.session ? data.session : null;
+    if (!session) return null;
+
+    const { data: userData, error: userError } = await client.auth.getUser();
+    if (userError || !userData || !userData.user) {
+      await client.auth.signOut();
+      return null;
+    }
+
+    return session;
   }
 
   async function logEvent(action, meta) {
@@ -123,12 +157,11 @@
     const client = createClientOrNull();
     if (!client) throw new Error('Supabase client not available');
 
-    const { data } = await client.auth.getSession();
-    const session = data && data.session ? data.session : null;
+    const session = await getValidatedSession(client);
 
     if (!session) {
       setPostLoginTarget(getRequestedPath());
-      window.location.href = 'login.html';
+      navigateTo('login.html');
       return null;
     }
 
@@ -140,9 +173,9 @@
     const client = createClientOrNull();
     if (!client || !authEnabled) return;
 
-    const { data } = await client.auth.getSession();
-    if (data && data.session) {
-      window.location.href = consumePostLoginTarget();
+    const session = await getValidatedSession(client);
+    if (session) {
+      navigateTo(consumePostLoginTarget());
       return;
     }
 
@@ -172,23 +205,23 @@
   async function handleCallbackPage() {
     const client = createClientOrNull();
     if (!client || !authEnabled) {
-      window.location.href = postLoginDefaultPath;
+      navigateTo(postLoginDefaultPath);
       return;
     }
 
     const status = document.getElementById('callbackStatus');
     if (status) status.textContent = 'Verifica sessione in corso...';
 
-    const { data } = await client.auth.getSession();
-    if (data && data.session) {
+    const session = await getValidatedSession(client);
+    if (session) {
       await logEvent('login_success');
-      window.location.href = consumePostLoginTarget();
+      navigateTo(consumePostLoginTarget());
       return;
     }
 
     if (status) status.textContent = 'Sessione non trovata. Riprova.';
     window.setTimeout(() => {
-      window.location.href = 'login.html';
+      navigateTo('login.html');
     }, 1500);
   }
 
