@@ -48,6 +48,13 @@
     window.location.replace(next ? '/' + next.replace(/^\/+/, '') : '/');
   }
 
+  function navigateToAuthRoute(target) {
+    const next = (target || '').replace(/^\/+/, '');
+    const current = getRequestedPath();
+    if (current === next) return;
+    window.location.replace('/' + next);
+  }
+
   function setPostLoginTarget(target) {
     window.sessionStorage.setItem('epic_post_login_target', sanitizeTarget(target));
   }
@@ -132,7 +139,7 @@
       if (!client) return;
       await logEvent('logout_click');
       await client.auth.signOut();
-      navigateTo('login');
+      navigateToAuthRoute('login');
     });
     logoutBtn.id = 'epicLogoutBtn';
 
@@ -168,7 +175,7 @@
     if (!session) {
       console.log('[EPIC auth] Nessuna sessione valida su', pageName, '-> redirect a login');
       setPostLoginTarget(getRequestedPath());
-      navigateTo('login');
+      navigateToAuthRoute('login');
       return null;
     }
 
@@ -239,7 +246,7 @@
     console.warn('[EPIC auth] Callback senza sessione valida, torno a login');
     if (status) status.textContent = 'Sessione non trovata. Riprova.';
     window.setTimeout(() => {
-      navigateTo('login');
+      navigateToAuthRoute('login');
     }, 1500);
   }
 
