@@ -930,7 +930,7 @@ var EPIC_DATA = {
         "principle": "Ridurre lo standard per agire.",
         "why": "Permette di procedere con risorse realistiche.",
         "serve_a": "ridurre sprechi nel perseguire la perfezione",
-        "verbo_mentale": "ALLEGERIRE",
+        "verbo_mentale": "ALLEGGERIRE",
         "how_to": "elenca cosa serve per farlo “perfetto” → tieni solo ciò che crea valore e agisci."
       },
       "retro": {
