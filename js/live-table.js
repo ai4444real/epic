@@ -303,18 +303,8 @@
     }
 
     function renderSingleCard(item, card) {
-      const type = item.kind === 'I' ? interventionType(card) : item.kind;
-      const cls = item.kind === 'I' ? ' kind-I ' + type : ' kind-' + item.kind;
-      const img = item.kind === 'E' && eImages[item.id] ? '<img class="live-image" src="' + eImages[item.id] + '" alt="' + esc(card.label) + '">' : '';
-      const pImg = item.kind === 'P' && pImages[item.id] ? '<img class="live-image" src="' + pImages[item.id] + '" alt="' + esc(card.label) + '">' : '';
-      const body = item.flipped ? cardBackText(item.kind, card) : cardFrontText(item.kind, card);
-      return '<article class="live-card' + cls + '">' +
-        '<div class="live-card-body">' +
-          '<div class="live-card-top"><div class="live-id">' + esc(card.id) + '</div><div class="live-pill">' + esc(type) + '</div></div>' +
-          '<div class="live-title">' + esc(card.label) + '</div>' +
-          (item.flipped ? '' : img + pImg) +
-          '<div class="live-text">' + body + '</div>' +
-        '</div>' +
+      return '<article class="live-card-wrap">' +
+        renderFixedCard(item.kind, card, item.flipped) +
         renderItemActions(item) +
       '</article>';
     }
@@ -325,21 +315,13 @@
       const comp = interventionForPattern(item.id, 'Comp');
       return '<article class="live-cross">' +
         '<div class="cross-mini-grid">' +
-          renderCrossCell('pat', p.id, p.label, 'Pattern', patternShort(p)) +
-          renderCrossCell('cog', cog?.id || '-', cog?.label || 'n/a', 'Cog', cog?.fronte?.principle || '') +
-          renderCrossCell('emo', emo?.id || '-', emo?.label || 'n/a', 'Emo', emo?.fronte?.principle || '') +
-          renderCrossCell('comp', comp?.id || '-', comp?.label || 'n/a', 'Comp', comp?.fronte?.principle || '') +
+          '<div class="cross-cell pat">' + renderFixedCard('P', p, false) + '</div>' +
+          '<div class="cross-cell cog">' + (cog ? renderFixedCard('I', cog, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
+          '<div class="cross-cell emo">' + (emo ? renderFixedCard('I', emo, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
+          '<div class="cross-cell comp">' + (comp ? renderFixedCard('I', comp, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
         '</div>' +
         renderItemActions(item) +
       '</article>';
-    }
-
-    function renderCrossCell(cls, id, label, pill, text) {
-      return '<div class="cross-cell ' + cls + '">' +
-        '<div class="live-card-top"><div class="live-id">' + esc(id) + '</div><div class="live-pill">' + esc(pill) + '</div></div>' +
-        '<div class="cross-cell-title">' + esc(label) + '</div>' +
-        (text ? '<div class="cross-cell-text">' + esc(text) + '</div>' : '') +
-      '</div>';
     }
 
     function renderItemActions(item) {
@@ -353,20 +335,101 @@
       '</div>';
     }
 
-    function cardFrontText(kind, card) {
-      if (kind === 'E') return esc((card.fronte?.quando_la_vedi?.items || []).slice(0, 3).join(' · '));
-      if (kind === 'P') return esc(patternShort(card));
-      return esc([card.fronte?.principle, card.fronte?.how_to].filter(Boolean).join(' · '));
-    }
-
-    function cardBackText(kind, card) {
-      if (kind === 'E') return esc((card.fronte?.non_e_questa_se?.items || card.retro?.non_e_questa_se?.items || []).slice(0, 3).join(' · ') || card.retro?.hint || '');
-      if (kind === 'P') return esc([card.retro?.hint, card.retro?.why].filter(Boolean).join(' · '));
-      return esc([card.retro?.example_q, card.retro?.example_C, card.retro?.fallback].filter(Boolean).join(' · '));
-    }
-
     function patternShort(p) {
       return (p.fronte?.shorts?.items || p.fronte?.segnali?.items || []).slice(0, 4).join(' · ');
+    }
+
+    function renderFixedCard(kind, card, flipped) {
+      const type = kind === 'I' ? interventionType(card) : (kind === 'E' ? 'Emozione' : 'Pattern');
+      const cls = kind === 'I' ? 'kind-' + interventionType(card) : 'kind-' + kind;
+      return '<div class="live-epic-card ' + cls + (flipped ? ' flipped' : '') + '">' +
+        '<div class="epic-card-inner">' +
+          '<div class="epic-face front">' + renderFixedCardFront(kind, card, type) + '</div>' +
+          '<div class="epic-face back">' + renderFixedCardBack(kind, card, type) + '</div>' +
+        '</div>' +
+      '</div>';
+    }
+
+    function renderFixedCardFront(kind, card, type) {
+      let html = renderEpicHead(card.id, type) + '<div class="epic-title">' + esc(card.label) + '</div>';
+
+      if (kind === 'E') {
+        html += renderAliases(card.fronte?.aliases?.items);
+        html += renderEpicSection('Quando la vedi', card.fronte?.quando_la_vedi?.items);
+        html += renderEpicSection('Pattern prioritari', card.fronte?.pattern_da_esplorare?.high);
+        html += renderEpicSection('Altri pattern', card.fronte?.pattern_da_esplorare?.medium);
+        html += renderEpicFooter('EPiC', 'Emozione');
+        return html;
+      }
+
+      if (kind === 'P') {
+        const linkedI = interventions.filter(i => i.id.startsWith('I-' + card.id + '-')).map(i => i.id);
+        html += renderAliases(card.fronte?.aliases?.items);
+        html += renderEpicSection('', card.fronte?.shorts?.items, 'muted');
+        html += renderEpicSection('Segnali', card.fronte?.segnali?.items);
+        html += renderEpicSection('Interventi', linkedI);
+        html += renderEpicFooter('EPiC', 'Pattern');
+        return html;
+      }
+
+      html += renderEpicSection('Principle', card.fronte?.principle);
+      html += renderEpicSection('Why', card.fronte?.why, 'muted');
+      html += renderEpicSection(card.fronte?.verbo_mentale || 'How to', card.fronte?.how_to);
+      html += renderEpicSection('Serve a', card.fronte?.serve_a, 'muted');
+      html += renderEpicFooter('EPiC', 'Intervento');
+      return html;
+    }
+
+    function renderFixedCardBack(kind, card, type) {
+      let html = renderEpicHead(card.id, type);
+      html += '<div class="epic-back-content">';
+
+      if (kind === 'E') {
+        html += renderEpicSection('Subtypes', card.fronte?.subtypes?.items);
+        html += renderEpicSection('Non e questa se', card.fronte?.non_e_questa_se?.items || card.retro?.non_e_questa_se?.items);
+        html += renderEpicSection('Red flags', card.retro?.red_flags?.items);
+        html += renderEpicSection('Hint', card.retro?.hint);
+      } else if (kind === 'P') {
+        html += renderEpicSection('Non e questo se', card.fronte?.non_e_questo_se?.items);
+        html += renderEpicSection('Hint', card.retro?.hint);
+        html += renderEpicSection('Why', card.retro?.why);
+        html += renderEpicSection('Porta I', card.retro?.porta_I);
+        html += renderEpicSection('Note', card.retro?.note);
+      } else {
+        html += renderAliases(card.retro?.aka);
+        html += renderEpicSection('Domanda esempio', card.retro?.example_q);
+        html += renderEpicSection('Compito / Consapevolezza', card.retro?.example_C);
+        html += renderEpicSection('Fallback', card.retro?.fallback);
+        html += renderEpicSection('Tags', card.retro?.tags);
+        html += renderEpicSection('Note', card.retro?.note);
+      }
+
+      html += '</div>' + renderEpicFooter('EPiC', kind === 'I' ? 'Retro intervento' : 'Retro');
+      return html;
+    }
+
+    function renderEpicHead(id, type) {
+      return '<header class="epic-card-head"><div class="epic-card-id">' + esc(id) + '</div><div class="epic-type-pill">' + esc(type) + '</div></header>';
+    }
+
+    function renderAliases(items) {
+      if (!Array.isArray(items) || !items.length) return '';
+      return '<div class="epic-aliases">' + items.map(esc).join(', ') + '</div>';
+    }
+
+    function renderEpicSection(title, value, extraClass) {
+      if (value == null) return '';
+      let arr = Array.isArray(value) ? value.filter(v => v != null && String(v).trim()) : [value].filter(v => String(v).trim());
+      if (!arr.length) return '';
+      const content = arr.map(v => esc(v)).join(' · ');
+      return '<section class="epic-section">' +
+        (title ? '<div class="epic-section-title">' + esc(title) + '</div>' : '') +
+        '<div class="epic-section-content ' + (extraClass || '') + '">' + content + '</div>' +
+      '</section>';
+    }
+
+    function renderEpicFooter(left, right) {
+      return '<footer class="epic-footer"><span>' + esc(left) + '</span><span>' + esc(right) + '</span></footer>';
     }
 
     function renderZoomButtons() {
