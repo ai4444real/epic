@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Live Table</title>
+    <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/live-table.css" />
+</head>
+<body data-live-mode="presenter">
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Live Table</span></h1>
+    <div class="toolbar-actions">
+      <a class="btn" href="index.html">Home</a>
+      <button class="btn primary" id="newRoomBtn">Nuova lezione</button>
+      <button class="btn" id="copyViewerBtn">Copia link studenti</button>
+    </div>
+  </div>
+
+  <main class="live-shell">
+    <aside class="live-sidebar">
+      <section class="room-panel">
+        <div class="panel-title">Stanza</div>
+        <div class="room-code" id="roomCode">...</div>
+        <div class="room-meta" id="roomMeta">Crea o apri una stanza.</div>
+        <div class="share-box">
+          <input class="input" id="viewerLink" readonly>
+          <button class="btn" id="copyViewerBtn2">Copia</button>
+        </div>
+        <div class="status-line" id="syncStatus"></div>
+        <div class="setup-warning" id="setupWarning"></div>
+      </section>
+
+      <section class="library-panel">
+        <div class="panel-title">Aggiungi carta</div>
+        <input class="input" id="librarySearch" type="search" placeholder="Cerca E, P, I..." />
+        <div class="library-tabs" id="libraryTabs">
+          <button data-filter="all" class="active">Tutte</button>
+          <button data-filter="E">E</button>
+          <button data-filter="P">P</button>
+          <button data-filter="I">I</button>
+        </div>
+        <div class="library-list" id="libraryList"></div>
+      </section>
+    </aside>
+
+    <section class="live-main">
+      <div class="table-head">
+        <div>
+          <div class="table-title">Tavolo lezione</div>
+          <div class="room-meta">Aggiungi carte, gira fronti/retro e apri le croci dei Pattern.</div>
+        </div>
+        <div class="tool-row">
+          <button class="btn" data-zoom="fit">Fit</button>
+          <button class="btn active" data-zoom="medium">Medium</button>
+          <button class="btn" data-zoom="large">Large</button>
+          <button class="btn" id="clearTableBtn">Svuota</button>
+        </div>
+      </div>
+      <div class="live-table zoom-medium" id="liveTable">
+        <div class="empty-table">Crea una stanza e aggiungi la prima carta.</div>
+      </div>
+    </section>
+  </main>
+
+    <script src="data/EPIC_data.js"></script>
+    <script src="js/shared.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/app-config.js"></script>
+  <script src="js/auth.js"></script>
+  <script src="js/live-table.js"></script>
+</body>
+</html>

@@ -6,5 +6,6 @@ window.EPIC_APP_CONFIG = {
   loginProvider: 'google',
   loginRedirectPath: 'auth-callback',
   postLoginDefaultPath: '',
-  appEventsTable: 'app_events'
+  appEventsTable: 'app_events',
+  publicPages: ['epic-live-view', 'epic-live-view.html']
 };

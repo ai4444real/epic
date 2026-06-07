@@ -8,11 +8,13 @@
     ? config.postLoginDefaultPath
     : '';
   const appEventsTable = config.appEventsTable || 'app_events';
+  const publicPages = Array.isArray(config.publicPages) ? config.publicPages.map((p) => String(p).toLowerCase()) : [];
 
   const pageName = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isLoginPage = pageName === 'login' || pageName === 'login.html';
   const isCallbackPage = pageName === 'auth-callback' || pageName === 'auth-callback.html';
-  const isProtectedPage = !isLoginPage && !isCallbackPage;
+  const isPublicPage = publicPages.includes(pageName);
+  const isProtectedPage = !isLoginPage && !isCallbackPage && !isPublicPage;
 
   let supabaseClient = null;
 
@@ -269,6 +271,11 @@
 
     if (isCallbackPage) {
       await handleCallbackPage();
+      return;
+    }
+
+    if (isPublicPage) {
+      await logEvent('public_page_view', { page: pageName });
       return;
     }
 

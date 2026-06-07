@@ -8,6 +8,7 @@
   --hero: #d7e7d1;
   --hero-strong: #adc89f;
   --sim: #d8ecff;
+  --live: #e7e3ff;
   --cards: #f8e3b8;
   --explorer: #d9efe8;
   --cross: #f2d7cf;
@@ -113,6 +114,7 @@ body{
 }
 
 .tool-card[data-tone="simulator"]{ background: linear-gradient(180deg, #ffffff, var(--sim)); }
+.tool-card[data-tone="live"]{ background: linear-gradient(180deg, #ffffff, var(--live)); }
 .tool-card[data-tone="cards"]{ background: linear-gradient(180deg, #ffffff, var(--cards)); }
 .tool-card[data-tone="explorer"]{ background: linear-gradient(180deg, #ffffff, var(--explorer)); }
 .tool-card[data-tone="cross"]{ background: linear-gradient(180deg, #ffffff, var(--cross)); }
