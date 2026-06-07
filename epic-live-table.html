@@ -23,10 +23,24 @@
         <div class="panel-title">Stanza</div>
         <div class="room-code" id="roomCode">...</div>
         <div class="room-meta" id="roomMeta">Crea o apri una stanza.</div>
+        <div style="margin-top:12px;">
+          <input class="input" id="roomTitleInput" placeholder="Titolo tavolo, es. Lezione 1.1">
+        </div>
+        <div class="tool-row" style="margin-top:8px;">
+          <button class="btn" id="saveTitleBtn">Salva titolo</button>
+        </div>
         <div class="share-box">
           <input class="input" id="viewerLink" readonly>
           <button class="btn" id="copyViewerBtn2">Copia</button>
         </div>
+        <div class="share-box" style="margin-top:8px;">
+          <input class="input" id="openRoomInput" placeholder="Room id da aprire">
+          <button class="btn" id="openRoomBtn">Apri</button>
+        </div>
+        <div class="tool-row" style="margin-top:8px;">
+          <button class="btn" id="refreshRoomsBtn">Aggiorna tavoli</button>
+        </div>
+        <div class="saved-room-list" id="savedRoomList"></div>
         <div class="status-line" id="syncStatus"></div>
         <div class="setup-warning" id="setupWarning"></div>
       </section>

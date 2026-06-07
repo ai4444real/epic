@@ -7,6 +7,9 @@
     const liveEls = {
       roomCode: document.getElementById('roomCode'),
       roomMeta: document.getElementById('roomMeta'),
+      roomTitleInput: document.getElementById('roomTitleInput'),
+      openRoomInput: document.getElementById('openRoomInput'),
+      savedRoomList: document.getElementById('savedRoomList'),
       viewerLink: document.getElementById('viewerLink'),
       syncStatus: document.getElementById('syncStatus'),
       setupWarning: document.getElementById('setupWarning'),
@@ -22,6 +25,7 @@
     let libraryFilter = 'all';
     let lastRemoteStamp = '';
     let pollTimer = null;
+    let savedRooms = [];
     let tableState = createEmptyState(roomId || createRoomId());
 
     function createEmptyState(id) {
@@ -169,6 +173,26 @@
       }
     }
 
+    async function loadSavedRooms() {
+      if (!IS_PRESENTER) return;
+      const client = getLiveClient();
+      if (!client) return;
+      try {
+        const { data, error } = await client
+          .from(LIVE_TABLE_NAME)
+          .select('room_id,payload,updated_at')
+          .order('updated_at', { ascending: false })
+          .limit(30);
+        if (error) throw error;
+        savedRooms = Array.isArray(data) ? data : [];
+        renderSavedRooms();
+        clearSetupWarning();
+      } catch (error) {
+        console.warn('Saved rooms load failed:', error);
+        showSetupWarning(error);
+      }
+    }
+
     function normalizeState(raw) {
       const next = raw && typeof raw === 'object' ? raw : createEmptyState(roomId);
       next.room_id = next.room_id || roomId;
@@ -246,6 +270,7 @@
       renderLibrary();
       renderTable();
       renderZoomButtons();
+      renderSavedRooms();
     }
 
     function renderRoom() {
@@ -256,6 +281,55 @@
           : 'Viewer: il tavolo si aggiorna automaticamente.';
       }
       if (liveEls.viewerLink) liveEls.viewerLink.value = viewerUrl();
+      if (liveEls.roomTitleInput && document.activeElement !== liveEls.roomTitleInput) {
+        liveEls.roomTitleInput.value = tableState.title || '';
+      }
+      const titleEl = document.querySelector('.table-title');
+      if (titleEl) titleEl.textContent = tableState.title || 'Tavolo lezione';
+    }
+
+    function renderSavedRooms() {
+      if (!IS_PRESENTER || !liveEls.savedRoomList) return;
+      if (!savedRooms.length) {
+        liveEls.savedRoomList.innerHTML = '<div class="room-meta">Nessun tavolo salvato trovato.</div>';
+        return;
+      }
+      liveEls.savedRoomList.innerHTML = savedRooms.map(row => {
+        const payload = row.payload || {};
+        const title = payload.title || 'Lezione EPiC';
+        const count = Array.isArray(payload.items) ? payload.items.length : 0;
+        const date = row.updated_at ? new Date(row.updated_at).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' }) : '';
+        return '<button class="saved-room' + (row.room_id === roomId ? ' active' : '') + '" data-room="' + esc(row.room_id) + '">' +
+          '<div class="saved-room-title">' + esc(title) + '</div>' +
+          '<div class="saved-room-meta">' + esc(row.room_id) + ' · ' + count + ' elementi · ' + esc(date) + '</div>' +
+        '</button>';
+      }).join('');
+      liveEls.savedRoomList.querySelectorAll('[data-room]').forEach(btn => {
+        btn.addEventListener('click', () => openRoom(btn.dataset.room));
+      });
+    }
+
+    async function openRoom(nextRoomId) {
+      const next = (nextRoomId || '').trim().toUpperCase();
+      if (!next) return;
+      roomId = next;
+      tableState = createEmptyState(roomId);
+      lastRemoteStamp = '';
+      const url = new URL(window.location.href);
+      url.searchParams.set('room', roomId);
+      window.history.replaceState(null, '', url.toString());
+      renderAll();
+      await loadRoom();
+      await loadSavedRooms();
+    }
+
+    async function saveTitle() {
+      if (!IS_PRESENTER) return;
+      const value = (liveEls.roomTitleInput?.value || '').trim();
+      tableState.title = value || 'Lezione EPiC';
+      await saveRoom();
+      await loadSavedRooms();
+      renderRoom();
     }
 
     function renderLibrary() {
@@ -487,6 +561,7 @@
 
       renderAll();
       await loadRoom();
+      await loadSavedRooms();
       startPolling();
     }
 
@@ -498,11 +573,20 @@
         url.searchParams.set('room', roomId);
         window.history.replaceState(null, '', url.toString());
         renderAll();
-        saveRoom();
+        saveRoom().then(loadSavedRooms);
       });
       document.getElementById('copyViewerBtn')?.addEventListener('click', copyViewerLink);
       document.getElementById('copyViewerBtn2')?.addEventListener('click', copyViewerLink);
       document.getElementById('clearTableBtn')?.addEventListener('click', clearTable);
+      document.getElementById('saveTitleBtn')?.addEventListener('click', saveTitle);
+      document.getElementById('openRoomBtn')?.addEventListener('click', () => openRoom(liveEls.openRoomInput?.value || ''));
+      document.getElementById('refreshRoomsBtn')?.addEventListener('click', loadSavedRooms);
+      liveEls.openRoomInput?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') openRoom(liveEls.openRoomInput.value);
+      });
+      liveEls.roomTitleInput?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') saveTitle();
+      });
       liveEls.librarySearch?.addEventListener('input', renderLibrary);
       liveEls.libraryTabs?.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', () => {

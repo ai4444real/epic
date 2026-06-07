@@ -98,6 +98,31 @@
       min-height: 18px;
     }
 
+    .saved-room-list{
+      display: grid;
+      gap: 7px;
+      max-height: 220px;
+      overflow-y: auto;
+      margin-top: 10px;
+      padding-right: 2px;
+    }
+
+    .saved-room{
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      padding: 9px 10px;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .saved-room:hover{ background: var(--border-light); border-color: var(--muted-light); }
+    .saved-room.active{ border-color: var(--fg); box-shadow: inset 3px 0 0 var(--fg); }
+    .saved-room-title{ font-size: var(--fs-sm); font-weight: 700; line-height: 1.25; }
+    .saved-room-meta{ color: var(--muted); font-size: var(--fs-xxs); margin-top: 3px; }
+
     .library-tabs{
       display: grid;
       grid-template-columns: repeat(4, 1fr);
