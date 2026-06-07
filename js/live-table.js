@@ -209,10 +209,23 @@
       saveRoom();
     }
 
+    function toggleCrossFlip(itemUid, slot) {
+      const item = tableState.items.find(item => item.uid === itemUid);
+      if (!item || item.kind !== 'P') return;
+      if (!item.crossFlipped || typeof item.crossFlipped !== 'object') {
+        item.crossFlipped = { P: false, Cog: false, Emo: false, Comp: false };
+      }
+      item.crossFlipped[slot] = !item.crossFlipped[slot];
+      saveRoom();
+    }
+
     function toggleCross(itemUid) {
       const item = tableState.items.find(item => item.uid === itemUid);
       if (!item || item.kind !== 'P') return;
       item.crossOpen = !item.crossOpen;
+      if (item.crossOpen && (!item.crossFlipped || typeof item.crossFlipped !== 'object')) {
+        item.crossFlipped = { P: false, Cog: false, Emo: false, Comp: false };
+      }
       saveRoom();
     }
 
@@ -282,6 +295,12 @@
       }
       liveEls.liveTable.innerHTML = '<div class="table-grid">' + tableState.items.map(renderTableItem).join('') + '</div>';
       if (!IS_PRESENTER) return;
+      liveEls.liveTable.querySelectorAll('[data-card-flip]').forEach(card => {
+        card.addEventListener('click', () => toggleFlip(card.dataset.cardFlip));
+      });
+      liveEls.liveTable.querySelectorAll('[data-cross-flip]').forEach(card => {
+        card.addEventListener('click', () => toggleCrossFlip(card.dataset.uid, card.dataset.crossFlip));
+      });
       liveEls.liveTable.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
           const action = btn.dataset.action;
@@ -289,7 +308,6 @@
           if (action === 'remove') removeItem(id);
           if (action === 'up') moveItem(id, -1);
           if (action === 'down') moveItem(id, 1);
-          if (action === 'flip') toggleFlip(id);
           if (action === 'cross') toggleCross(id);
         });
       });
@@ -304,7 +322,7 @@
 
     function renderSingleCard(item, card) {
       return '<article class="live-card-wrap">' +
-        renderFixedCard(item.kind, card, item.flipped) +
+        renderFixedCard(item.kind, card, item.flipped, 'data-card-flip="' + esc(item.uid) + '"') +
         renderItemActions(item) +
       '</article>';
     }
@@ -313,12 +331,13 @@
       const cog = interventionForPattern(item.id, 'Cog');
       const emo = interventionForPattern(item.id, 'Emo');
       const comp = interventionForPattern(item.id, 'Comp');
+      const flipped = item.crossFlipped && typeof item.crossFlipped === 'object' ? item.crossFlipped : {};
       return '<article class="live-cross">' +
         '<div class="cross-mini-grid">' +
-          '<div class="cross-cell pat">' + renderFixedCard('P', p, false) + '</div>' +
-          '<div class="cross-cell cog">' + (cog ? renderFixedCard('I', cog, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
-          '<div class="cross-cell emo">' + (emo ? renderFixedCard('I', emo, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
-          '<div class="cross-cell comp">' + (comp ? renderFixedCard('I', comp, false) : '<div class="empty-slot">n/a</div>') + '</div>' +
+          '<div class="cross-cell pat">' + renderFixedCard('P', p, !!flipped.P, 'data-cross-flip="P" data-uid="' + esc(item.uid) + '"') + '</div>' +
+          '<div class="cross-cell cog">' + (cog ? renderFixedCard('I', cog, !!flipped.Cog, 'data-cross-flip="Cog" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
+          '<div class="cross-cell emo">' + (emo ? renderFixedCard('I', emo, !!flipped.Emo, 'data-cross-flip="Emo" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
+          '<div class="cross-cell comp">' + (comp ? renderFixedCard('I', comp, !!flipped.Comp, 'data-cross-flip="Comp" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
         '</div>' +
         renderItemActions(item) +
       '</article>';
@@ -330,7 +349,6 @@
         '<button class="mini-btn" data-action="up" data-uid="' + item.uid + '">Su</button>' +
         '<button class="mini-btn" data-action="down" data-uid="' + item.uid + '">Giu</button>' +
         (item.kind === 'P' ? '<button class="mini-btn" data-action="cross" data-uid="' + item.uid + '">' + (item.crossOpen ? 'Chiudi croce' : 'Apri croce') + '</button>' : '') +
-        (item.kind !== 'P' || !item.crossOpen ? '<button class="mini-btn" data-action="flip" data-uid="' + item.uid + '">' + (item.flipped ? 'Fronte' : 'Retro') + '</button>' : '') +
         '<button class="mini-btn danger" data-action="remove" data-uid="' + item.uid + '">Togli</button>' +
       '</div>';
     }
@@ -339,10 +357,10 @@
       return (p.fronte?.shorts?.items || p.fronte?.segnali?.items || []).slice(0, 4).join(' · ');
     }
 
-    function renderFixedCard(kind, card, flipped) {
+    function renderFixedCard(kind, card, flipped, attrs) {
       const type = kind === 'I' ? interventionType(card) : (kind === 'E' ? 'Emozione' : 'Pattern');
       const cls = kind === 'I' ? 'kind-' + interventionType(card) : 'kind-' + kind;
-      return '<div class="live-epic-card ' + cls + (flipped ? ' flipped' : '') + '">' +
+      return '<div class="live-epic-card ' + cls + (flipped ? ' flipped' : '') + '" ' + (attrs || '') + '>' +
         '<div class="epic-card-inner">' +
           '<div class="epic-face front">' + renderFixedCardFront(kind, card, type) + '</div>' +
           '<div class="epic-face back">' + renderFixedCardBack(kind, card, type) + '</div>' +
