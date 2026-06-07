@@ -7,6 +7,14 @@
       min-height: calc(100vh - 61px);
     }
 
+    .live-shell.viewer-only{
+      display: block;
+    }
+
+    .live-shell.viewer-only .live-main{
+      max-width: none;
+    }
+
     .live-sidebar{
       border-right: 1px solid var(--border);
       background: #fff;
@@ -379,11 +387,7 @@
       position: relative;
       width: 100%;
       height: 100%;
-      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-style: preserve-3d;
     }
-
-    .live-epic-card.flipped .epic-card-inner{ transform: rotateY(180deg); }
 
     .live-epic-card .epic-face{
       position: absolute;
@@ -396,8 +400,6 @@
       background: #fff;
       padding: calc(15px * var(--live-card-scale));
       box-shadow: 0 1px 4px rgba(0,0,0,0.06);
-      backface-visibility: hidden;
-      -webkit-backface-visibility: hidden;
       overflow: hidden;
     }
 
@@ -407,9 +409,12 @@
     }
 
     .live-epic-card .epic-face.back{
-      transform: rotateY(180deg);
+      display: none;
       padding: calc(12px * var(--live-card-scale));
     }
+
+    .live-epic-card.flipped .epic-face.front{ display: none; }
+    .live-epic-card.flipped .epic-face.back{ display: flex; }
 
     .live-epic-card.kind-E .epic-face{ background: rgba(250,204,21,0.05); border-left-color: #facc15; }
     .live-epic-card.kind-P .epic-face{ background: rgba(56,189,248,0.05); border-left-color: var(--type-p); }
