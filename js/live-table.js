@@ -62,8 +62,9 @@
     }
 
     function allCards() {
+      const orderedEmotions = liveEmotionOrder.map(id => eMap[id]).filter(Boolean);
       return [
-        ...emotions.map(card => ({ kind: 'E', card })),
+        ...orderedEmotions.map(card => ({ kind: 'E', card })),
         ...patterns.map(card => ({ kind: 'P', card })),
         ...interventions.map(card => ({ kind: 'I', card }))
       ];
@@ -369,16 +370,24 @@
           return !q || hay.includes(q);
         })
         .slice(0, 80);
-      liveEls.libraryList.innerHTML = cards.map(({ kind, card }) =>
-        '<div class="library-card" data-kind="' + esc(kind) + '" data-id="' + esc(card.id) + '">' +
-          '<div class="library-id">' + esc(card.id) + '</div>' +
-          '<div class="library-label">' + esc(card.label) + '</div>' +
-          '<div class="library-kind">' + kindName(kind, card) + '</div>' +
-        '</div>'
-      ).join('');
+      liveEls.libraryList.innerHTML = cards.map(({ kind, card }) => renderLibraryCard(kind, card)).join('');
       liveEls.libraryList.querySelectorAll('.library-card').forEach(el => {
         el.addEventListener('click', () => addCard(el.dataset.kind, el.dataset.id));
       });
+    }
+
+    function renderLibraryCard(kind, card) {
+      const thumb = kind === 'E' && liveEmotionImages[card.id]
+        ? '<div class="library-thumb"><img src="' + liveEmotionImages[card.id] + '" alt="' + esc(card.id) + '"></div>'
+        : '';
+      return '<div class="library-card' + (thumb ? ' has-thumb' : '') + '" data-kind="' + esc(kind) + '" data-id="' + esc(card.id) + '">' +
+        thumb +
+        '<div>' +
+          '<div class="library-id">' + esc(card.id) + '</div>' +
+          '<div class="library-label">' + esc(card.label) + '</div>' +
+          '<div class="library-kind">' + kindName(kind, card) + '</div>' +
+        '</div>' +
+      '</div>';
     }
 
     function kindName(kind, card) {

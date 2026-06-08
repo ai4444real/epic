@@ -163,6 +163,31 @@
       transition: all 0.15s ease;
     }
 
+    .library-card.has-thumb{
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 9px;
+      align-items: center;
+    }
+
+    .library-thumb{
+      width: 42px;
+      height: 42px;
+      border-radius: 999px;
+      overflow: hidden;
+      background: var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .library-thumb img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
     .library-card:hover{
       border-color: var(--muted-light);
       background: var(--border-light);
