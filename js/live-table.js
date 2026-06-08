@@ -20,6 +20,16 @@
     };
 
     const liveConfig = window.EPIC_APP_CONFIG || {};
+    const liveEmotionOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
+    const liveEmotionImages = {
+      E1: 'images/E1b.png',
+      E2: 'images/E2b.png',
+      E3: 'images/E3b.png',
+      E4: 'images/E4b.png',
+      E5: 'images/E5b.png',
+      E6: 'images/E6b.png'
+    };
+    const livePatternEnergyMap = buildPatternEnergyMap();
     let liveClient = null;
     let roomId = new URLSearchParams(window.location.search).get('room') || '';
     let libraryFilter = 'all';
@@ -73,6 +83,23 @@
     function interventionType(i) {
       const map = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
       return map[(i?.type || '').toLowerCase()] || i?.type || 'I';
+    }
+
+    function buildPatternEnergyMap() {
+      const result = {};
+      emotions.forEach(e => {
+        const high = e.fronte?.pattern_da_esplorare?.high || [];
+        const medium = e.fronte?.pattern_da_esplorare?.medium || [];
+        high.forEach(pid => {
+          if (!result[pid]) result[pid] = {};
+          result[pid][e.id] = 'high';
+        });
+        medium.forEach(pid => {
+          if (!result[pid]) result[pid] = {};
+          if (!result[pid][e.id]) result[pid][e.id] = 'medium';
+        });
+      });
+      return result;
     }
 
     function interventionForPattern(pid, type) {
@@ -460,6 +487,7 @@
         html += renderEpicSection('', card.fronte?.shorts?.items, 'muted');
         html += renderEpicSection('Segnali', card.fronte?.segnali?.items);
         html += renderEpicSection('Interventi', linkedI);
+        html += renderPatternEnergyStrip(card.id);
         html += renderEpicFooter('EPiC', 'Pattern');
         return html;
       }
@@ -522,6 +550,17 @@
 
     function renderEpicFooter(left, right) {
       return '<footer class="epic-footer"><span>' + esc(left) + '</span><span>' + esc(right) + '</span></footer>';
+    }
+
+    function renderPatternEnergyStrip(patternId) {
+      const map = livePatternEnergyMap[patternId] || {};
+      const icons = liveEmotionOrder.map(eid => {
+        const level = map[eid] || 'none';
+        const energyClass = (eid === 'E1' || eid === 'E2' || eid === 'E6') ? 'energy-low' : 'energy-high';
+        const src = liveEmotionImages[eid];
+        return '<span class="pattern-energy-icon ' + level + ' ' + energyClass + '"><img src="' + src + '" alt="' + eid + '"></span>';
+      }).join('');
+      return '<div class="pattern-energy-strip" aria-label="Energie del pattern">' + icons + '</div>';
     }
 
     function renderZoomButtons() {
