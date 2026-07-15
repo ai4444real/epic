@@ -194,7 +194,7 @@ var EPIC_DATA = {
     },
     {
       "id": "E4",
-      "label": "Stress / Sfinimento",
+      "label": "Stress / Pressione",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -388,6 +388,7 @@ var EPIC_DATA = {
     {
       "id": "P1",
       "label": "Perfezione",
+      "hint_leva": "E1:Emo,E4:Comp",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -431,6 +432,7 @@ var EPIC_DATA = {
     {
       "id": "P2",
       "label": "Sfiducia",
+      "hint_leva": "E2:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -474,6 +476,7 @@ var EPIC_DATA = {
     {
       "id": "P3",
       "label": "Attribuzione",
+      "hint_leva": "E5:Emo,E3:Cog",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -518,6 +521,7 @@ var EPIC_DATA = {
     {
       "id": "P4",
       "label": "Confini",
+      "hint_leva": "E5:Emo,E3:Cog",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -561,6 +565,7 @@ var EPIC_DATA = {
     {
       "id": "P5",
       "label": "Evitamento",
+      "hint_leva": "E2:Emo,E6:Comp",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -602,7 +607,8 @@ var EPIC_DATA = {
     },
     {
       "id": "P6",
-      "label": "Ruminazione",
+      "label": "Rimuginazione",
+      "hint_leva": "E1:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -645,6 +651,7 @@ var EPIC_DATA = {
     {
       "id": "P7",
       "label": "Perdita",
+      "hint_leva": "E2:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -685,6 +692,7 @@ var EPIC_DATA = {
     {
       "id": "P8",
       "label": "Miopia",
+      "hint_leva": "",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -726,6 +734,7 @@ var EPIC_DATA = {
     {
       "id": "P9",
       "label": "Impostura",
+      "hint_leva": "E2:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -768,6 +777,7 @@ var EPIC_DATA = {
     {
       "id": "P10",
       "label": "Conformità",
+      "hint_leva": "E6:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -812,6 +822,7 @@ var EPIC_DATA = {
     {
       "id": "P11",
       "label": "Rigidità",
+      "hint_leva": "E6:Comp",
       "fronte": {
         "aliases": {
           "_label": "Alias",
@@ -853,6 +864,7 @@ var EPIC_DATA = {
     {
       "id": "P12",
       "label": "Conferma",
+      "hint_leva": "E5:Emo",
       "fronte": {
         "aliases": {
           "_label": "Alias",

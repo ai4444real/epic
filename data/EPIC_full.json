@@ -24,6 +24,7 @@
 "preoccupazione",
 "nodo allo stomaco"
 ],
+"funzione": "agitazione",
 "red_flags": [
 "assenza di attivazione",
 "apatia marcata",
@@ -67,6 +68,7 @@
 "allarme interno",
 "mi tiro indietro"
 ],
+"funzione": "allarme",
 "red_flags": [
 "assenza minaccia",
 "confusione diffusa",
@@ -109,6 +111,7 @@
 "stallo",
 "non va avanti"
 ],
+"funzione": "attrito",
 "red_flags": [
 "assenza tensione",
 "assenza obiettivo",
@@ -128,7 +131,7 @@
 },
 {
 "id": "E4",
-"label": "Stress / Sfinimento",
+"label": "Stress / Pressione",
 "subtypes": [
 "Sovraccarico",
 "Recupero insufficiente",
@@ -150,6 +153,7 @@
 "pressione",
 "troppo da reggere"
 ],
+"funzione": "pressione",
 "red_flags": [
 "assenza sovraccarico",
 "alta energia arrabbiata",
@@ -192,6 +196,7 @@
 "esplodo dentro",
 "mi sale"
 ],
+"funzione": "attacco",
 "red_flags": [
 "energia bassa",
 "tristezza predominante",
@@ -234,6 +239,7 @@
 "spento",
 "senza energia"
 ],
+"funzione": "vuoto",
 "red_flags": [
 "alta energia",
 "agitazione",
@@ -273,7 +279,8 @@
 ],
 "hint": "definisci 'abbastanza buono'",
 "non_e_questo_se": "0/100 → probabile P11",
-"porta_I": "I-P1-Cog"
+"porta_I": "I-P1-Cog",
+"hint_leva": "E1:Emo,E4:Comp"
 },
 {
 "id": "P2",
@@ -297,7 +304,8 @@
 ],
 "hint": "mostra evidenza che già puoi",
 "non_e_questo_se": "timore di perdere → probabile P7",
-"porta_I": "I-P2-Cog"
+"porta_I": "I-P2-Cog",
+"hint_leva": "E2:Emo"
 },
 {
 "id": "P3",
@@ -322,7 +330,8 @@
 ],
 "hint": "cerca bisogno → riduci attribuzione",
 "non_e_questo_se": "eviti per piacere → probabile P4",
-"porta_I": "I-P3-Comp"
+"porta_I": "I-P3-Comp",
+"hint_leva": "E5:Emo,E3:Cog"
 },
 {
 "id": "P4",
@@ -346,7 +355,8 @@
 ],
 "hint": "porta al bisogno → formula richiesta",
 "non_e_questo_se": "vedi cattiva intenzione → probabile P3",
-"porta_I": "I-P4-Comp"
+"porta_I": "I-P4-Comp",
+"hint_leva": "E5:Emo,E3:Cog"
 },
 {
 "id": "P5",
@@ -369,11 +379,12 @@
 ],
 "hint": "micro → aggancio",
 "non_e_questo_se": "non fai per rischio perdita → P7",
-"porta_I": "I-P5-Comp"
+"porta_I": "I-P5-Comp",
+"hint_leva": "E2:Emo,E6:Comp"
 },
 {
 "id": "P6",
-"label": "Ruminazione",
+"label": "Rimuginazione",
 "aliases": [
 "rimuginio cognitivo",
 "overthinking",
@@ -392,7 +403,8 @@
 ],
 "hint": "separa: pensiero → evento mentale",
 "non_e_questo_se": "tema merito/vergogna → P9",
-"porta_I": "I-P6-Emo"
+"porta_I": "I-P6-Emo",
+"hint_leva": "E1:Emo"
 },
 {
 "id": "P7",
@@ -413,7 +425,8 @@
 ],
 "hint": "micro-test reversibile",
 "non_e_questo_se": "incapace → P2",
-"porta_I": "I-P7-Comp"
+"porta_I": "I-P7-Comp",
+"hint_leva": "E2:Emo"
 },
 {
 "id": "P8",
@@ -435,7 +448,8 @@
 ],
 "hint": "allinea al sé del futuro",
 "non_e_questo_se": "tema identità/metro esterno → P10",
-"porta_I": "I-P8-Cog"
+"porta_I": "I-P8-Cog",
+"hint_leva": ""
 },
 {
 "id": "P9",
@@ -458,7 +472,8 @@
 ],
 "hint": "riconosci merito → normalizza",
 "non_e_questo_se": "pensiero in loop → P6",
-"porta_I": "I-P9-Cog"
+"porta_I": "I-P9-Cog",
+"hint_leva": "E2:Emo"
 },
 {
 "id": "P10",
@@ -483,7 +498,8 @@
 ],
 "hint": "porta al metro interno",
 "non_e_questo_se": "evitare attrito → P4",
-"porta_I": "I-P10-Cog"
+"porta_I": "I-P10-Cog",
+"hint_leva": "E6:Emo"
 },
 {
 "id": "P11",
@@ -505,7 +521,8 @@
 ],
 "hint": "trova la zona grigia",
 "non_e_questo_se": "standard altissimi → P1",
-"porta_I": "I-P11-Cog"
+"porta_I": "I-P11-Cog",
+"hint_leva": "E6:Comp"
 },
 {
 "id": "P12",
@@ -527,7 +544,8 @@
 ],
 "hint": "porta 2a ipotesi",
 "non_e_questo_se": "non agisce per paura → P2/P7",
-"porta_I": "I-P12-Cog"
+"porta_I": "I-P12-Cog",
+"hint_leva": "E5:Emo"
 }
 ],
 "I": [

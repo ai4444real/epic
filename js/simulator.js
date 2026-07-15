@@ -1,10 +1,28 @@
 // ---- SIMULATOR-SPECIFIC JS ----
+    const SIMULATOR_CONFIG = window.EPIC_SIMULATOR_CONFIG || {
+      mode: 'locked',
+      scenarioRefresh: true,
+      label: ''
+    };
+
+    function applySimulatorConfig() {
+      const btn = document.getElementById('fetchScenariosBtn');
+      if (btn && SIMULATOR_CONFIG.scenarioRefresh === false) {
+        btn.hidden = true;
+      }
+
+      if (SIMULATOR_CONFIG.label) {
+        const sub = document.querySelector('.toolbar h1 .sub');
+        if (sub) sub.textContent = 'Coach Simulator · ' + SIMULATOR_CONFIG.label;
+      }
+    }
 
     // ---- Supabase ----
     const SUPABASE_URL = 'https://afbecjijvzalkycttqtj.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmYmVjamlqdnphbGt5Y3R0cXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjA1NDMsImV4cCI6MjA2ODQ5NjU0M30.xVn-2xeYMuq230CPizJxn5ac8fcO2siFWAIj0gSDeB0';
 
     async function fetchScenariosFromSupabase() {
+      if (SIMULATOR_CONFIG.scenarioRefresh === false) return;
       const btn = document.getElementById('fetchScenariosBtn');
       btn.disabled = true;
       btn.textContent = 'Caricamento...';
@@ -136,6 +154,7 @@
 
     // ---- Init ----
     window.addEventListener('DOMContentLoaded', () => {
+      applySimulatorConfig();
       renderDifficultyFilter();
       renderScenarioList();
       checkResume();

@@ -7,5 +7,14 @@ window.EPIC_APP_CONFIG = {
   loginRedirectPath: 'auth-callback',
   postLoginDefaultPath: '',
   appEventsTable: 'app_events',
-  publicPages: ['epic-live-view', 'epic-live-view.html']
+  publicPages: [
+    'epic-live-view',
+    'epic-live-view.html',
+    'epic-simulator',
+    'epic-simulator.html',
+    'epic-simulator-free',
+    'epic-simulator-free.html',
+    'epic-simulator-locked',
+    'epic-simulator-locked.html'
+  ]
 };
