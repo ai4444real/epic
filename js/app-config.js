@@ -21,6 +21,12 @@ window.EPIC_APP_CONFIG = {
     'epic-explorer-free',
     'epic-explorer-free.html',
     'epic-explorer-locked',
-    'epic-explorer-locked.html'
+    'epic-explorer-locked.html',
+    'epic-all-cards',
+    'epic-all-cards.html',
+    'epic-all-cards-free',
+    'epic-all-cards-free.html',
+    'epic-all-cards-locked',
+    'epic-all-cards-locked.html'
   ]
 };

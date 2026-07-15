@@ -5,24 +5,48 @@ const state = {
       patternFilter: null  // es. "P6" - filtra P6 + I-P6-*
     };
 
+    const ALL_CARDS_CONFIG = window.EPIC_ALL_CARDS_CONFIG || {
+      mode: 'locked',
+      label: '',
+      fullDataSrc: 'EPIC_full.json',
+      allowFileLoad: true
+    };
+
+    function applyAllCardsConfig() {
+      if (ALL_CARDS_CONFIG.label) {
+        const sub = document.querySelector('.toolbar h1 .sub');
+        if (sub) sub.textContent = ALL_CARDS_CONFIG.label;
+      }
+
+      if (ALL_CARDS_CONFIG.allowFileLoad === false) {
+        const input = document.getElementById('fileInput');
+        const label = input ? input.closest('label') : null;
+        if (label) label.hidden = true;
+      }
+    }
+
     // Auto-load on init - prova prima inline poi esterno
     window.addEventListener('DOMContentLoaded', async () => {
+      applyAllCardsConfig();
+
       // Check if EPIC_DATA is available (embedded inline or loaded from EPIC_data.js)
       if (typeof EPIC_DATA !== 'undefined' && EPIC_DATA) {
         console.log('Auto-loading embedded data...');
         loadData(EPIC_DATA);
-        document.querySelector('label').style.opacity = '0.5';
+        const label = document.getElementById('fileInput')?.closest('label');
+        if (label) label.style.opacity = '0.5';
         return;
       }
 
       // Try loading from external file (fallback)
       try {
-        const response = await fetch('data/EPIC_full.json');
+        const response = await fetch(ALL_CARDS_CONFIG.fullDataSrc || 'EPIC_full.json');
         if (response.ok) {
           const data = await response.json();
-          console.log('Auto-loading from EPIC_full.json...');
+          console.log('Auto-loading cards data...');
           loadData(data);
-          document.querySelector('label').style.opacity = '0.5';
+          const label = document.getElementById('fileInput')?.closest('label');
+          if (label) label.style.opacity = '0.5';
         }
       } catch (err) {
         console.log('No auto-load available - use file input');
