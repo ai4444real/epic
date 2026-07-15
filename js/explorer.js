@@ -1,4 +1,15 @@
 // ---- EXPLORER-SPECIFIC JS ----
+    const EXPLORER_CONFIG = window.EPIC_EXPLORER_CONFIG || {
+      mode: 'locked',
+      label: ''
+    };
+
+    function applyExplorerConfig() {
+      if (EXPLORER_CONFIG.label) {
+        const sub = document.querySelector('.toolbar h1 .sub');
+        if (sub) sub.textContent = 'Explorer · ' + EXPLORER_CONFIG.label;
+      }
+    }
 
     // Intent → Intervention type mapping
     const INTENT_MAP = {
@@ -17,6 +28,7 @@
 
     // ---- Init ----
     window.addEventListener('DOMContentLoaded', () => {
+      applyExplorerConfig();
       renderStep1();
     });
 

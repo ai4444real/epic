@@ -15,6 +15,12 @@ window.EPIC_APP_CONFIG = {
     'epic-simulator-free',
     'epic-simulator-free.html',
     'epic-simulator-locked',
-    'epic-simulator-locked.html'
+    'epic-simulator-locked.html',
+    'epic-explorer',
+    'epic-explorer.html',
+    'epic-explorer-free',
+    'epic-explorer-free.html',
+    'epic-explorer-locked',
+    'epic-explorer-locked.html'
   ]
 };
