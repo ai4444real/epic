@@ -75,17 +75,17 @@
 .epic-v1-pattern-note.left,
 .epic-v1-pattern-note.right {
   top: 43%;
-  width: 150px;
+  width: 178px;
   transform-origin: center;
 }
 
 .epic-v1-pattern-note.left {
-  left: -51px;
+  left: -53px;
   transform: rotate(-90deg);
 }
 
 .epic-v1-pattern-note.right {
-  right: -51px;
+  right: -53px;
   transform: rotate(90deg);
 }
 
