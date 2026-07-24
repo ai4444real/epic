@@ -75,17 +75,17 @@
 .epic-v1-pattern-note.left,
 .epic-v1-pattern-note.right {
   top: 43%;
-  width: 178px;
+  width: 150px;
   transform-origin: center;
 }
 
 .epic-v1-pattern-note.left {
-  left: -53px;
+  left: -54px;
   transform: rotate(-90deg);
 }
 
 .epic-v1-pattern-note.right {
-  right: -53px;
+  right: -54px;
   transform: rotate(90deg);
 }
 
@@ -136,6 +136,10 @@
   opacity: 0.42;
   pointer-events: none;
   z-index: 0;
+}
+
+.epic-v1-pattern-watermark {
+  display: none;
 }
 
 .epic-v1-pattern-title,
