@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="_shared.css" />
+  <title>EPiC Energy Print __PRINT_SIDE_LABEL__</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    :root {
+      --page-pad: 8mm;
+      --card-w: 63mm;
+      --card-h: 88mm;
+      --gap-x: 5mm;
+      --gap-y: 3mm;
+      --radius: 6px;
+      --pad: 10px;
+      --fs-xxs: 8px;
+      --fs-xs: 8px;
+      --fs-sm: 9px;
+      --fs-md: 10px;
+      --fs-lg: 13px;
+      --fg: #0a0a0a;
+      --muted: #71717a;
+      --muted-light: #a1a1aa;
+      --border: #d4d4d8;
+      --border-light: #e4e4e7;
+      --blue: #93c5fd;
+      --blue-line: #60a5fa;
+      --orange: #fdba74;
+      --orange-line: #fb923c;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font: 400 10px/1.35 "Inter", "Source Sans 3", system-ui, sans-serif;
+      background: #fff;
+      color: var(--fg);
+    }
+
+    body {
+      padding: 0 0 18px;
+    }
+
+    .screenbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.96);
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 13px;
+    }
+
+    .btn {
+      border: 1px solid #d4d4d8;
+      border-radius: 6px;
+      background: #fff;
+      color: #111827;
+      padding: 6px 10px;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .screenbar .note {
+      color: #6b7280;
+    }
+
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: var(--page-pad);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .a4-page:last-child { page-break-after: auto; }
+
+    @media screen {
+      body {
+        background: #f5f5f5;
+      }
+
+      .a4-page {
+        margin: 14px auto 0;
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        outline: 1px solid #e5e7eb;
+      }
+    }
+
+    .page-label {
+      position: absolute;
+      top: 3mm;
+      right: 5mm;
+      font-size: 7px;
+      color: #c4c4c7;
+    }
+
+    .page-content {
+      position: absolute;
+      inset: var(--page-pad);
+      display: grid;
+      grid-template-columns: var(--card-w) var(--card-w);
+      grid-template-rows: var(--card-h) var(--card-h) var(--card-h);
+      column-gap: var(--gap-x);
+      row-gap: var(--gap-y);
+      justify-content: center;
+      align-content: center;
+    }
+
+    .card-slot {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+    }
+
+    .card {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      border-radius: 0;
+      padding: var(--pad);
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .card.front.energy-low {
+      background: transparent;
+    }
+
+    .card.front.energy-high {
+      background: transparent;
+    }
+
+    .card.back {
+      padding: 14mm 10mm 12mm;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-logo {
+      width: 35mm;
+      height: auto;
+      display: block;
+      margin-bottom: 7mm;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 3mm;
+      letter-spacing: 0;
+    }
+
+    .url {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8mm;
+      letter-spacing: 0.01em;
+    }
+
+    .type-label {
+      min-width: 31mm;
+      padding: 2.2mm 4mm;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .card-id {
+      font-size: var(--fs-xxs);
+      color: var(--muted-light);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .type-pill {
+      font-size: var(--fs-xxs);
+      padding: 1px 5px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .energy-low .type-pill {
+      background: rgba(147, 197, 253, 0.18);
+      color: #2563eb;
+    }
+
+    .energy-high .type-pill {
+      background: rgba(251, 146, 60, 0.18);
+      color: #c2410c;
+    }
+
+    .title {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+
+    .subtypes-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      min-height: 2.5em;
+    }
+
+    .aliases-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.25;
+      margin-bottom: 6px;
+      min-height: 2.3em;
+    }
+
+    .art {
+      height: 24mm;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .art img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .energy-text-area {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .energy-text-area > *:not(.energy-epic-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .energy-epic-watermark {
+      position: absolute;
+      left: 50%;
+      bottom: -4mm;
+      width: 54mm;
+      height: auto;
+      opacity: 0.22;
+      object-fit: contain;
+      pointer-events: none;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .section {
+      margin-top: 3px;
+    }
+
+    .section-title {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .bullets {
+      padding-left: 13px;
+    }
+
+    .bullets li {
+      font-size: var(--fs-xs);
+      line-height: 1.2;
+      margin-bottom: 0;
+    }
+
+    .block {
+      margin-top: 14px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .label {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .block-content {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3px;
+    }
+
+    .chip {
+      display: inline-block;
+      font-size: var(--fs-xxs);
+      padding: 2px 5px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .trim-svg {
+      position: absolute;
+      width: calc(var(--card-w) + 6.2mm);
+      height: calc(var(--card-h) + 6.2mm);
+      left: -3.1mm;
+      top: -3.1mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .reg-svg {
+      position: absolute;
+      width: 8mm;
+      height: 8mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .reg-top {
+      top: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-bottom {
+      bottom: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-left {
+      left: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .reg-right {
+      right: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    @media print {
+      .screenbar { display: none; }
+      html, body { background: #fff; }
+    }
+  </style>
+</head>
+<body>
+  <div class="screenbar">
+    <button class="btn" onclick="window.print()">Stampa / Salva PDF</button>
+    <div class="note">6 carte energia, __PRINT_SIDE_LABEL__, formato uguale alle carte della croce, fronte/retro allineato.</div>
+  </div>
+
+  <div id="pages"></div>
+
+  <script>
+    const EPIC_DATA = __EPIC_DATA__;
+    const printSide = '__PRINT_SIDE__';
+    const emotions = EPIC_DATA.E || [];
+    const energyOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
+    const orderedEnergies = energyOrder
+      .map(id => emotions.find(e => e.id === id))
+      .filter(Boolean);
+    const patterns = EPIC_DATA.P || [];
+    const emotionLabelMap = Object.fromEntries(emotions.map(e => [e.id, e.label]));
+    const patternLabelMap = Object.fromEntries(patterns.map(p => [p.id, p.label]));
+    const imageMap = {
+      E1: 'images/E1.png',
+      E2: 'images/E2.png',
+      E3: 'images/E3.png',
+      E4: 'images/E4.png',
+      E5: 'images/E5.png',
+      E6: 'images/E6.png'
+    };
+
+    function escapeHTML(value) {
+      return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function energyClass(id) {
+      return (id === 'E1' || id === 'E2' || id === 'E6') ? 'energy-low' : 'energy-high';
+    }
+
+    function expandEmotionRefs(text) {
+      return String(text ?? '')
+        .replace(/\bE([1-6])\b/g, (match) => emotionLabelMap[match] || match)
+        .replace(/\bP([1-9]|1[0-2])\b/g, (match) => patternLabelMap[match] || match);
+    }
+
+    function renderRegistrationMarks() {
+      return `
+        <svg class="reg-svg reg-top" viewBox="0 0 8 8" aria-hidden="true">
+          <line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <svg class="reg-svg reg-right" viewBox="0 0 8 8" aria-hidden="true">
+          <line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <svg class="reg-svg reg-bottom" viewBox="0 0 8 8" aria-hidden="true">
+          <line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <svg class="reg-svg reg-left" viewBox="0 0 8 8" aria-hidden="true">
+          <line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+          <circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/>
+        </svg>
+      `;
+    }
+
+    function renderBulletList(items) {
+      const safe = (items || []).filter(Boolean);
+      if (safe.length === 0) return '';
+      return `<ul class="bullets">${safe.map(v => `<li>${escapeHTML(expandEmotionRefs(v))}</li>`).join('')}</ul>`;
+    }
+
+    function renderChips(items) {
+      const safe = (items || []).filter(Boolean);
+      if (safe.length === 0) return '';
+      return `<div class="chips">${safe.map(v => `<span class="chip">${escapeHTML(expandEmotionRefs(v))}</span>`).join('')}</div>`;
+    }
+
+    function renderFront(e) {
+      const aliases = (e.fronte?.aliases?.items || []).slice(0, 4).map(escapeHTML).join(', ');
+      const quando = e.fronte?.quando_la_vedi?.items || [];
+      const subtypes = e.fronte?.subtypes?.items || [];
+      const notThis = e.fronte?.non_e_questa_se?.items || [];
+      const klass = energyClass(e.id);
+      return `
+        <div class="card front ${klass}">
+          <div class="title">${escapeHTML(e.label)}</div>
+          <div class="subtypes-line">${subtypes.map(v => escapeHTML(String(v).toLowerCase())).join(', ')}</div>
+          <div class="art">
+            <img src="${imageMap[e.id]}" alt="${escapeHTML(e.label)}">
+          </div>
+          <div class="energy-text-area">
+          <img class="energy-epic-watermark" src="app/images/logo/epic_logo.png" alt="">
+          <div class="aliases-line">${aliases}</div>
+          <div class="section">
+            <div class="section-title">Quando la vedi</div>
+            ${renderBulletList(quando)}
+          </div>
+          <div class="block">
+            <div class="label">Non è questa se</div>
+            <div class="block-content">${renderBulletList(notThis)}</div>
+          </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderBack() {
+      return `
+        <div class="card back">
+          <img class="back-logo" src="app/images/logo/epic_logo.png" alt="EPiC">
+          <div class="brand">EPiC</div>
+          <div class="url">simonegenini.com/epic</div>
+          <div class="type-label">ENERGIA</div>
+        </div>
+      `;
+    }
+
+    function renderCard(e) {
+      return printSide === 'back' ? renderBack() : renderFront(e);
+    }
+
+    function wrapCard(html) {
+      return `
+        <div class="card-slot">
+          <svg class="trim-svg" viewBox="-3.1 -3.1 69.2 94.2" aria-hidden="true">
+            <line x1="-3.1" y1="0" x2="-0.8" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="-3.1" x2="0" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="63.8" y1="0" x2="66.1" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="63" y1="-3.1" x2="63" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="-3.1" y1="88" x2="-0.8" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="0" y1="88.8" x2="0" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="63.8" y1="88" x2="66.1" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+            <line x1="63" y1="88.8" x2="63" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>
+          </svg>
+          ${html}
+        </div>
+      `;
+    }
+
+    function renderPage(cards) {
+      return `
+        <section class="a4-page">
+          ${renderRegistrationMarks()}
+          <div class="page-label">__PRINT_SIDE_LABEL__ · Energia</div>
+          <div class="page-content">
+            ${cards.map(e => wrapCard(renderCard(e))).join('')}
+          </div>
+        </section>
+      `;
+    }
+
+    document.getElementById('pages').innerHTML = renderPage(orderedEnergies);
+  </script>
+</body>
+</html>

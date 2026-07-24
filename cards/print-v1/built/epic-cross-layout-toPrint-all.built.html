@@ -1,0 +1,3350 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="_shared.css" />
+  <title>EPiC Cross Layout toPrint All</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    :root {
+      --page-pad: 8mm;
+      /* Compact (75%): 2 crosses per A4 */
+      --card-w: 47mm;
+      --card-h: 66mm;
+      --gap: 1mm;
+      --crosses-per-page: 2;
+      --radius: 5px;
+      --pad: 8px;
+      --e-icon-size: 5.8mm;
+      --e-icons-gap: 1.1mm;
+      --fs-xxs: 7px;
+      --fs-xs: 8px;
+      --fs-sm: 9px;
+      --fs-md: 10px;
+      --fs-lg: 12px;
+      --fg: #0a0a0a;
+      --muted: #71717a;
+      --muted-light: #a1a1aa;
+      --border: #ccc;
+      --border-light: #e4e4e7;
+      --type-cog: #3b82f6;
+      --type-comp: #10b981;
+      --type-emo: #fb923c;
+      --type-p: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font: 400 10px/1.4 "Inter", "Source Sans 3", system-ui, sans-serif;
+      background: #fff;
+      color: var(--fg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ---- A4 page container ---- */
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: var(--page-pad);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .a4-page:last-child {
+      page-break-after: auto;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 3mm;
+      right: 5mm;
+      font-size: 8px;
+      color: #ccc;
+    }
+
+    /* ---- Fixed print layout ---- */
+    .page-content {
+      position: absolute;
+      inset: var(--page-pad);
+      display: grid;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .page-content.layout-1 {
+      grid-template-rows: 1fr;
+    }
+
+    .page-content.layout-2 {
+      grid-template-rows: 1fr auto 1fr;
+    }
+
+    .cross-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;
+    }
+
+    /* ---- Cross layout ---- */
+    .cross {
+      display: grid;
+      grid-template-areas:
+        ".   cog  ."
+        "emo pat comp";
+      grid-template-columns: var(--card-w) var(--card-w) var(--card-w);
+      grid-template-rows: var(--card-h) var(--card-h);
+      gap: 0;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+    .cross.back-side {
+      grid-template-areas:
+        ".    cog  ."
+        "comp pat  emo";
+    }
+
+    .cross-cog { grid-area: cog; }
+    .cross-emo { grid-area: emo; }
+    .cross-pat { grid-area: pat; }
+    .cross-comp { grid-area: comp; }
+
+    .cross-cog,
+    .cross-emo,
+    .cross-pat,
+    .cross-comp {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+    }
+
+    /* ---- Card ---- */
+    .card {
+      width: var(--card-w);
+      height: var(--card-h);
+      border: 0;
+      border-radius: 0;
+      padding: var(--pad);
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Type colors */
+    .card.Cog { background: transparent; }
+    .card.Comp { background: transparent; }
+    .card.Emo { background: transparent; }
+    .card.P { background: transparent; }
+
+    .p-lab-front {
+      padding: 0;
+      display: grid;
+      grid-template-columns: 46px 1fr 46px;
+      grid-template-rows: 34px 1fr 24px;
+      grid-template-areas:
+        "top top top"
+        "left main right"
+        "bottom bottom bottom";
+    }
+
+    .p-margin-note {
+      position: relative;
+      font-size: 9px;
+      line-height: 1;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .p-margin-note .note-copy {
+      display: block;
+    }
+
+    .p-margin-note strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 6px;
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .p-margin-note.top strong {
+      color: var(--type-cog);
+    }
+
+    .p-margin-note.left strong {
+      color: var(--type-emo);
+    }
+
+    .p-margin-note.right strong {
+      color: var(--type-comp);
+    }
+
+    .p-margin-note.top {
+      grid-area: top;
+      align-self: center;
+      justify-self: stretch;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .p-margin-note.left,
+    .p-margin-note.right {
+      align-self: center;
+      justify-self: center;
+      width: 176px;
+      display: block;
+      text-align: center;
+      transform-origin: center center;
+      white-space: nowrap;
+    }
+
+    .p-margin-note.left {
+      grid-area: left;
+      transform: rotate(-90deg);
+    }
+
+    .p-margin-note.right {
+      grid-area: right;
+      transform: rotate(90deg);
+    }
+
+    .p-main {
+      grid-area: main;
+      min-width: 0;
+      padding: 10px 6px 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .p-text-area {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .p-text-area > *:not(.p-epic-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .p-epic-watermark {
+      position: absolute;
+      left: 50%;
+      bottom: 3mm;
+      width: 58.8mm;
+      height: auto;
+      opacity: 0.24;
+      object-fit: contain;
+      pointer-events: none;
+      transform: translateX(-50%) rotate(0deg);
+      z-index: 0;
+    }
+
+    .p-main-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .p-main-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .p-bottom {
+      grid-area: bottom;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Card head */
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .card-id {
+      font-size: var(--fs-xxs);
+      color: var(--muted-light);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .type-pill {
+      font-size: var(--fs-xxs);
+      padding: 1px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .Cog .type-pill { background: rgba(59,130,246,0.1); color: var(--type-cog); }
+    .Comp .type-pill { background: rgba(16,185,129,0.1); color: var(--type-comp); }
+    .Emo .type-pill { background: rgba(251,146,60,0.1); color: var(--type-emo); }
+    .P .type-pill { background: rgba(56,189,248,0.1); color: var(--type-p); }
+
+    .intervention-card {
+      padding: 8px;
+      position: relative;
+      display: grid;
+      grid-template-rows: auto minmax(20mm, 1fr) auto;
+      row-gap: 5px;
+    }
+
+    .intervention-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intervention-lever {
+      position: relative;
+      padding: 1.5mm 2mm 1mm;
+      overflow: hidden;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .intervention-lever > *:not(.intervention-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intervention-watermark {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 27mm;
+      height: auto;
+      opacity: 0.22;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .Cog .intervention-watermark {
+      left: 50%;
+      top: 39%;
+      width: 21.6mm;
+    }
+
+    .Emo .intervention-watermark {
+      left: 22%;
+      top: 47%;
+    }
+
+    .Comp .intervention-watermark {
+      left: 78%;
+      top: 61%;
+    }
+
+    .intervention-type-row {
+      display: flex;
+      justify-content: flex-end;
+      min-height: 11px;
+    }
+
+    .intervention-header {
+      min-height: 0;
+    }
+
+    .intervention-main {
+      padding-top: 3mm;
+      margin-bottom: 0;
+    }
+
+    .intervention-principle {
+      font-size: var(--fs-lg);
+      font-weight: 700;
+      line-height: 1.18;
+      margin: 4px 0 7px;
+      text-align: center;
+    }
+
+    .Cog .intervention-principle { color: var(--type-cog); }
+    .Comp .intervention-principle { color: var(--type-comp); }
+    .Emo .intervention-principle { color: var(--type-emo); }
+
+    .intervention-howto {
+      font-size: var(--fs-sm);
+      color: var(--fg);
+      line-height: 1.32;
+    }
+
+    .intervention-aka {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.25;
+      margin: -3px 0 6px;
+      text-align: center;
+    }
+
+    .intervention-verb {
+      font-size: 11px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-align: center;
+      color: var(--fg);
+    }
+
+    .intervention-task {
+      font-size: var(--fs-sm);
+      line-height: 1.28;
+      color: var(--fg);
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .rescue-box {
+      position: relative;
+      margin-top: 0;
+      padding: 6px 6px 6px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 5px;
+      background: rgba(255,255,255,0.68);
+    }
+
+    .rescue-badge {
+      position: absolute;
+      top: -1.7mm;
+      right: -1.4mm;
+      width: 4mm;
+      height: 4mm;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
+    }
+
+    .rescue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .rescue-grid .rescue-line + .rescue-line {
+      border-left: 1px solid rgba(0,0,0,0.12);
+      padding-left: 5px;
+    }
+
+    .rescue-line {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: start;
+      font-size: var(--fs-xs);
+      line-height: 1.24;
+      color: var(--fg);
+    }
+
+    .rescue-icon {
+      width: 3mm;
+      height: 3mm;
+      display: block;
+      color: var(--fg);
+      opacity: 0.72;
+    }
+
+    .title {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .aliases-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 3px;
+    }
+
+    .principle-line {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .howto-line {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .front-extra {
+      margin-top: 10px;
+    }
+
+    .howto-line strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .section {
+      margin-top: 3px;
+    }
+
+    .section-title {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1px;
+    }
+
+    .section-content {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+    }
+
+    .section-content ul {
+      margin: 0;
+      padding-left: 10px;
+    }
+
+    .shorts-line {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      line-height: 1.3;
+      margin-top: 3px;
+    }
+
+    .why-line {
+      font-size: var(--fs-sm);
+      line-height: 1.35;
+      color: var(--fg);
+      margin-top: 10px;
+    }
+
+    /* Back card */
+    .card.back-card {
+      border-left-width: 1px;
+      padding: 9mm 8mm;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-brand-card {
+      padding: 14mm 10mm 12mm;
+    }
+
+    .back-logo {
+      width: 35mm;
+      height: auto;
+      display: block;
+      margin-bottom: 5mm;
+    }
+
+    .back-chain {
+      font-size: 7px;
+      line-height: 1.2;
+      color: var(--muted);
+      letter-spacing: 0;
+      margin-bottom: 3mm;
+      text-align: left;
+      width: 34mm;
+    }
+
+    .back-chain span {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .back-chain .step-2 { padding-left: 5mm; }
+    .back-chain .step-3 { padding-left: 10mm; }
+    .back-chain .step-4 { padding-left: 15mm; }
+    }
+
+    .back-brand {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 3mm;
+      letter-spacing: 0;
+    }
+
+    .back-url {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8mm;
+      letter-spacing: 0.01em;
+    }
+
+    .back-type-label {
+      min-width: 31mm;
+      padding: 2.2mm 4mm;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--type-p);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .back-instruction-title {
+      font-size: var(--fs-lg);
+      line-height: 1.15;
+      font-weight: 700;
+      max-width: 42mm;
+      margin: 0 auto 3mm;
+    }
+
+    .back-instruction-lead {
+      font-size: var(--fs-sm);
+      line-height: 1.25;
+      font-weight: 600;
+      max-width: 42mm;
+      margin: 0 auto 1.5mm;
+    }
+
+    .back-instruction-note {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+      color: var(--muted);
+      max-width: 42mm;
+      margin: 0 auto 5mm;
+    }
+
+    .back-visual {
+      width: 100%;
+      min-height: 24mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5.5mm 0 4mm;
+      position: relative;
+    }
+
+    .card.Emo.back-card .back-visual {
+      margin-top: -1.5mm;
+      margin-bottom: 6mm;
+    }
+
+    .back-caption {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+      color: var(--muted);
+      max-width: 42mm;
+      margin: 0 auto;
+    }
+
+    .back-energy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 9.5mm);
+      gap: 2.3mm 2.8mm;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .back-energy-dot {
+      width: 9.5mm;
+      height: 9.5mm;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .back-energy-dot img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .back-energy-dot.pick::after {
+      content: "";
+      position: absolute;
+      inset: -1.5mm;
+      border: 0.45mm solid #111;
+      border-radius: 50%;
+    }
+
+    .back-energy-dot.pick::before {
+      content: "";
+      position: absolute;
+      right: -3.2mm;
+      bottom: -1.5mm;
+      width: 4.2mm;
+      height: 4.2mm;
+      border-right: 0.55mm solid #111;
+      border-bottom: 0.55mm solid #111;
+      transform: rotate(-15deg);
+    }
+
+    .back-energy-scan {
+      position: relative;
+      width: 41mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-energy-scan img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .back-energy-lens {
+      position: relative;
+      width: 7.2mm;
+      height: 7.2mm;
+      object-fit: contain;
+      margin-top: -1.2mm;
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+
+    .back-pattern-stack {
+      display: grid;
+      grid-template-columns: repeat(3, 13mm);
+      gap: 2mm;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .back-pattern-token {
+      height: 18mm;
+      border: 0.35mm solid #111;
+      border-radius: 2mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(56,189,248,0.04);
+      overflow: hidden;
+      padding: 0.7mm;
+    }
+
+    .back-pattern-token:nth-child(3) {
+      transform: translateY(2mm);
+    }
+
+    .back-pattern-token img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .back-lever-choice {
+      display: grid;
+      grid-template-columns: repeat(3, 12mm);
+      gap: 1.6mm;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .back-lever-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1mm;
+    }
+
+    .back-lever-img {
+      width: 12mm;
+      height: 13mm;
+      object-fit: contain;
+    }
+
+    .back-lever-img.pick {
+      transform: none;
+    }
+
+    .back-lever-name {
+      font-size: var(--fs-xxs);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .block {
+      margin-bottom: 4px;
+    }
+
+    .block:last-child { margin-bottom: 0; }
+
+    .label {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1px;
+    }
+
+    .block-content {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+    }
+
+    .aka-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    /* E icons on P cards */
+    .e-icons {
+      display: flex;
+      gap: var(--e-icons-gap);
+      justify-content: center;
+      align-items: center;
+      padding: 2px 0 1px;
+    }
+
+    .e-icon {
+      width: var(--e-icon-size);
+      height: var(--e-icon-size);
+      border-radius: 50%;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .e-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .e-lever {
+      position: absolute;
+      z-index: 2;
+      bottom: -0.35mm;
+      width: 3mm;
+      height: 3mm;
+      background: url("app/images/goccia.svg") center / contain no-repeat;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .e-lever.Cog {
+      left: 50%;
+      transform: translateX(-50%) rotate(0deg);
+    }
+
+    .e-lever.Emo {
+      left: 50%;
+      transform: translateX(-50%) rotate(-90deg);
+    }
+
+    .e-lever.Comp {
+      left: 50%;
+      transform: translateX(-50%) rotate(90deg);
+    }
+
+    /* Not linked: gray and faded */
+    .e-icon.none {
+      opacity: 1;
+    }
+
+    .e-icon.none img {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
+
+    /* Medium: black outline, no background */
+    .e-icon.medium {
+      opacity: 1;
+      filter: none;
+    }
+
+    /* High: with colored background circle */
+    .e-icon.high {
+      opacity: 1;
+      filter: none;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .e-icon.high.energy-low {
+      background: rgba(147, 197, 253, 0.45);
+    }
+
+    .e-icon.high.energy-high {
+      background: rgba(251, 191, 36, 0.45);
+    }
+
+    .empty-slot {
+      width: var(--card-w);
+      height: var(--card-h);
+      border: 1px dashed #ddd;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fs-xs);
+      color: #ccc;
+    }
+
+    .trim-svg {
+      position: absolute;
+      width: calc(var(--card-w) + 6.2mm);
+      height: calc(var(--card-h) + 6.2mm);
+      left: -3.1mm;
+      top: -3.1mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* Cross label */
+    .cross-label {
+      font-size: 8px;
+      color: #bbb;
+      text-align: center;
+      margin-bottom: 2mm;
+    }
+
+    .cross-label.back-spacer {
+      visibility: hidden;
+    }
+
+    /* Separator between two crosses on same page */
+    .cross-separator {
+      width: 80%;
+      border: none;
+      border-top: 1px dashed #ddd;
+      margin: 0;
+      align-self: center;
+    }
+
+    /* ---- Registration marks ---- */
+    .reg-svg {
+      position: absolute;
+      width: 8mm;
+      height: 8mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .reg-top {
+      top: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-bottom {
+      bottom: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-left {
+      left: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .reg-right {
+      right: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Toolbar (screen only) */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #333;
+      color: #fff;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-family: system-ui, sans-serif;
+    }
+
+    .toolbar label { font-weight: 500; }
+
+    .toolbar select {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #444;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Full size: 1 cross per A4 */
+    body.full-size .a4-page {
+      justify-content: center;
+    }
+
+    /* Screen-only styles */
+    @media screen {
+      body { background: #eee; padding: 0; }
+      #output { padding: 20px; }
+      .a4-page {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin: 20px auto;
+      }
+    }
+
+    /* Print: hide screen-only elements */
+    @media print {
+      .toolbar { display: none; }
+      .page-label { display: none; }
+      .e-icon.high.energy-low {
+        background: rgb(191, 219, 254);
+      }
+      .e-icon.high.energy-high {
+        background: rgb(253, 230, 138);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <label>Cross Layout toPrint:</label>
+    <select id="sizeSelector">
+      <option value="full">Originale — 100% (63×88mm) — 1 croce/foglio</option>
+      <option value="compact">Compatta — 75% (47×66mm) — 2 croci/foglio</option>
+    </select>
+    <span id="sideLabel">Fronte</span>
+  </div>
+  <div id="output"></div>
+
+  <script>
+    var EPIC_DATA = {
+  "E": [
+    {
+      "id": "E1",
+      "label": "Ansia",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "agitazione",
+            "tensione",
+            "preoccupazione",
+            "nodo allo stomaco"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Prestazionale",
+            "Relazionale",
+            "Anticipatoria"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "attivazione alta",
+            "focus sul futuro → scenari negativi",
+            "spinta a preparare molto"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "energia bassa → possibile E6",
+            "nessuna anticipazione → possibile E2/P7"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P1",
+            "P6"
+          ],
+          "medium": [
+            "P2",
+            "P9",
+            "P4",
+            "P7"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "assenza di attivazione",
+            "apatia marcata",
+            "indifferenza",
+            "assenza di focus sul futuro"
+          ]
+        },
+        "hint": "attivazione alta + futuro → guarda P7",
+        "porta_I": "I-P6-Emo"
+      }
+    },
+    {
+      "id": "E2",
+      "label": "Paura",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "evitamento",
+            "blocco",
+            "allarme interno",
+            "mi tiro indietro"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Esposizione",
+            "Incertezza",
+            "Conseguenze"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "orientamento alla minaccia",
+            "evitamento forte"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "assenza di minaccia percepita → possibile E1",
+            "autocritica focalizzata su sé → possibile P9"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P2",
+            "P5",
+            "P7"
+          ],
+          "medium": [
+            "P9",
+            "P11",
+            "P10"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "assenza minaccia",
+            "confusione diffusa",
+            "apatia profonda",
+            "ritiro totale"
+          ]
+        },
+        "hint": "evitamento specifico → guarda P7",
+        "porta_I": "I-P5-Emo"
+      }
+    },
+    {
+      "id": "E3",
+      "label": "Frustrazione",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "impotenza",
+            "irritazione",
+            "stallo",
+            "non va avanti"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Blocco",
+            "Ingiustizia percepita",
+            "Attesa prolungata"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "tentativi senza progresso",
+            "sensazione di 'non è giusto'"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "molta energia verso fuori → possibile E5",
+            "energia molto bassa → possibile E6"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P3",
+            "P4",
+            "P11"
+          ],
+          "medium": [
+            "P12",
+            "P7",
+            "P10"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "assenza tensione",
+            "assenza obiettivo",
+            "stanchezza marcata"
+          ]
+        },
+        "hint": "'non va / non è giusto' → guarda interpretazione vs richiesta",
+        "porta_I": "I-P3-Comp"
+      }
+    },
+    {
+      "id": "E4",
+      "label": "Stress / Pressione",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "sovraccarico",
+            "sfinimento",
+            "pressione",
+            "troppo da reggere"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Sovraccarico",
+            "Recupero insufficiente",
+            "Mancanza di chiarezza"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "troppe cose → nessuna chiara",
+            "fatica + difficoltà a scegliere"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "segni fisici significativi / compromissione → valutare sanitario",
+            "energia orientata all'esterno → possibile E5"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P4",
+            "P1"
+          ],
+          "medium": [
+            "P6",
+            "P2",
+            "P7",
+            "P10"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "assenza sovraccarico",
+            "alta energia arrabbiata",
+            "trance",
+            "immobilità non motivata"
+          ]
+        },
+        "hint": "troppo + poco chiaro → guarda sovraccarico",
+        "porta_I": "I-P4-Emo"
+      }
+    },
+    {
+      "id": "E5",
+      "label": "Rabbia / Irritazione",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "fastidio",
+            "risentimento",
+            "esplodo dentro",
+            "mi sale"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Opposizione/resistenza",
+            "Attrito interpersonale",
+            "Ostacolo inatteso"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "energia alta",
+            "spinta verso l'esterno"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "energia molto bassa → E6",
+            "rivolta verso sé → possibile P9"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P3",
+            "P4",
+            "P12"
+          ],
+          "medium": [
+            "P7",
+            "P10",
+            "P5"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "energia bassa",
+            "tristezza predominante",
+            "evitamento passivo",
+            "azione inesistente"
+          ]
+        },
+        "hint": "energia alta verso fuori → guarda confine / bisogno",
+        "porta_I": "I-P4-Comp"
+      }
+    },
+    {
+      "id": "E6",
+      "label": "Apatia / Tristezza",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "vuoto",
+            "disconnessione",
+            "spento",
+            "senza energia"
+          ]
+        },
+        "subtypes": {
+          "_label": "Subtipi",
+          "items": [
+            "Demotivazione",
+            "Ritiro",
+            "Sfiducia"
+          ]
+        },
+        "quando_la_vedi": {
+          "_label": "Quando la vedi",
+          "items": [
+            "energia bassa",
+            "perdita di spinta → 'tanto non serve'"
+          ]
+        },
+        "non_e_questa_se": {
+          "_label": "Non è questa se",
+          "items": [
+            "attivazione alta → E3/E5"
+          ]
+        },
+        "pattern_da_esplorare": {
+          "_label": "Pattern da esplorare",
+          "high": [
+            "P5",
+            "P8",
+            "P11"
+          ],
+          "medium": [
+            "P2",
+            "P6",
+            "P10"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "red_flags": {
+          "_label": "Red flags",
+          "items": [
+            "alta energia",
+            "agitazione",
+            "lotta",
+            "tentativi ripetuti senza ritiro"
+          ]
+        },
+        "hint": "energia bassa → guarda evitamento + senso",
+        "porta_I": "I-P8-Emo"
+      }
+    }
+  ],
+  "P": [
+    {
+      "id": "P1",
+      "label": "Perfezione",
+      "hint_leva": "E1:Emo,E4:Comp",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "standard impossibili",
+            "bisogno di controllo",
+            "mai-abbastanza"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "0/100 → probabile P11"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Non è mai abbastanza",
+            "Non è ancora pronto",
+            "Mi manca qualcosa"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "standard irrealistici",
+            "autocritica costante",
+            "paura errore",
+            "iper-preparazione"
+          ]
+        },
+        "hint": "definisci 'abbastanza buono'",
+        "porta_I": "I-P1-Cog",
+        "why": "Blocca l’azione perché nulla sembra abbastanza buono."
+      }
+    },
+    {
+      "id": "P2",
+      "label": "Sfiducia",
+      "hint_leva": "E2:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "bassa autoefficacia",
+            "autosvalutazione",
+            "senso di inadeguatezza"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "timore di perdere → probabile P7"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Mi sento incapace",
+            "Non io",
+            "Cosa ho io da dare?"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "sfiducia nelle risorse",
+            "minimizzazione successi",
+            "auto-svalutazione",
+            "dipendenza guida"
+          ]
+        },
+        "hint": "mostra evidenza che già puoi",
+        "porta_I": "I-P2-Cog",
+        "why": "Riduce l’iniziativa e aumenta dipendenza da conferme esterne."
+      }
+    },
+    {
+      "id": "P3",
+      "label": "Attribuzione",
+      "hint_leva": "E5:Emo,E3:Cog",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "bias relazionale",
+            "lettura della mente",
+            "attribuzione ostile"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "eviti per piacere → probabile P4"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Lo fa contro di me",
+            "Pensa che io...",
+            "Lo fa apposta",
+            "So già cosa pensa"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "attribuzione intenzioni",
+            "rigidità percettiva",
+            "lettura della mente",
+            "giudizio rapido"
+          ]
+        },
+        "hint": "cerca bisogno → riduci attribuzione",
+        "porta_I": "I-P3-Comp",
+        "why": "Complica relazioni e genera conflitti evitabili."
+      }
+    },
+    {
+      "id": "P4",
+      "label": "Confini",
+      "hint_leva": "E5:Emo,E3:Cog",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "compiacenza",
+            "accomodamento eccessivo",
+            "fusione relazionale"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "vedi cattiva intenzione → probabile P3"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Non riesco a dire no",
+            "Mi adatto",
+            "Faccio io"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "difficoltà dire no",
+            "sovraccarico",
+            "paura giudizio",
+            "fusione identitaria"
+          ]
+        },
+        "hint": "porta al bisogno → formula richiesta",
+        "porta_I": "I-P4-Comp",
+        "why": "Porta sovraccarico, risentimento e perdita di identità."
+      }
+    },
+    {
+      "id": "P5",
+      "label": "Evitamento",
+      "hint_leva": "E2:Emo,E6:Comp",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "status quo",
+            "procrastinazione",
+            "blocco decisionale"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "non fai per rischio perdita → P7"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Non adesso",
+            "Ci penso",
+            "Vediamo"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "procrastinazione",
+            "congelamento",
+            "minimizzazione rischio"
+          ]
+        },
+        "hint": "micro → aggancio",
+        "porta_I": "I-P5-Comp",
+        "why": "Protegge dal rischio ma blocca crescita e cambiamento."
+      }
+    },
+    {
+      "id": "P6",
+      "label": "Rimuginazione",
+      "hint_leva": "E1:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "rimuginio cognitivo",
+            "overthinking",
+            "iper-analisi"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "tema merito/vergogna → P9"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Ci devo pensare ancora",
+            "Devo capirlo bene",
+            "Non sono sicuro"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "loop analitici",
+            "iper-analisi",
+            "blocco decisionale"
+          ]
+        },
+        "hint": "separa: pensiero → evento mentale",
+        "porta_I": "I-P6-Emo",
+        "why": "Consuma energia e impedisce scelte utili."
+      }
+    },
+    {
+      "id": "P7",
+      "label": "Perdita",
+      "hint_leva": "E2:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "loss aversion",
+            "sovraprotezione",
+            "prudenza eccessiva"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "incapace → P2"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "E se poi va male?",
+            "Non voglio rischiare"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "prudenza eccessiva",
+            "focalizzazione perdita"
+          ]
+        },
+        "hint": "micro-test reversibile",
+        "porta_I": "I-P7-Comp",
+        "why": "Mantiene abitudini sicure e frena opportunità."
+      }
+    },
+    {
+      "id": "P8",
+      "label": "Miopia",
+      "hint_leva": "",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "sconto del futuro",
+            "separato dal sé futuro",
+            "breve termine"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "tema identità/metro esterno → P10"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Ci penserò",
+            "Viviamo oggi",
+            "Si vive una volta sola"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "scarsa visione",
+            "difficoltà investimento"
+          ]
+        },
+        "hint": "allinea al sé del futuro",
+        "porta_I": "I-P8-Cog",
+        "why": "Compromette scelte strategiche e disciplina utile."
+      }
+    },
+    {
+      "id": "P9",
+      "label": "Impostura",
+      "hint_leva": "E2:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "sindrome dell'impostore",
+            "percezione di frode",
+            "svalutazione competenza"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "pensiero in loop → P6"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Non me lo merito",
+            "È stato solo fortuna",
+            "Prima o poi mi sgamano"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "attribuzione fortuna",
+            "paura di essere smascherato",
+            "autosabotaggio"
+          ]
+        },
+        "hint": "riconosci merito → normalizza",
+        "porta_I": "I-P9-Cog",
+        "why": "Erode sicurezza e visibilità del proprio valore."
+      }
+    },
+    {
+      "id": "P10",
+      "label": "Conformità",
+      "hint_leva": "E6:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "approval seeking",
+            "validazione esterna",
+            "dipendenza dal giudizio"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "evitare attrito → P4"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Mi serve che piaccia",
+            "Dimmi se va bene",
+            "Se non va bene?"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "ricerca approvazione",
+            "ipersensibilità al giudizio",
+            "insicurezza",
+            "conformismo relazionale",
+            "paura del successo"
+          ]
+        },
+        "hint": "porta al metro interno",
+        "porta_I": "I-P10-Cog",
+        "why": "Porta a scelte guidate dagli altri, non da ciò che conta per sé."
+      }
+    },
+    {
+      "id": "P11",
+      "label": "Rigidità",
+      "hint_leva": "E6:Comp",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "pensiero tutto-o-niente",
+            "polarizzazione",
+            "binarismo"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "standard altissimi → P1"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "O così o niente",
+            "Se non ho questo non parto nemmeno"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "rigidità binaria",
+            "catastrofizzazione",
+            "polarizzazione"
+          ]
+        },
+        "hint": "trova la zona grigia",
+        "porta_I": "I-P11-Cog",
+        "why": "Ostacola progressi graduali."
+      }
+    },
+    {
+      "id": "P12",
+      "label": "Conferma",
+      "hint_leva": "E5:Emo",
+      "fronte": {
+        "aliases": {
+          "_label": "Alias",
+          "items": [
+            "confirmation bias",
+            "selezione confermativa",
+            "filtro informativo"
+          ]
+        },
+        "non_e_questo_se": {
+          "_label": "Non è questo se",
+          "items": [
+            "non agisce per paura → P2/P7"
+          ]
+        },
+        "shorts": {
+          "_label": "Short",
+          "items": [
+            "Ho già capito",
+            "Lo so già"
+          ]
+        }
+      },
+      "retro": {
+        "_label": "Retro",
+        "segnali": {
+          "_label": "Segnali",
+          "items": [
+            "resistenza alla disconferma",
+            "visione parziale",
+            "filtraggio informativo"
+          ]
+        },
+        "hint": "porta 2a ipotesi",
+        "porta_I": "I-P12-Cog",
+        "why": "Limita apprendimento e blocca nuove possibilità."
+      }
+    }
+  ],
+  "I": [
+    {
+      "id": "I-P1-Cog",
+      "label": "Scegliere il “buono abbastanza”",
+      "type": "cognitive",
+      "pattern": "P1",
+      "fronte": {
+        "principle": "Esplorare il minimo accettabile e sostenibile.",
+        "why": "Aiuta a ridurre rigidità e pressione interna.",
+        "serve_a": "definire uno standard minimo praticabile",
+        "verbo_mentale": "RIDIMENSIONARE",
+        "how_to": "definisci il requisito minimo utile → scegli l’opzione che lo soddisfa."
+      },
+      "retro": {
+        "aka": [
+          "standard sostenibili",
+          "qualità sufficiente"
+        ],
+        "example_q": "Qual è un risultato “abbastanza buono” per te qui?",
+        "example_C": "Scegli uno standard “abbastanza buono” da applicare a un compito reale.",
+        "fallback": "Reframing: perfezione → “abbastanza bene”",
+        "tags": [
+          "perfezionismo",
+          "standard",
+          "soglia"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P1-Comp",
+      "label": "Riduci il costo della perfezione",
+      "type": "behavioral",
+      "pattern": "P1",
+      "fronte": {
+        "principle": "Ridurre lo standard per agire.",
+        "why": "Permette di procedere con risorse realistiche.",
+        "serve_a": "ridurre sprechi nel perseguire la perfezione",
+        "verbo_mentale": "ALLEGGERIRE",
+        "how_to": "elenca cosa serve per farlo “perfetto” → tieni solo ciò che crea valore e agisci."
+      },
+      "retro": {
+        "aka": [
+          "semplificare",
+          "delegare"
+        ],
+        "example_q": "Dove il 100% ti sta rallentando inutilmente?",
+        "example_C": "Togli un singolo requisito non essenziale.",
+        "fallback": "Come puoi rendere questo passo più leggero, ora?",
+        "tags": [
+          "micro_azione",
+          "standard_minimo"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P1-Emo",
+      "label": "Disaccoppiare la scelta dalla tensione",
+      "type": "emotional",
+      "pattern": "P1",
+      "fronte": {
+        "principle": "La tensione segnala uno standard interno attivo, non un divieto di agire.",
+        "why": "Permette di scegliere senza aspettare che la tensione sparisca.",
+        "serve_a": "ridurre la pressione interna quel tanto che basta per poter scegliere",
+        "verbo_mentale": "DISACCOPPIARE",
+        "how_to": "riconosci la tensione legata allo “standard ideale” e concediti di non doverla risolvere ora"
+      },
+      "retro": {
+        "aka": [
+          "tensione ≠ criterio",
+          "scelta valida",
+          "pressione interna"
+        ],
+        "example_q": "Se la tensione resta, quale scelta rimane comunque valida per te?",
+        "example_C": "Nota la sensazione di “non è abbastanza” e fai comunque il passo minimo previsto",
+        "fallback": "Fai un respiro lento e scegli comunque un micro-passo.",
+        "tags": [
+          "perfezionismo",
+          "pressione",
+          "scelta"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P2-Cog",
+      "label": "Riconoscere competenze già dimostrate",
+      "type": "cognitive",
+      "pattern": "P2",
+      "fronte": {
+        "principle": "Riscoprire competenze già usate con successo.",
+        "why": "Evidenzia capacità esistenti, facilitando la scelta.",
+        "serve_a": "riconoscere risorse e capacità già presenti",
+        "verbo_mentale": "RICONOSCERE CAPACITÀ",
+        "how_to": "identifica un risultato già ottenuto → collegalo all’azione imminente come prova."
+      },
+      "retro": {
+        "aka": [
+          "riconoscere capacità",
+          "mettere a fuoco risorse"
+        ],
+        "example_q": "Quando hai gestito qualcosa di simile con successo?",
+        "example_C": "Riconosci una capacità già usata in situazioni simili e decidi come riattivarla.",
+        "fallback": "Quale pezzo puoi riusare subito?",
+        "tags": [
+          "autoefficacia",
+          "risorse"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P2-Comp",
+      "label": "Agire subito con un passo semplice",
+      "type": "behavioral",
+      "pattern": "P2",
+      "fronte": {
+        "principle": "Scegliere un'azione a basso rischio e alta utilità.",
+        "why": "Costruisce autoefficacia tramite prove rapide.",
+        "serve_a": "ricostruire auto-efficacia con prove rapide",
+        "verbo_mentale": "DIMOSTRARE",
+        "how_to": "scegli un micro-passo che puoi fare ora → fallo subito per generare prova."
+      },
+      "retro": {
+        "aka": [
+          "prime mosse",
+          "prove rapide"
+        ],
+        "example_q": "Qual è un’azione minima, dimostrativa, che potresti provare ora?",
+        "example_C": "Prova una versione ridotta dell’azione che avevi in mente.",
+        "fallback": "Come puoi fare un passo ancora più piccolo, adesso?",
+        "tags": [
+          "autoefficacia",
+          "azione"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P2-Emo",
+      "label": "Riconoscere momenti di padronanza",
+      "type": "emotional",
+      "pattern": "P2",
+      "fronte": {
+        "principle": "I piccoli successi mostrano capacità già presenti.",
+        "why": "Richiama esperienze riuscite, riducendo l’incertezza e facilitando l’avvio.",
+        "serve_a": "ridurre l’insicurezza richiamando esperienze riuscite",
+        "verbo_mentale": "RIATTIVARE",
+        "how_to": "ricorda un momento in cui hai gestito qualcosa di simile → nota cosa avevi fatto"
+      },
+      "retro": {
+        "aka": [
+          "familiarità",
+          "tracce di riuscita"
+        ],
+        "example_q": "Quando ti sei sentito capace in qualcosa di simile?",
+        "example_C": "Identifica un elemento di quel successo che puoi riusare ora",
+        "fallback": "Reframing: incapace → capace-abbastanza",
+        "tags": [
+          "successo_passato",
+          "auto_efficacia"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P3-Cog",
+      "label": "Vedere l’altra prospettiva",
+      "type": "cognitive",
+      "pattern": "P3",
+      "fronte": {
+        "principle": "Rileggere le intenzioni altrui.",
+        "why": "Riduce attribuzioni negative automatiche.",
+        "serve_a": "vedere intenzioni e prospettive alternative",
+        "verbo_mentale": "CONSIDERARE ALTERNATIVE",
+        "how_to": "formula almeno una seconda possibile interpretazione dell’intenzione altrui."
+      },
+      "retro": {
+        "aka": [
+          "metaposizione",
+          "seconda lettura",
+          "occhi dell’altro"
+        ],
+        "example_q": "Che altra intenzione potresti ipotizzare?",
+        "example_C": "Formula e annota un’interpretazione alternativa plausibile.",
+        "fallback": "Quale intenzione alternativa potresti ipotizzare?",
+        "tags": [
+          "relazione",
+          "prospettiva"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P3-Comp",
+      "label": "Chiarire il punto di vista altrui",
+      "type": "behavioral",
+      "pattern": "P3",
+      "fronte": {
+        "principle": "Comprendere strategicamente la posizione altrui.",
+        "why": "Chiarisce interessi e limiti, permettendo passi utili anche nel disaccordo.",
+        "serve_a": "agire comprendendo meglio il punto di vista altrui",
+        "verbo_mentale": "COINVOLGERE",
+        "how_to": "formula una domanda che esplori il significato o l’intenzione dietro la loro azione."
+      },
+      "retro": {
+        "aka": [
+          "domande di chiarimento",
+          "empatia strategica"
+        ],
+        "example_q": "Cosa ti serve capire meglio della loro prospettiva?",
+        "example_C": "Poni una domanda genuina per chiarire la loro intenzione.",
+        "fallback": "Come puoi fare una domanda che chiarisca la loro intenzione?",
+        "tags": [
+          "relazione",
+          "empatia"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P3-Emo",
+      "label": "Riconosci il bisogno alla base",
+      "type": "emotional",
+      "pattern": "P3",
+      "fronte": {
+        "principle": "Riconoscere il bisogno dietro l’emozione protettiva.",
+        "why": "Sposta l'attenzione da \"colpa loro\" a \"cosa mi serve\".",
+        "serve_a": "riconoscere il bisogno emotivo coinvolto per ridurre la reattività",
+        "verbo_mentale": "RICONOSCERE",
+        "how_to": "nomina l’emozione → identifica il bisogno correlato."
+      },
+      "retro": {
+        "aka": [
+          "bisogno",
+          "legittimare"
+        ],
+        "example_q": "Quale tuo bisogno importante senti toccato qui?",
+        "example_C": "Riconosci e formula il tuo bisogno legittimo.",
+        "fallback": "Reframing: colpa loro → bisogno mio",
+        "tags": [
+          "bisogno",
+          "legittimazione"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P4-Cog",
+      "label": "Proteggere i propri valori chiave",
+      "type": "cognitive",
+      "pattern": "P4",
+      "fronte": {
+        "principle": "Riconoscere i costi nascosti protegge ciò che è importante.",
+        "why": "Rende esplicite le priorità e i valori, facilitando prese di posizione autonome.",
+        "serve_a": "chiarire valori e costi del dire “sì”",
+        "verbo_mentale": "SELEZIONARE",
+        "how_to": "identifica a cosa diresti “no” per difendere un valore chiave."
+      },
+      "retro": {
+        "aka": [
+          "valori guida",
+          "priorità interne"
+        ],
+        "example_q": "Cosa vai a sacrificare quando dici “sì”?",
+        "example_C": "Identifica un valore personale a rischio quando dici “sì”.",
+        "fallback": "Reframing: No → protettivo",
+        "tags": [
+          "confini",
+          "valori"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P4-Comp",
+      "label": "Dire “no” in modo assertivo",
+      "type": "behavioral",
+      "pattern": "P4",
+      "fronte": {
+        "principle": "Dire “no” tutela valori e priorità.",
+        "why": "Definisce confini chiari, proteggendo ciò che conta senza danneggiare la relazione.",
+        "serve_a": "costruire comunicazioni di “no” efficaci",
+        "verbo_mentale": "DEFINIRE CONFINI",
+        "how_to": "allena formulazione di un “no” rispettoso"
+      },
+      "retro": {
+        "aka": [
+          "assertività",
+          "negoziare confini"
+        ],
+        "example_q": "Come puoi dire “no” proteggendo te e la relazione?",
+        "example_C": "Prepara una frase di “no” che rispetti te e l’altro.",
+        "fallback": "Come puoi esprimere il tuo “no” con chiarezza e rispetto?",
+        "tags": [
+          "confini",
+          "assertività"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P4-Emo",
+      "label": "Onorare la propria dignità",
+      "type": "emotional",
+      "pattern": "P4",
+      "fronte": {
+        "principle": "La dignità precede l’adattamento.",
+        "why": "Fa emergere il confine prima di spiegare.",
+        "serve_a": "sentirsi autorizzati ad avere un limite",
+        "verbo_mentale": "ONORARE",
+        "how_to": "nota cosa stai accettando e chiediti se è ok per te"
+      },
+      "retro": {
+        "aka": [
+          "rispetto di sé",
+          "limite interno"
+        ],
+        "example_q": "Questo, così com’è, è davvero ok per te?",
+        "example_C": "Fermati un attimo prima di adattarti e verifica se stai rispettando te.",
+        "fallback": "Qual è il limite minimo che tieni ora?",
+        "tags": [
+          "dignità",
+          "confini",
+          "rispetto_di_sé"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P5-Cog",
+      "label": "Valutare il costo di non agire",
+      "type": "cognitive",
+      "pattern": "P5",
+      "fronte": {
+        "principle": "Rendere visibili le conseguenze future.",
+        "why": "Avvicina il costo di “poi”, facilitando la scelta ora.",
+        "serve_a": "rendere evidente il costo della non-azione",
+        "verbo_mentale": "VALUTARE CONSEGUENZE",
+        "how_to": "considera gli effetti futuri del non agire."
+      },
+      "retro": {
+        "aka": [
+          "costo inazione",
+          "proiezione nel tempo"
+        ],
+        "example_q": "Quanto vale quello che stai perdendo?",
+        "example_C": "Considera le conseguenze di restare fermi rispetto al tema attuale.",
+        "fallback": "Reframing: inazione → costo elevato",
+        "tags": [
+          "costo_rimando",
+          "scelta"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P5-Comp",
+      "label": "Rompere il blocco con micro-azione",
+      "type": "behavioral",
+      "pattern": "P5",
+      "fronte": {
+        "principle": "Definire un micro-passo sostenibile.",
+        "why": "Riduce lo stallo con passi ridicolmente piccoli.",
+        "serve_a": "rimuovere blocchi con passi ridicolmente piccoli",
+        "verbo_mentale": "SBLOCCARE",
+        "how_to": "scegli un’azione minima che puoi fare subito e falla."
+      },
+      "retro": {
+        "aka": [
+          "micro-passo",
+          "azione minima"
+        ],
+        "example_q": "Qual è un primo movimento semplice?",
+        "example_C": "Definisci il primo passo utile per sciogliere lo stallo.",
+        "fallback": "Come puoi rendere il primo passo ancora più semplice?",
+        "tags": [
+          "evitamento",
+          "azione"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P5-Emo",
+      "label": "Consentire l’avvio senza slancio",
+      "type": "emotional",
+      "pattern": "P5",
+      "fronte": {
+        "principle": "L’azione può iniziare senza motivazione.",
+        "why": "Riduce l’attesa di “sentirsi pronti”.",
+        "serve_a": "sentire che si può partire anche senza slancio",
+        "verbo_mentale": "CONSENTIRE",
+        "how_to": "nota la spinta a rimandare e consenti un primo passo minimo"
+      },
+      "retro": {
+        "aka": [
+          "partire senza voglia",
+          "permesso interno"
+        ],
+        "example_q": "Se non servisse sentirti pronto, quale passo faresti ora?",
+        "example_C": "Avvia un gesto minimo anche mentre senti resistenza.",
+        "fallback": "Reframing: non pronto → posso iniziare",
+        "tags": [
+          "evitamento",
+          "avvio",
+          "permesso"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P6-Cog",
+      "label": "Distinguere pensieri utili da rumore",
+      "type": "cognitive",
+      "pattern": "P6",
+      "fronte": {
+        "principle": "Valutare l'utilità reale del pensiero.",
+        "why": "Riduce il rumore e allenta la presa del pensiero ripetitivo.",
+        "serve_a": "distinguere pensiero utile da rumore",
+        "verbo_mentale": "VALUTARE UTILITÀ",
+        "how_to": "chiediti se il pensiero ti è utile per la scelta attuale."
+      },
+      "retro": {
+        "aka": [
+          "distinguere utile",
+          "disinnescare rumore"
+        ],
+        "example_q": "Se ti vedessi da fuori, cosa penseresti di questa preoccupazione?",
+        "example_C": "Se ti vedessi da fuori, cosa ti diresti di fare ora?",
+        "fallback": "Reframing: pensiero → evento mentale",
+        "tags": [
+          "ruminazione",
+          "distanza_cognitiva"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P6-Comp",
+      "label": "Interrompere il loop con il corpo",
+      "type": "behavioral",
+      "pattern": "P6",
+      "fronte": {
+        "principle": "Interrompere tramite il corpo.",
+        "why": "Riporta al presente, riducendo rumore mentale e aprendo spazio decisionale.",
+        "serve_a": "interrompere il loop cognitivo e tornare al presente",
+        "verbo_mentale": "INTERROMPERE",
+        "how_to": "fai un gesto fisico semplice (respiro, movimento) per spezzare il loop."
+      },
+      "retro": {
+        "aka": [
+          "pausa corporea",
+          "radicamento"
+        ],
+        "example_q": "Cosa potrebbe aiutare il tuo corpo a tornare presente?",
+        "example_C": "Usa un gesto o respiro per riportare presenza quando serve.",
+        "fallback": "Come puoi usare il corpo per tornare presente, ora?",
+        "tags": [
+          "ruminazione",
+          "presenza"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P6-Emo",
+      "label": "Accorgersi della presenza",
+      "type": "emotional",
+      "pattern": "P6",
+      "fronte": {
+        "principle": "Accorgersi del presente interrompe l’identificazione.",
+        "why": "Crea spazio dal loop mentale, rendendo possibile la scelta.",
+        "serve_a": "creare distanza emotiva dal pensiero",
+        "verbo_mentale": "ACCORGERSI",
+        "how_to": "nota il loop mentale e senti un punto del corpo"
+      },
+      "retro": {
+        "aka": [
+          "esserci",
+          "contatto col qui"
+        ],
+        "example_q": "Dove sei adesso, proprio in questo momento?",
+        "example_C": "Nota cosa stai facendo — o non facendo — mentre il pensiero gira.",
+        "fallback": "Nota tre cose che vedi ora.",
+        "tags": [
+          "regolazione_emotiva",
+          "presenza"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P7-Cog",
+      "label": "Valutare rischi e benefici",
+      "type": "cognitive",
+      "pattern": "P7",
+      "fronte": {
+        "principle": "Valutare realisticamente rischi e benefici.",
+        "why": "Riporta la percezione da minaccia a rischio valutabile.",
+        "serve_a": "valutare realisticamente rischi e benefici",
+        "verbo_mentale": "PESARE RISCHI E BENEFICI",
+        "how_to": "confronta cosa rischi davvero e cosa puoi invece ottenere"
+      },
+      "retro": {
+        "aka": [
+          "valutazione rischio",
+          "pro-contro"
+        ],
+        "example_q": "Qual è il rischio reale?",
+        "example_C": "Scrivi un rischio reale e un possibile beneficio concreto.",
+        "fallback": "Reframing: perdita → possibilità",
+        "tags": [
+          "avversione_perdita",
+          "valutazione_rischio"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P7-Emo",
+      "label": "Contattare ciò che conta davvero",
+      "type": "emotional",
+      "pattern": "P7",
+      "fronte": {
+        "principle": "Sentire ciò che conta riduce la paura.",
+        "why": "Collega l’emozione a un valore personale.",
+        "serve_a": "ricordare ciò che conta",
+        "verbo_mentale": "RICONNETTERE",
+        "how_to": "collega l’emozione a ciò che potresti ottenere o far crescere."
+      },
+      "retro": {
+        "aka": [
+          "valore",
+          "scelta",
+          "protezione"
+        ],
+        "example_q": "Per cosa vale la pena provarci?",
+        "example_C": "Nomina il valore che rende questa scelta significativa.",
+        "fallback": "Reframing: perdita → valore",
+        "tags": [
+          "valore",
+          "priorità"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P7-Comp",
+      "label": "Micro-test reversibile",
+      "type": "behavioral",
+      "pattern": "P7",
+      "fronte": {
+        "principle": "Stimolare una micro-azione reversibile.",
+        "why": "Riduce incertezza e rassicura attraverso feedback reale a basso costo.",
+        "serve_a": "testare possibilità riducendo il rischio",
+        "verbo_mentale": "SONDARE",
+        "how_to": "definisci una prova piccola e reversibile per raccogliere un primo feedback."
+      },
+      "retro": {
+        "aka": [
+          "prova minima",
+          "esperimento rapido"
+        ],
+        "example_q": "Qual è una prova piccola e reversibile che puoi fare?",
+        "example_C": "Fai una prova ridotta e osserva cosa impari.",
+        "fallback": "Come puoi renderlo ancora più piccolo e reversibile?",
+        "tags": [
+          "micro_prova",
+          "rischio_controllato"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P8-Cog",
+      "label": "Consultare il proprio Sé futuro",
+      "type": "cognitive",
+      "pattern": "P8",
+      "fronte": {
+        "principle": "Immaginare il sé futuro.",
+        "why": "Amplia la prospettiva temporale.",
+        "serve_a": "guarda questa scelta dal punto di vista del tuo sé futuro",
+        "verbo_mentale": "COLLEGARE FUTURO",
+        "how_to": "proietta la tua vita dopo aver agito e nota cosa cambia."
+      },
+      "retro": {
+        "aka": [
+          "Io futuro",
+          "retro-proiezione"
+        ],
+        "example_q": "Che consiglio ti darebbe il tuo “io futuro”?",
+        "example_C": "Guarda questa scelta come il tuo sé futuro e scrivi cosa faresti.",
+        "fallback": "Se fossi il tuo sé futuro, cosa sceglieresti ora?",
+        "tags": [
+          "sé_futuro",
+          "prospettiva"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P8-Comp",
+      "label": "Agire oggi per l’obiettivo futuro",
+      "type": "behavioral",
+      "pattern": "P8",
+      "fronte": {
+        "principle": "Agire in coerenza con il sé futuro.",
+        "why": "Rende il futuro rilevante nel presente.",
+        "serve_a": "agire come il proprio sé futuro",
+        "verbo_mentale": "ALLINEARE",
+        "how_to": "guida la scelta di un gesto allineato al tuo futuro"
+      },
+      "retro": {
+        "aka": [
+          "azione quotidiana",
+          "allineamento"
+        ],
+        "example_q": "Qual è il gesto più piccolo che puoi fare ora?",
+        "example_C": "Scegli un’azione che ti permetta di avvicinarti, anche poco, al tuo futuro.",
+        "fallback": "Qual è l’azione più semplice, allineata?",
+        "tags": [
+          "sé_futuro",
+          "allineamento"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P8-Emo",
+      "label": "Ritrovarsi nel sé futuro",
+      "type": "emotional",
+      "pattern": "P8",
+      "fronte": {
+        "principle": "Sentire continuità con il sé futuro.",
+        "why": "Rafforza il legame emotivo con il proprio futuro.",
+        "serve_a": "rendere emotivamente rilevante una scelta che oggi sembra lontana",
+        "verbo_mentale": "RITROVARSI",
+        "how_to": "richiama il tuo sé futuro e nota se questa scelta ti rappresenta"
+      },
+      "retro": {
+        "aka": [
+          "continuità personale",
+          "identità nel tempo"
+        ],
+        "example_q": "Questo passo è qualcosa in cui ti ritrovi davvero?",
+        "example_C": "Porta alla mente il tuo sé futuro e verifica se questa scelta ti somiglia.",
+        "fallback": "Che scelta fai oggi che ti semplifica il futuro?",
+        "tags": [
+          "futuro",
+          "identità",
+          "continuità"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P9-Cog",
+      "label": "Riconoscere meriti",
+      "type": "cognitive",
+      "pattern": "P9",
+      "fronte": {
+        "principle": "Appropriarsi del proprio contributo ai risultati.",
+        "why": "Riduce il dubbio restituendo la paternità ai propri successi.",
+        "serve_a": "appropriarsi dei propri meriti",
+        "verbo_mentale": "ATTRIBUIRE",
+        "how_to": "identifica azioni/decisioni proprie che hanno portato al risultato"
+      },
+      "retro": {
+        "aka": [
+          "attribuzione interna",
+          "riconoscimento"
+        ],
+        "example_q": "Quali tue scelte/azioni hanno contribuito a questo risultato?",
+        "example_C": "Identifica almeno un’azione concreta che ha prodotto il risultato",
+        "fallback": "Reframing: fortuna → competenza",
+        "tags": [
+          "responsabilità",
+          "merito"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P9-Emo",
+      "label": "Accogliere l’emozione senza giudizio",
+      "type": "emotional",
+      "pattern": "P9",
+      "fronte": {
+        "principle": "L’emozione è un segnale, non un verdetto.",
+        "why": "Normalizza l’emozione, riconoscendola, mantenendo accesso alla scelta.",
+        "serve_a": "ridurre l’auto-giudizio normalizzando l’emozione",
+        "verbo_mentale": "NOTARE EMOZIONE",
+        "how_to": "riconosci l’emozione senza giudicarla, poi resta un attimo con essa"
+      },
+      "retro": {
+        "aka": [
+          "accettare",
+          "funzione"
+        ],
+        "example_q": "Cosa ti sta proteggendo questa emozione, proprio adesso?",
+        "example_C": "Nomina l’emozione e concedile spazio per un attimo.",
+        "fallback": "Datti il permesso di sentire questo, poi scegli un passo piccolo.",
+        "tags": [
+          "vergogna",
+          "funzione",
+          "accoglienza"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P9-Comp",
+      "label": "Esporsi con contributo concreto",
+      "type": "behavioral",
+      "pattern": "P9",
+      "fronte": {
+        "principle": "Esporsi con un contributo reale.",
+        "why": "Trasforma la paura di “non meritare” in azione.",
+        "serve_a": "ridurre l’auto-sabotaggio",
+        "verbo_mentale": "ESPORSI",
+        "how_to": "condividi un contributo concreto senza giustificarlo o sminuirlo"
+      },
+      "retro": {
+        "aka": [
+          "visibilità",
+          "presenza attiva"
+        ],
+        "example_q": "Cosa potresti portare ora, senza spiegarti?",
+        "example_C": "Fai una proposta concreta senza premettere scuse o giustificazioni.",
+        "fallback": "Reframing: ritiro → presenza attiva",
+        "tags": [
+          "impostura",
+          "azione",
+          "visibilità"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P10-Cog",
+      "label": "Spostare la sorgente del valore",
+      "type": "cognitive",
+      "pattern": "P10",
+      "fronte": {
+        "principle": "Spostare il valore dall’esterno all’interno.",
+        "why": "Riorienta il criterio di valore.",
+        "serve_a": "chiarire la propria sorgente interna di valore",
+        "verbo_mentale": "DISTINGUERE",
+        "how_to": "separa ciò che pensi tu da ciò che pensano gli altri e nota la differenza."
+      },
+      "retro": {
+        "aka": [
+          "sorgente interna",
+          "criteri propri"
+        ],
+        "example_q": "Qual è il tuo criterio, qui?",
+        "example_C": "Definisci almeno un \"criterio interno\" per valutare il risultato dell’azione",
+        "fallback": "Reframing: esterno → interno",
+        "tags": [
+          "valore_interno",
+          "identità"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P10-Comp",
+      "label": "Autorizzarsi all’azione",
+      "type": "behavioral",
+      "pattern": "P10",
+      "fronte": {
+        "principle": "Agire senza conferma rafforza l’autonomia.",
+        "why": "Trasforma la dipendenza dal giudizio esterno in scelta attiva.",
+        "serve_a": "ridurre la dipendenza dal giudizio esterno attraverso azione autonoma",
+        "verbo_mentale": "AUTORIZZARSI",
+        "how_to": "fai una scelta concreta senza chiedere conferma"
+      },
+      "retro": {
+        "aka": [
+          "iniziativa personale",
+          "permesso interno"
+        ],
+        "example_q": "Se non dovessi chiedere a nessuno, cosa faresti ora?",
+        "example_C": "Prendi una piccola decisione senza consultare altri.",
+        "fallback": "Reframing: approvazione → iniziativa",
+        "tags": [
+          "conformità",
+          "autonomia",
+          "azione"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P10-Emo",
+      "label": "Riconnettersi al proprio metro interno",
+      "type": "emotional",
+      "pattern": "P10",
+      "fronte": {
+        "principle": "Riconnettersi ai segnali interni.",
+        "why": "Rende sicuro affidarsi a sé perché il corpo segnala quando qualcosa è giusto.",
+        "serve_a": "riconnettersi ai segnali interni che guidano le scelte",
+        "verbo_mentale": "VERIFICARE CONGRUENZA",
+        "how_to": "identifica un segnale interno che ti indica “Ok per me”."
+      },
+      "retro": {
+        "aka": [
+          "autenticità",
+          "fiducia in se stessi"
+        ],
+        "example_q": "Come ti accorgi nel corpo che qualcosa è davvero ‘a posto’ per te?",
+        "example_C": "Nota un segnale fisico che per te significa “ok”.",
+        "fallback": "Se segui il tuo sì interno, cosa fai?",
+        "tags": [
+          "fiducia_interna",
+          "autonomia"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P11-Cog",
+      "label": "Riconoscere la zona grigia",
+      "type": "cognitive",
+      "pattern": "P11",
+      "fronte": {
+        "principle": "Riconoscere progressi parziali.",
+        "why": "Apre spazio per apprendere dai progressi.",
+        "serve_a": "riconoscere progressi intermedi",
+        "verbo_mentale": "SFUMARE",
+        "how_to": "trasforma l'obiettivo da binario a scalare (0-100)"
+      },
+      "retro": {
+        "aka": [
+          "gradiente",
+          "spettro intermedio"
+        ],
+        "example_q": "Quali risultati intermedi esistono tra il fallimento totale e il successo pieno?",
+        "example_C": "Definisci almeno un criterio intermedio che ti dica che stai avanzando.",
+        "fallback": "Reframing: giusto/sbagliato → utile/inutile",
+        "tags": [
+          "tutto_o_niente",
+          "zona_grigia"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P11-Comp",
+      "label": "Agire nella zona grigia",
+      "type": "behavioral",
+      "pattern": "P11",
+      "fronte": {
+        "principle": "Spostare l’azione da “tutto o nulla” a “un passo”.",
+        "why": "Abbassa la soglia d’azione, permettendo il movimento anche senza perfezione.",
+        "serve_a": "procedere tramite azioni non perfette",
+        "verbo_mentale": "PROCEDERE",
+        "how_to": "definisci una micro-azione che porti un vantaggio parziale."
+      },
+      "retro": {
+        "aka": [
+          "passo non-perfetto",
+          "compromesso utile"
+        ],
+        "example_q": "Qual è un passo piccolo che è comunque meglio di zero?",
+        "example_C": "Esegui un’azione minima che crea un avanzamento reale.",
+        "fallback": "Qual è un passo utile, anche imperfetto?",
+        "tags": [
+          "binario",
+          "zona_grigia",
+          "microazione"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P11-Emo",
+      "label": "Aprire uno spazio intermedio",
+      "type": "emotional",
+      "pattern": "P11",
+      "fronte": {
+        "principle": "Un minimo di apertura emotiva rende tollerabile un’opzione non estrema.",
+        "why": "Riduce la rigidità emotiva davanti all’incertezza.",
+        "serve_a": "rendere possibile una via di mezzo",
+        "verbo_mentale": "APRIRE",
+        "how_to": "nota la rigidità interna e cerca una posizione più morbida"
+      },
+      "retro": {
+        "aka": [
+          "apertura",
+          "via di mezzo"
+        ],
+        "example_q": "Quale via di mezzo sarebbe accettabile adesso?",
+        "example_C": "Scegli un passo di mezzo, anche imperfetto.",
+        "fallback": "Reframing: estremo → intermedio",
+        "tags": [
+          "rigidità",
+          "apertura",
+          "via_di_mezzo"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P12-Cog",
+      "label": "Raccogliere contro-evidenze",
+      "type": "cognitive",
+      "pattern": "P12",
+      "fronte": {
+        "principle": "Cercare dati contrari alla propria idea.",
+        "why": "Libera nuove opzioni.",
+        "serve_a": "mettere alla prova la propria idea",
+        "verbo_mentale": "FALSIFICARE",
+        "how_to": "formula l’ipotesi opposta e cerca dati o prospettive che la supportano."
+      },
+      "retro": {
+        "aka": [
+          "seconda ipotesi",
+          "prova contraria"
+        ],
+        "example_q": "Quali elementi indicano che la tua idea non è completa o è errata?",
+        "example_C": "Annota un dato che contraddice la tua idea.",
+        "fallback": "Quale verifica concreta fai adesso?",
+        "tags": [
+          "bias_conferma",
+          "contro_evidenza"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P12-Comp",
+      "label": "Testare la realtà con piccoli esperimenti",
+      "type": "behavioral",
+      "pattern": "P12",
+      "fronte": {
+        "principle": "Testare attivamente l'ipotesi opposta.",
+        "why": "Riduce la rigidità attraverso l’azione.",
+        "serve_a": "testare nella realtà l’ipotesi opposta",
+        "verbo_mentale": "TESTARE",
+        "how_to": "esegui un test che potrebbe falsificare l’idea → osserva il risultato."
+      },
+      "retro": {
+        "aka": [
+          "mini-esperimento",
+          "test realtà"
+        ],
+        "example_q": "Che piccolo esperimento puoi fare per verificare?",
+        "example_C": "Progetta un mini-test che possa smentire la tua ipotesi.",
+        "fallback": "Come puoi renderlo ancora più semplice da provare?",
+        "tags": [
+          "conferma",
+          "esperimento"
+        ],
+        "note": ""
+      }
+    },
+    {
+      "id": "I-P12-Emo",
+      "label": "Ammettere il dubbio",
+      "type": "emotional",
+      "pattern": "P12",
+      "fronte": {
+        "principle": "Sostenere il dubbio per verificare.",
+        "why": "Riduce la chiusura difensiva, aprendo alla verifica.",
+        "serve_a": "permettere l’ingresso di un’informazione che contraddice",
+        "verbo_mentale": "AMMETTERE",
+        "how_to": "nota la chiusura e resta un attimo nel dubbio"
+      },
+      "retro": {
+        "aka": [
+          "tolleranza al forse",
+          "apertura alla disconferma"
+        ],
+        "example_q": "Quale dubbio puoi sostenere per un attimo?",
+        "example_C": "Lascia aperta un’ipotesi diversa per un momento.",
+        "fallback": "Resta un attimo nel dubbio, poi fai una domanda.",
+        "tags": [
+          "dubbio",
+          "apertura"
+        ],
+        "note": ""
+      }
+    }
+  ]
+};
+  </script>
+  <script>
+    const patterns = EPIC_DATA.P || [];
+    const interventions = EPIC_DATA.I || [];
+    const printSide = 'front';
+    const energyOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
+
+    function escapeHTML(str) {
+      return String(str ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    function getIntervention(patternId, type) {
+      const suffix = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
+      return interventions.find(i => i.id === 'I-' + patternId + '-' + type);
+    }
+
+    // ---- FRONT renderers ----
+    // Build E→P reverse map
+    const emotions = EPIC_DATA.E || [];
+    const ePMap = {};
+    emotions.forEach(e => {
+      const high = e.fronte?.pattern_da_esplorare?.high || [];
+      const med = e.fronte?.pattern_da_esplorare?.medium || [];
+      high.forEach(pid => { if (!ePMap[pid]) ePMap[pid] = {}; ePMap[pid][e.id] = 'high'; });
+      med.forEach(pid => { if (!ePMap[pid]) ePMap[pid] = {}; if (!ePMap[pid][e.id]) ePMap[pid][e.id] = 'medium'; });
+    });
+
+    const eImages = {
+      E1: 'images/E1b.png',
+      E2: 'images/E2b.png',
+      E3: 'images/E3b.png',
+      E4: 'images/E4b.png',
+      E5: 'images/E5b.png',
+      E6: 'images/E6b.png'
+    };
+
+    function parseLeverHints(value) {
+      const hints = {};
+      String(value || '').split(',').forEach(part => {
+        const [eidRaw, typeRaw] = part.split(':').map(v => String(v || '').trim());
+        if (!/^E[1-6]$/.test(eidRaw)) return;
+        const type = { Cog: 'Cog', Emo: 'Emo', Comp: 'Comp' }[typeRaw];
+        if (!type) return;
+        if (!hints[eidRaw]) hints[eidRaw] = [];
+        hints[eidRaw].push(type);
+      });
+      return hints;
+    }
+
+    function renderLeverHints(types) {
+      return (types || []).map(type => '<span class="e-lever ' + type + '" aria-hidden="true"></span>').join('');
+    }
+
+    function renderEIcons(pattern) {
+      const map = ePMap[pattern.id] || {};
+      const leverHints = parseLeverHints(pattern.hint_leva);
+      let icons = '';
+      for (const eid of energyOrder) {
+        const level = map[eid] || 'none';
+        const energyClass = (eid === 'E1' || eid === 'E2' || eid === 'E6') ? 'energy-low' : 'energy-high';
+        icons += '<span class="e-icon ' + level + ' ' + energyClass + '">' +
+          renderLeverHints(leverHints[eid]) +
+          '<img src="' + eImages[eid] + '" alt="' + eid + '">' +
+        '</span>';
+      }
+      return '<div class="e-icons">' + icons + '</div>';
+    }
+
+    function interventionMarginCopy(i) {
+      if (!i) return { label: '', verb: '' };
+      return {
+        label: escapeHTML(i.label || ''),
+        verb: escapeHTML(i.fronte?.verbo_mentale || '')
+      };
+    }
+
+    function renderPFront(p) {
+      const signals = (p.retro?.segnali?.items || []).map(s => escapeHTML(s)).join(', ');
+      const shorts = (p.fronte?.shorts?.items || []).map(s => escapeHTML(s)).join(', ');
+      const why = p.retro?.why ? escapeHTML(p.retro.why) : '';
+      const topCopy = interventionMarginCopy(getIntervention(p.id, 'Cog'));
+      const leftCopy = interventionMarginCopy(getIntervention(p.id, 'Emo'));
+      const rightCopy = interventionMarginCopy(getIntervention(p.id, 'Comp'));
+      return '<div class="card P front p-lab-front">' +
+        '<div class="p-margin-note top"><span class="note-copy">' + topCopy.label + '</span><strong>' + topCopy.verb + '</strong></div>' +
+        '<div class="p-margin-note left"><span class="note-copy">' + leftCopy.label + '</span><strong>' + leftCopy.verb + '</strong></div>' +
+        '<div class="p-margin-note right"><span class="note-copy">' + rightCopy.label + '</span><strong>' + rightCopy.verb + '</strong></div>' +
+        '<div class="p-main">' +
+        '<div class="p-main-visual"><img src="images/' + escapeHTML(p.id) + '.png" alt="' + escapeHTML(p.id) + '"></div>' +
+        '<div class="p-text-area">' +
+        '<img class="p-epic-watermark" src="app/images/pattern.png" alt="">' +
+        '<div class="title">' + escapeHTML(p.id) + ': ' + escapeHTML(p.label) + '</div>' +
+        (signals ? '<div class="aliases-line">' + signals + '</div>' : '') +
+        (shorts ? '<div class="shorts-line">' + shorts + '</div>' : '') +
+        (why ? '<div class="why-line">' + why + '</div>' : '') +
+        '</div>' +
+        '</div>' +
+        '<div class="p-bottom">' + renderEIcons(p) + '</div>' +
+      '</div>';
+    }
+
+    function renderIFront(i) {
+      if (!i) return '<div class="empty-slot">n/a</div>';
+      const typeMap = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
+      const t = typeMap[(i.type || '').toLowerCase()] || i.type;
+      const watermarkMap = { Cog: 'cog.png', Emo: 'emo.png', Comp: 'comp.png' };
+      const watermark = watermarkMap[t] || 'cog.png';
+      const why = i.fronte?.why
+        ? i.fronte.why
+        : ((Array.isArray(i.retro?.aka) && i.retro.aka.length > 0) ? i.retro.aka.join(' · ') : '');
+      const whyLine = why ? '<div class="intervention-aka">' + avoidWidow(why) + '</div>' : '';
+      return '<div class="card ' + t + ' front intervention-card">' +
+        '<div class="intervention-header">' +
+        '<div class="intervention-type-row"><div class="type-pill">' + escapeHTML(String(t).toUpperCase()) + '</div></div>' +
+        '<div class="intervention-main">' +
+        '<div class="intervention-principle">' + escapeHTML(i.fronte?.principle) + '</div>' +
+        whyLine +
+        '<div class="intervention-howto">' + avoidWidow(i.retro?.example_C) + '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="intervention-lever">' +
+        '<img class="intervention-watermark" src="app/images/' + watermark + '" alt="">' +
+        '<div class="intervention-verb">' + escapeHTML(formatVerb(i.fronte?.verbo_mentale)) + '</div>' +
+        renderTask(i.fronte?.how_to) +
+        '</div>' +
+        renderRescueBox(i) +
+      '</div>';
+    }
+
+    // ---- BACK renderers ----
+    function renderPBack(p) {
+      return '<div class="card P back-card back-brand-card">' +
+        '<img class="back-logo" src="app/images/logo/epic_logo.png" alt="EPiC">' +
+        '<div class="back-chain">' +
+          '<span>ENERGIA</span>' +
+          '<span class="step-2">-&gt; PATTERN</span>' +
+          '<span class="step-3">-&gt; INTERVENTO</span>' +
+          '<span class="step-4">-&gt; COMPORTAMENTO</span>' +
+        '</div>' +
+        '<div class="back-brand">EPiC</div>' +
+        '<div class="back-url">simonegenini.com/epic</div>' +
+        '<div class="back-type-label">Pattern</div>' +
+      '</div>';
+    }
+
+    function renderBackEnergyChoice() {
+      return '<div class="back-energy-scan">' +
+        '<img src="app/images/new/energie.png" alt="Energie">' +
+      '</div>';
+    }
+
+    function renderBackPatternChoice() {
+      return '<div class="back-pattern-stack">' +
+        '<div class="back-pattern-token"><img src="app/images/new/P1.png" alt="P1"></div>' +
+        '<div class="back-pattern-token"><img src="app/images/new/P11.png" alt="P11"></div>' +
+        '<div class="back-pattern-token"><img src="app/images/new/P5.png" alt="P5"></div>' +
+      '</div>';
+    }
+
+    function renderBackLeverChoice() {
+      return '<div class="back-lever-choice">' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="app/images/cog.png" alt="Cog"><div class="back-lever-name">Cog</div></div>' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="app/images/emo.png" alt="Emo"><div class="back-lever-name">Emo</div></div>' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="app/images/comp.png" alt="Comp"><div class="back-lever-name">Comp</div></div>' +
+      '</div>';
+    }
+
+    function renderInstructionBack(kind) {
+      const cfg = {
+        energy: {
+          cls: 'Cog',
+          title: '1 - (E)NERGIA',
+          lead: 'Riconosci l’Energia prevalente',
+          note: 'Questa è la forza che<br>alimenta il pattern',
+          visual: renderBackEnergyChoice(),
+          caption: ''
+        },
+        pattern: {
+          cls: 'Comp',
+          title: '2 - (P)ATTERN',
+          lead: 'Individua i Pattern in gioco',
+          note: 'Questa è la struttura che<br>mantiene il blocco',
+          visual: renderBackPatternChoice(),
+          caption: ''
+        },
+        lever: {
+          cls: 'Emo',
+          title: '3 - (I)NTERVENTO',
+          lead: 'Scegli la leva più utile',
+          note: 'Emo regola, Cog orienta,<br>Comp muove',
+          visual: renderBackLeverChoice(),
+          caption: ''
+        }
+      }[kind];
+      return '<div class="card ' + cfg.cls + ' back-card">' +
+        '<div class="back-instruction-title">' + cfg.title + '</div>' +
+        '<div class="back-instruction-lead">' + cfg.lead + '</div>' +
+        '<div class="back-instruction-note">' + cfg.note + '</div>' +
+        '<div class="back-visual">' + cfg.visual + '</div>' +
+        (cfg.caption ? '<div class="back-caption">' + cfg.caption + '</div>' : '') +
+      '</div>';
+    }
+
+    function renderBlock(label, value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      let content;
+      if (Array.isArray(value)) {
+        content = value.map(v => escapeHTML(v)).join(' · ');
+      } else {
+        content = escapeHTML(value);
+      }
+      return '<div class="block"><div class="label">' + label + '</div><div class="block-content">' + content + '</div></div>';
+    }
+
+    function renderIcon(kind) {
+      if (kind === 'life') {
+        return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l3 3M17 7l-3 3M17 17l-3-3M7 17l3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'question') {
+        return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9a2.7 2.7 0 0 1 5 1.4c0 2-2.5 2.2-2.5 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>';
+      }
+      return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7H5v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 12c2-4 5-6 9-5 3.5.8 5.5 3.3 5.5 6.2 0 3.6-2.8 6.3-6.7 6.3-2.2 0-4.1-.8-5.3-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+
+    function renderTask(value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      const content = Array.isArray(value) ? value.map(v => escapeHTML(v)).join(' · ') : escapeHTML(value);
+      return '<div class="intervention-task">' + content + '</div>';
+    }
+
+    function avoidWidow(value) {
+      const safe = escapeHTML(value).trim().replace(/(\d)-(\d)/g, '$1&#8209;$2');
+      return safe.replace(/\s+(\S+)\s+(\S+)$/, '&nbsp;$1&nbsp;$2');
+    }
+
+    function formatVerb(value) {
+      const text = String(value || '').trim();
+      if (!text) return '';
+      const lower = text.toLocaleLowerCase('it-IT');
+      return lower.charAt(0).toLocaleUpperCase('it-IT') + lower.slice(1);
+    }
+
+    function renderRescueLine(kind, value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      const content = Array.isArray(value) ? value.map(v => escapeHTML(v)).join(' · ') : escapeHTML(value);
+      return '<div class="rescue-line">' + renderIcon(kind) + '<div>' + content + '</div></div>';
+    }
+
+    function renderRescueBox(i) {
+      const question = renderRescueLine('question', i.retro?.example_q);
+      const fallback = renderRescueLine('fallback', i.retro?.fallback);
+      const lines = question + fallback;
+      if (!lines) return '';
+      return '<div class="rescue-box">' +
+        '<div class="rescue-badge">' + renderIcon('life') + '</div>' +
+        '<div class="rescue-grid">' + lines + '</div>' +
+      '</div>';
+    }
+
+    function wrapCard(html, sides) {
+      if (!sides || sides.length === 0) return html;
+      const lines = [];
+      if (sides.includes('top')) {
+        lines.push('<line x1="-3.1" y1="0" x2="-0.8" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+        lines.push('<line x1="63.8" y1="0" x2="66.1" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('top-left-h')) {
+        lines.push('<line x1="-3.1" y1="0" x2="-0.8" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('top-right-h')) {
+        lines.push('<line x1="63.8" y1="0" x2="66.1" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom')) {
+        lines.push('<line x1="-3.1" y1="88" x2="-0.8" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+        lines.push('<line x1="63.8" y1="88" x2="66.1" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom-left-h')) {
+        lines.push('<line x1="-3.1" y1="88" x2="-0.8" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom-right-h')) {
+        lines.push('<line x1="63.8" y1="88" x2="66.1" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('left')) {
+        lines.push('<line x1="0" y1="-3.1" x2="0" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('right')) {
+        lines.push('<line x1="63" y1="-3.1" x2="63" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('left-bottom')) {
+        lines.push('<line x1="0" y1="88.8" x2="0" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('right-bottom')) {
+        lines.push('<line x1="63" y1="88.8" x2="63" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      return '<svg class="trim-svg" viewBox="-3.1 -3.1 69.2 94.2" aria-hidden="true">' + lines.join('') + '</svg>' + html;
+    }
+
+    // ---- Build crosses ----
+    function buildCrossFront(p) {
+      const cog = getIntervention(p.id, 'Cog');
+      const emo = getIntervention(p.id, 'Emo');
+      const comp = getIntervention(p.id, 'Comp');
+      return '<div class="cross-label">' + escapeHTML(p.id) + ' — ' + escapeHTML(p.label) + '</div>' +
+        '<div class="cross">' +
+        '<div class="cross-cog">' + wrapCard(renderIFront(cog), ['top','left','right']) + '</div>' +
+        '<div class="cross-emo">' + wrapCard(renderIFront(emo), ['left','top-left-h','bottom-left-h','left-bottom']) + '</div>' +
+        '<div class="cross-pat">' + wrapCard(renderPFront(p), ['top','left','right','bottom','left-bottom','right-bottom']) + '</div>' +
+        '<div class="cross-comp">' + wrapCard(renderIFront(comp), ['right','top-right-h','bottom-right-h','right-bottom']) + '</div>' +
+        '</div>';
+    }
+
+    function buildCrossBack(p) {
+      const cog = getIntervention(p.id, 'Cog');
+      const emo = getIntervention(p.id, 'Emo');
+      const comp = getIntervention(p.id, 'Comp');
+      // Mirrored: emo and comp swap positions
+      return '<div class="cross-label back-spacer" aria-hidden="true">retro</div>' +
+        '<div class="cross back-side">' +
+        '<div class="cross-cog">' + wrapCard(renderInstructionBack('energy'), ['top','left','right']) + '</div>' +
+        '<div class="cross-emo">' + wrapCard(renderInstructionBack('lever'), ['right','top-right-h','bottom-right-h','right-bottom']) + '</div>' +
+        '<div class="cross-pat">' + wrapCard(renderPBack(p), ['top','left','right','bottom','left-bottom','right-bottom']) + '</div>' +
+        '<div class="cross-comp">' + wrapCard(renderInstructionBack('pattern'), ['left','top-left-h','bottom-left-h','left-bottom']) + '</div>' +
+        '</div>';
+    }
+
+    // ---- Size configs ----
+    const SIZES = {
+      compact: { cardW: '47mm', cardH: '66mm', gap: '1mm', perPage: 2, radius: '5px', pad: '8px',
+                 eIconSize: '5.8mm', eIconsGap: '1.1mm',
+                 fsXxs: '7px', fsXs: '8px', fsSm: '9px', fsMd: '10px', fsLg: '12px' },
+      full:    { cardW: '63mm', cardH: '88mm', gap: '1mm', perPage: 1, radius: '6px', pad: '10px',
+                 eIconSize: '8.5mm', eIconsGap: '1.5mm',
+                 fsXxs: '8px', fsXs: '9px', fsSm: '10px', fsMd: '11px', fsLg: '14px' }
+    };
+
+    function applySize(mode) {
+      const s = SIZES[mode];
+      const r = document.documentElement.style;
+      r.setProperty('--card-w', s.cardW);
+      r.setProperty('--card-h', s.cardH);
+      r.setProperty('--gap', s.gap);
+      r.setProperty('--radius', s.radius);
+      r.setProperty('--pad', s.pad);
+      r.setProperty('--e-icon-size', s.eIconSize);
+      r.setProperty('--e-icons-gap', s.eIconsGap);
+      r.setProperty('--fs-xxs', s.fsXxs);
+      r.setProperty('--fs-xs', s.fsXs);
+      r.setProperty('--fs-sm', s.fsSm);
+      r.setProperty('--fs-md', s.fsMd);
+      r.setProperty('--fs-lg', s.fsLg);
+      document.body.classList.toggle('full-size', mode === 'full');
+      renderPages(s.perPage);
+    }
+
+    function buildCrossForSide(p) {
+      return printSide === 'back' ? buildCrossBack(p) : buildCrossFront(p);
+    }
+
+    function renderPages(perPage) {
+      let html = '';
+      const step = perPage;
+      for (let i = 0; i < patterns.length; i += step) {
+        const group = patterns.slice(i, i + step);
+        const pageNum = Math.floor(i / step) + 1;
+        const layoutClass = group.length === 1 ? 'layout-1' : (perPage === 1 ? 'layout-1' : 'layout-2');
+        const pageLabel = printSide === 'back' ? 'Retro' : 'Fronte';
+
+        html += '<div class="a4-page">';
+        html += '<div class="page-label">' + pageLabel + ' — Pag ' + pageNum + '</div>';
+        html += renderRegistrationMarks();
+        html += '<div class="page-content ' + layoutClass + '">';
+        html += '<div class="cross-slot">' + buildCrossForSide(group[0]) + '</div>';
+        if (group[1]) {
+          html += '<hr class="cross-separator">';
+          html += '<div class="cross-slot">' + buildCrossForSide(group[1]) + '</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+
+      }
+      document.getElementById('output').innerHTML = html;
+    }
+
+    function renderRegistrationMarks() {
+      return '' +
+        '<svg class="reg-svg reg-top" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-right" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-bottom" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-left" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>';
+    }
+
+    // ---- Init ----
+    document.getElementById('sizeSelector').addEventListener('change', function() {
+      applySize(this.value);
+    });
+    applySize('full');
+  </script>
+</body>
+</html>
