@@ -162,6 +162,10 @@
   line-height: 1.25;
 }
 
+.epic-v1-pattern-signals {
+  font-size: 13px;
+}
+
 .epic-v1-pattern-copy,
 .epic-v1-energy-copy {
   position: relative;
@@ -169,6 +173,10 @@
   margin-top: 8px;
   font-size: 15px;
   line-height: 1.25;
+}
+
+.epic-v1-pattern-copy {
+  font-size: 14px;
 }
 
 .epic-v1-energy-strip {
