@@ -86,12 +86,12 @@
 }
 
 .epic-v1-pattern-note.left {
-  left: -54px;
+  left: -70px;
   transform: rotate(-90deg);
 }
 
 .epic-v1-pattern-note.right {
-  right: -54px;
+  right: -70px;
   transform: rotate(90deg);
 }
 
