@@ -75,8 +75,14 @@
 .epic-v1-pattern-note.left,
 .epic-v1-pattern-note.right {
   top: 43%;
-  width: 150px;
+  width: 230px;
   transform-origin: center;
+}
+
+.epic-v1-pattern-note.left span,
+.epic-v1-pattern-note.right span {
+  display: block;
+  white-space: nowrap;
 }
 
 .epic-v1-pattern-note.left {
