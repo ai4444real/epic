@@ -679,6 +679,11 @@
         margin-top: 8px;
         overflow: visible;
       }
+      .live-card-wrap .epic-v1-rescue-item,
+      .live-cross .epic-v1-cross .epic-v1-rescue-item{
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
       .cross-mini-grid{
         grid-template-columns: 1fr;
         grid-template-areas: "pat" "cog" "emo" "comp";
