@@ -30,6 +30,54 @@
     .diff-btn:hover{ border-color: var(--muted); }
     .diff-btn.active{ background: var(--bg-dark); color: #fff; border-color: var(--bg-dark); }
 
+    #view-intervention{
+      max-width: min(1180px, 100vw);
+    }
+
+    #view-intervention .cross-container{
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 8px 0 18px;
+    }
+
+    #view-intervention .cross-layout{
+      display: block;
+      width: max-content;
+      max-width: none;
+      transform: none !important;
+    }
+
+    #view-intervention .epic-v1-cross{
+      --epic-v1-cross-card-w: min(315px, calc((100vw - 88px) / 3));
+    }
+
+    .sim-cross-choice{
+      cursor: pointer;
+      border-radius: var(--radius);
+      transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+    }
+
+    .sim-cross-choice:hover{
+      filter: drop-shadow(0 8px 14px rgba(15,23,42,0.12));
+      transform: translateY(-2px);
+    }
+
+    .sim-cross-choice.selected-primary .epic-v1-card{
+      box-shadow: 0 0 0 4px rgba(10,10,10,0.82);
+    }
+
+    .sim-cross-choice.selected-secondary .epic-v1-card{
+      box-shadow: 0 0 0 4px rgba(10,10,10,0.35);
+      outline: 3px dashed rgba(10,10,10,0.72);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 760px) {
+      #view-intervention .cross-layout{
+        width: min(315px, 88vw);
+      }
+    }
+
     /* ---- STEP INDICATOR ---- */
     .step-bar{ display: flex; gap: 4px; margin-bottom: 24px; align-items: center; }
     .step-dot{ width: 10px; height: 10px; border-radius: 50%; background: var(--border); transition: background 0.3s; }

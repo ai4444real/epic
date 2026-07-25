@@ -107,7 +107,6 @@
       document.getElementById('iCompactView').style.display = mode === 'compact' ? '' : 'none';
       document.getElementById('crossContainer').style.display = mode === 'detail' ? '' : 'none';
       if (mode === 'detail') {
-        requestAnimationFrame(scaleCross);
         const log = JSON.parse(localStorage.getItem(DETAIL_LOG_KEY) || '[]');
         log.push({ ts: new Date().toISOString(), scenario_id: currentScenario?.id || null, action: 'detail_cross_view' });
         localStorage.setItem(DETAIL_LOG_KEY, JSON.stringify(log));
@@ -154,13 +153,14 @@
 
     // ---- Init ----
     window.addEventListener('DOMContentLoaded', () => {
+      if (window.EPICCardsV1) {
+        window.EPICCardsV1.configure({ data: EPIC_DATA });
+      }
       applySimulatorConfig();
       renderDifficultyFilter();
       renderScenarioList();
       checkResume();
     });
-
-    window.addEventListener('resize', scaleCross);
 
     function renderStepBar(step) {
       const labels = ['E', 'P', 'I'];
@@ -411,15 +411,13 @@
       const comp = iMap['I-' + chosenP + '-Comp'];
 
       const layout = document.getElementById('crossLayout');
-      layout.innerHTML =
-        '<div class="cross-top">' + renderISelectable(cog) + '</div>' +
-        '<div class="cross-left">' + renderISelectable(emo) + '</div>' +
-        '<div class="cross-center">' + renderPCard(p) + '</div>' +
-        '<div class="cross-right">' + renderISelectable(comp) + '</div>';
+      layout.innerHTML = window.EPICCardsV1.renderCrossFront(p);
+      markCrossIntervention('Cog', cog);
+      markCrossIntervention('Emo', emo);
+      markCrossIntervention('Comp', comp);
 
-      layout.querySelectorAll('.i-selectable').forEach(el => {
+      layout.querySelectorAll('.sim-cross-choice').forEach(el => {
         el.addEventListener('click', (e) => {
-          if (e.target.closest('.flip-btn')) return;
           const iid = el.getAttribute('data-iid');
           selectI(iid);
         });
@@ -431,14 +429,28 @@
       document.getElementById('btnIDetail').classList.toggle('active', iViewMode === 'detail');
 
       if (chosenI1) {
-        if (layout.querySelector('.i-selectable[data-iid="' + chosenI1 + '"]'))
-          layout.querySelector('.i-selectable[data-iid="' + chosenI1 + '"]').classList.add('selected-primary');
-        if (chosenI2 && layout.querySelector('.i-selectable[data-iid="' + chosenI2 + '"]'))
-          layout.querySelector('.i-selectable[data-iid="' + chosenI2 + '"]').classList.add('selected-secondary');
+        if (layout.querySelector('.sim-cross-choice[data-iid="' + chosenI1 + '"]'))
+          layout.querySelector('.sim-cross-choice[data-iid="' + chosenI1 + '"]').classList.add('selected-primary');
+        if (chosenI2 && layout.querySelector('.sim-cross-choice[data-iid="' + chosenI2 + '"]'))
+          layout.querySelector('.sim-cross-choice[data-iid="' + chosenI2 + '"]').classList.add('selected-secondary');
         showIFeedback();
       }
+    }
 
-      if (iViewMode === 'detail') requestAnimationFrame(scaleCross);
+    function markCrossIntervention(slot, intervention) {
+      if (!intervention) return;
+      const map = { Cog: 'cog', Emo: 'emo', Comp: 'comp' };
+      const el = document.querySelector('.epic-v1-cross-' + map[slot]);
+      if (!el) return;
+      el.classList.add('sim-cross-choice');
+      el.setAttribute('data-iid', intervention.id);
+      el.setAttribute('role', 'button');
+      el.setAttribute('tabindex', '0');
+      el.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        e.preventDefault();
+        selectI(intervention.id);
+      });
     }
 
     function selectI(iid) {
@@ -451,9 +463,9 @@
     }
 
     function updateISelection() {
-      document.querySelectorAll('.i-selectable').forEach(el => el.classList.remove('selected-primary', 'selected-secondary'));
-      if (chosenI1) { const s = document.querySelector('.i-selectable[data-iid="' + chosenI1 + '"]'); if (s) s.classList.add('selected-primary'); }
-      if (chosenI2) { const s = document.querySelector('.i-selectable[data-iid="' + chosenI2 + '"]'); if (s) s.classList.add('selected-secondary'); }
+      document.querySelectorAll('.sim-cross-choice').forEach(el => el.classList.remove('selected-primary', 'selected-secondary'));
+      if (chosenI1) { const s = document.querySelector('.sim-cross-choice[data-iid="' + chosenI1 + '"]'); if (s) s.classList.add('selected-primary'); }
+      if (chosenI2) { const s = document.querySelector('.sim-cross-choice[data-iid="' + chosenI2 + '"]'); if (s) s.classList.add('selected-secondary'); }
       document.querySelectorAll('.i-compact-card').forEach(c => c.classList.remove('selected-primary', 'selected-secondary'));
       if (chosenI1) { const s = document.querySelector('.i-compact-card[data-iid="' + chosenI1 + '"]'); if (s) s.classList.add('selected-primary'); }
       if (chosenI2) { const s = document.querySelector('.i-compact-card[data-iid="' + chosenI2 + '"]'); if (s) s.classList.add('selected-secondary'); }
