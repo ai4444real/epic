@@ -53,21 +53,21 @@
   position: absolute;
   z-index: 2;
   color: var(--epic-v1-muted);
-  font-size: 13px;
+  font-size: calc(13px * var(--epic-v1-density));
   line-height: 1.1;
   text-align: center;
 }
 
 .epic-v1-pattern-note strong {
   display: block;
-  margin-top: 2px;
-  font-size: 16px;
+  margin-top: calc(2px * var(--epic-v1-density));
+  font-size: calc(16px * var(--epic-v1-density));
   color: inherit;
   text-transform: uppercase;
 }
 
 .epic-v1-pattern-note.top {
-  top: 14px;
+  top: calc(14px * var(--epic-v1-density));
   left: 50%;
   transform: translateX(-50%);
   width: 72%;
@@ -103,14 +103,14 @@
 .epic-v1-pattern-main {
   align-self: center;
   display: grid;
-  gap: 8px;
+  gap: calc(8px * var(--epic-v1-density));
   justify-items: center;
-  padding: 46px 22px 8px;
+  padding: calc(52px * var(--epic-v1-density)) 22px calc(8px * var(--epic-v1-density));
 }
 
 .epic-v1-pattern-art {
   width: 72%;
-  max-height: 136px;
+  max-height: calc(124px * var(--epic-v1-density));
   display: flex;
   align-items: end;
   justify-content: center;
@@ -119,7 +119,7 @@
 .epic-v1-pattern-art img {
   display: block;
   width: 100%;
-  max-height: 136px;
+  max-height: calc(124px * var(--epic-v1-density));
   object-fit: contain;
 }
 
@@ -158,6 +158,10 @@
   line-height: 1.08;
 }
 
+.epic-v1-pattern-title {
+  font-size: calc(23px * var(--epic-v1-density));
+}
+
 .epic-v1-pattern-signals,
 .epic-v1-energy-aliases {
   position: relative;
@@ -170,7 +174,8 @@
 }
 
 .epic-v1-pattern-signals {
-  font-size: 13px;
+  margin-top: calc(6px * var(--epic-v1-density));
+  font-size: calc(13px * var(--epic-v1-density));
 }
 
 .epic-v1-pattern-copy,
@@ -183,21 +188,22 @@
 }
 
 .epic-v1-pattern-copy {
-  font-size: 14px;
+  margin-top: calc(6px * var(--epic-v1-density));
+  font-size: calc(14px * var(--epic-v1-density));
 }
 
 .epic-v1-energy-strip {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 8px;
-  min-height: 40px;
+  gap: calc(8px * var(--epic-v1-density));
+  min-height: calc(40px * var(--epic-v1-density));
 }
 
 .epic-v1-energy-dot {
   position: relative;
-  width: 31px;
-  height: 31px;
+  width: calc(31px * var(--epic-v1-density));
+  height: calc(31px * var(--epic-v1-density));
   border-radius: 999px;
   display: inline-flex;
   align-items: center;
@@ -233,10 +239,10 @@
 .epic-v1-lever-hint {
   position: absolute;
   left: 50%;
-  bottom: -6px;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
+  bottom: calc(-6px * var(--epic-v1-density));
+  width: calc(12px * var(--epic-v1-density));
+  height: calc(12px * var(--epic-v1-density));
+  margin-left: calc(-6px * var(--epic-v1-density));
   background: center / contain no-repeat;
   z-index: 2;
 }
