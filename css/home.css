@@ -85,6 +85,49 @@ body{
   font-size: 18px;
 }
 
+.gateway{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.gateway-card{
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px 20px;
+  border: 1px solid rgba(17,17,17,0.12);
+  border-radius: 20px;
+  background: rgba(255,255,255,0.72);
+  color: inherit;
+  text-decoration: none;
+  box-shadow: 0 10px 26px rgba(17,17,17,0.06);
+  transition: transform 0.18s ease, border-color 0.18s ease;
+}
+
+.gateway-card:hover{
+  transform: translateY(-2px);
+  border-color: rgba(17,17,17,0.24);
+}
+
+.gateway-kicker{
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.gateway-card strong{
+  font-size: 24px;
+  line-height: 1;
+}
+
+.gateway-card span:last-child{
+  color: var(--muted);
+}
+
 .grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -182,6 +225,7 @@ body{
   body{ padding: 18px 14px 36px; }
   .hero{ padding: 24px 20px; border-radius: 22px; }
   .hero p{ font-size: 16px; }
+  .gateway{ grid-template-columns: 1fr; }
   .grid{ grid-template-columns: 1fr; }
   .tool-card{ min-height: 0; }
 }

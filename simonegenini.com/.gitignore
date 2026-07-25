@@ -1,0 +1,6 @@
+desktop-check.png
+mobile-check.png
+*.tmp
+*.log
+.DS_Store
+Thumbs.db
