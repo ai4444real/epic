@@ -94,6 +94,28 @@
 
     #view-intervention .epic-v1-cross{
       --epic-v1-cross-card-w: min(315px, calc((100vw - 88px) / 3));
+      grid-template-rows: auto auto;
+      align-items: start;
+    }
+
+    #view-intervention .epic-v1-intervention{
+      aspect-ratio: auto;
+      height: auto;
+      min-height: calc(var(--epic-v1-cross-card-w) * 88 / 63);
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    #view-intervention .epic-v1-rescue{
+      margin-top: 8px;
+      overflow: visible;
+    }
+
+    #view-intervention .epic-v1-rescue-item{
+      min-width: 0;
+      overflow-wrap: anywhere;
     }
 
     @media (max-width: 760px) {
