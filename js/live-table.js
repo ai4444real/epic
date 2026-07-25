@@ -93,10 +93,23 @@
       return Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
     }
 
+    function escAttr(value) {
+      return esc(value).replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+    }
+
     function viewerUrl() {
       const url = new URL('epic-live-view.html', window.location.href);
       url.searchParams.set('room', roomId);
       return url.toString();
+    }
+
+    function ensureRoomId() {
+      if (roomId) return;
+      roomId = createRoomId();
+      tableState.room_id = roomId;
+      const url = new URL(window.location.href);
+      url.searchParams.set('room', roomId);
+      window.history.replaceState(null, '', url.toString());
     }
 
     function setStatus(text) {
@@ -119,6 +132,7 @@
 
     async function saveRoom() {
       if (!IS_PRESENTER) return;
+      ensureRoomId();
       const client = getLiveClient();
       if (!client) {
         showSetupWarning('Supabase client non disponibile');
@@ -200,6 +214,50 @@
       } catch (error) {
         console.warn('Saved rooms load failed:', error);
         showSetupWarning(error);
+      }
+    }
+
+    async function deleteRoom(deleteRoomId) {
+      if (!IS_PRESENTER) return;
+      const target = (deleteRoomId || '').trim().toUpperCase();
+      if (!target) return;
+      const row = savedRooms.find(item => item.room_id === target);
+      const title = row?.payload?.title || target;
+      if (!confirm('Cancellare il tavolo "' + title + '"?')) return;
+      const client = getLiveClient();
+      if (!client) {
+        showSetupWarning('Supabase client non disponibile');
+        return;
+      }
+      try {
+        const { error } = await client
+          .from(LIVE_TABLE_NAME)
+          .delete()
+          .eq('room_id', target);
+        if (error) throw error;
+        savedRooms = savedRooms.filter(item => item.room_id !== target);
+        if (target === roomId) {
+          const fallbackRoomId = savedRooms[0]?.room_id || '';
+          if (fallbackRoomId) {
+            await openRoom(fallbackRoomId);
+          } else {
+            roomId = '';
+            tableState = createEmptyState('');
+            lastRemoteStamp = '';
+            const url = new URL(window.location.href);
+            url.searchParams.delete('room');
+            window.history.replaceState(null, '', url.toString());
+            renderAll();
+          }
+        } else {
+          renderSavedRooms();
+        }
+        clearSetupWarning();
+        setStatus('Tavolo cancellato');
+      } catch (error) {
+        console.warn('Live table delete failed:', error);
+        showSetupWarning(error);
+        setStatus('Cancellazione non riuscita');
       }
     }
 
@@ -292,13 +350,22 @@
         const title = payload.title || 'Lezione EPiC';
         const count = Array.isArray(payload.items) ? payload.items.length : 0;
         const date = row.updated_at ? new Date(row.updated_at).toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'short' }) : '';
-        return '<button class="saved-room' + (row.room_id === roomId ? ' active' : '') + '" data-room="' + esc(row.room_id) + '">' +
-          '<div class="saved-room-title">' + esc(title) + '</div>' +
-          '<div class="saved-room-meta">' + esc(row.room_id) + ' · ' + count + ' elementi · ' + esc(date) + '</div>' +
-        '</button>';
+        return '<div class="saved-room-row' + (row.room_id === roomId ? ' active' : '') + '">' +
+          '<button class="saved-room" data-room="' + escAttr(row.room_id) + '">' +
+            '<div class="saved-room-title">' + esc(title) + '</div>' +
+            '<div class="saved-room-meta">' + esc(row.room_id) + ' · ' + count + ' elementi · ' + esc(date) + '</div>' +
+          '</button>' +
+          '<button class="saved-room-delete" data-delete-room="' + escAttr(row.room_id) + '" title="Cancella tavolo" aria-label="Cancella tavolo ' + escAttr(title) + '">×</button>' +
+        '</div>';
       }).join('');
       liveEls.savedRoomList.querySelectorAll('[data-room]').forEach(btn => {
         btn.addEventListener('click', () => openRoom(btn.dataset.room));
+      });
+      liveEls.savedRoomList.querySelectorAll('[data-delete-room]').forEach(btn => {
+        btn.addEventListener('click', event => {
+          event.stopPropagation();
+          deleteRoom(btn.dataset.deleteRoom);
+        });
       });
     }
 

@@ -107,19 +107,41 @@
       padding-right: 2px;
     }
 
+    .saved-room-row{
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 30px;
+      align-items: stretch;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      background: #fff;
+      overflow: hidden;
+    }
+
     .saved-room{
       width: 100%;
       text-align: left;
-      border: 1px solid var(--border);
-      border-radius: 7px;
+      border: 0;
       background: #fff;
       padding: 9px 10px;
       font: inherit;
       cursor: pointer;
     }
 
-    .saved-room:hover{ background: var(--border-light); border-color: var(--muted-light); }
-    .saved-room.active{ border-color: var(--fg); box-shadow: inset 3px 0 0 var(--fg); }
+    .saved-room-delete{
+      border: 0;
+      border-left: 1px solid var(--border);
+      background: #fff;
+      color: #b91c1c;
+      font: inherit;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .saved-room-row:hover{ border-color: var(--muted-light); }
+    .saved-room:hover,
+    .saved-room-delete:hover{ background: var(--border-light); }
+    .saved-room-row.active{ border-color: var(--fg); box-shadow: inset 3px 0 0 var(--fg); }
     .saved-room-title{ font-size: var(--fs-sm); font-weight: 700; line-height: 1.25; }
     .saved-room-meta{ color: var(--muted); font-size: var(--fs-xxs); margin-top: 3px; }
 
