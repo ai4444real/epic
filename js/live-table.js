@@ -29,7 +29,6 @@
       E5: 'images/E5b.png',
       E6: 'images/E6b.png'
     };
-    const livePatternEnergyMap = buildPatternEnergyMap();
     let liveClient = null;
     let roomId = new URLSearchParams(window.location.search).get('room') || '';
     let libraryFilter = 'all';
@@ -84,23 +83,6 @@
     function interventionType(i) {
       const map = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
       return map[(i?.type || '').toLowerCase()] || i?.type || 'I';
-    }
-
-    function buildPatternEnergyMap() {
-      const result = {};
-      emotions.forEach(e => {
-        const high = e.fronte?.pattern_da_esplorare?.high || [];
-        const medium = e.fronte?.pattern_da_esplorare?.medium || [];
-        high.forEach(pid => {
-          if (!result[pid]) result[pid] = {};
-          result[pid][e.id] = 'high';
-        });
-        medium.forEach(pid => {
-          if (!result[pid]) result[pid] = {};
-          if (!result[pid][e.id]) result[pid][e.id] = 'medium';
-        });
-      });
-      return result;
     }
 
     function interventionForPattern(pid, type) {
@@ -254,23 +236,6 @@
       saveRoom();
     }
 
-    function toggleFlip(itemUid) {
-      const item = tableState.items.find(item => item.uid === itemUid);
-      if (!item) return;
-      item.flipped = !item.flipped;
-      saveRoom();
-    }
-
-    function toggleCrossFlip(itemUid, slot) {
-      const item = tableState.items.find(item => item.uid === itemUid);
-      if (!item || item.kind !== 'P') return;
-      if (!item.crossFlipped || typeof item.crossFlipped !== 'object') {
-        item.crossFlipped = { P: false, Cog: false, Emo: false, Comp: false };
-      }
-      item.crossFlipped[slot] = !item.crossFlipped[slot];
-      saveRoom();
-    }
-
     function toggleCross(itemUid) {
       const item = tableState.items.find(item => item.uid === itemUid);
       if (!item || item.kind !== 'P') return;
@@ -391,7 +356,7 @@
     }
 
     function kindName(kind, card) {
-      if (kind === 'E') return 'Emozione';
+      if (kind === 'E') return 'Energia';
       if (kind === 'P') return 'Pattern, apribile come croce';
       return 'Intervento ' + interventionType(card);
     }
@@ -405,12 +370,6 @@
       }
       liveEls.liveTable.innerHTML = '<div class="table-grid">' + tableState.items.map(renderTableItem).join('') + '</div>';
       if (!IS_PRESENTER) return;
-      liveEls.liveTable.querySelectorAll('[data-card-flip]').forEach(card => {
-        card.addEventListener('click', () => toggleFlip(card.dataset.cardFlip));
-      });
-      liveEls.liveTable.querySelectorAll('[data-cross-flip]').forEach(card => {
-        card.addEventListener('click', () => toggleCrossFlip(card.dataset.uid, card.dataset.crossFlip));
-      });
       liveEls.liveTable.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
           const action = btn.dataset.action;
@@ -432,25 +391,23 @@
 
     function renderSingleCard(item, card) {
       return '<article class="live-card-wrap">' +
-        renderFixedCard(item.kind, card, item.flipped, 'data-card-flip="' + esc(item.uid) + '"') +
+        renderLiveV1Card(item.kind, card) +
         renderItemActions(item) +
       '</article>';
     }
 
     function renderCrossItem(item, p) {
-      const cog = interventionForPattern(item.id, 'Cog');
-      const emo = interventionForPattern(item.id, 'Emo');
-      const comp = interventionForPattern(item.id, 'Comp');
-      const flipped = item.crossFlipped && typeof item.crossFlipped === 'object' ? item.crossFlipped : {};
       return '<article class="live-cross">' +
-        '<div class="cross-mini-grid">' +
-          '<div class="cross-cell pat">' + renderFixedCard('P', p, !!flipped.P, 'data-cross-flip="P" data-uid="' + esc(item.uid) + '"') + '</div>' +
-          '<div class="cross-cell cog">' + (cog ? renderFixedCard('I', cog, !!flipped.Cog, 'data-cross-flip="Cog" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
-          '<div class="cross-cell emo">' + (emo ? renderFixedCard('I', emo, !!flipped.Emo, 'data-cross-flip="Emo" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
-          '<div class="cross-cell comp">' + (comp ? renderFixedCard('I', comp, !!flipped.Comp, 'data-cross-flip="Comp" data-uid="' + esc(item.uid) + '"') : '<div class="empty-slot">n/a</div>') + '</div>' +
-        '</div>' +
+        window.EPICCardsV1.renderCrossFront(p) +
         renderItemActions(item) +
       '</article>';
+    }
+
+    function renderLiveV1Card(kind, card) {
+      if (!window.EPICCardsV1) return '';
+      if (kind === 'E') return window.EPICCardsV1.renderEnergyFront(card);
+      if (kind === 'P') return window.EPICCardsV1.renderPatternFront(card);
+      return window.EPICCardsV1.renderInterventionFront(card);
     }
 
     function renderItemActions(item) {
@@ -461,115 +418,6 @@
         (item.kind === 'P' ? '<button class="mini-btn" data-action="cross" data-uid="' + item.uid + '">' + (item.crossOpen ? 'Chiudi croce' : 'Apri croce') + '</button>' : '') +
         '<button class="mini-btn danger" data-action="remove" data-uid="' + item.uid + '">Togli</button>' +
       '</div>';
-    }
-
-    function patternShort(p) {
-      return (p.fronte?.shorts?.items || p.fronte?.segnali?.items || []).slice(0, 4).join(' · ');
-    }
-
-    function renderFixedCard(kind, card, flipped, attrs) {
-      const type = kind === 'I' ? interventionType(card) : (kind === 'E' ? 'Emozione' : 'Pattern');
-      const cls = kind === 'I' ? 'kind-' + interventionType(card) : 'kind-' + kind;
-      return '<div class="live-epic-card ' + cls + (flipped ? ' flipped' : '') + '" ' + (attrs || '') + '>' +
-        '<div class="epic-card-inner">' +
-          '<div class="epic-face front">' + renderFixedCardFront(kind, card, type) + '</div>' +
-          '<div class="epic-face back">' + renderFixedCardBack(kind, card, type) + '</div>' +
-        '</div>' +
-      '</div>';
-    }
-
-    function renderFixedCardFront(kind, card, type) {
-      let html = renderEpicHead(card.id, type) + '<div class="epic-title">' + esc(card.label) + '</div>';
-
-      if (kind === 'E') {
-        html += renderAliases(card.fronte?.aliases?.items);
-        html += renderEpicSection('Quando la vedi', card.fronte?.quando_la_vedi?.items);
-        html += renderEpicSection('Pattern prioritari', card.fronte?.pattern_da_esplorare?.high);
-        html += renderEpicSection('Altri pattern', card.fronte?.pattern_da_esplorare?.medium);
-        html += renderEpicFooter('EPiC', 'Emozione');
-        return html;
-      }
-
-      if (kind === 'P') {
-        const linkedI = interventions.filter(i => i.id.startsWith('I-' + card.id + '-')).map(i => i.id);
-        html += renderAliases(card.fronte?.aliases?.items);
-        html += renderEpicSection('', card.fronte?.shorts?.items, 'muted');
-        html += renderEpicSection('Segnali', card.fronte?.segnali?.items);
-        html += renderEpicSection('Interventi', linkedI);
-        html += renderPatternEnergyStrip(card.id);
-        html += renderEpicFooter('EPiC', 'Pattern');
-        return html;
-      }
-
-      html += renderEpicSection('Principle', card.fronte?.principle);
-      html += renderEpicSection('Why', card.fronte?.why, 'muted');
-      html += renderEpicSection(card.fronte?.verbo_mentale || 'How to', card.fronte?.how_to);
-      html += renderEpicSection('Serve a', card.fronte?.serve_a, 'muted');
-      html += renderEpicFooter('EPiC', 'Intervento');
-      return html;
-    }
-
-    function renderFixedCardBack(kind, card, type) {
-      let html = renderEpicHead(card.id, type);
-      html += '<div class="epic-back-content">';
-
-      if (kind === 'E') {
-        html += renderEpicSection('Subtypes', card.fronte?.subtypes?.items);
-        html += renderEpicSection('Non e questa se', card.fronte?.non_e_questa_se?.items || card.retro?.non_e_questa_se?.items);
-        html += renderEpicSection('Red flags', card.retro?.red_flags?.items);
-        html += renderEpicSection('Hint', card.retro?.hint);
-      } else if (kind === 'P') {
-        html += renderEpicSection('Non e questo se', card.fronte?.non_e_questo_se?.items);
-        html += renderEpicSection('Hint', card.retro?.hint);
-        html += renderEpicSection('Why', card.retro?.why);
-        html += renderEpicSection('Porta I', card.retro?.porta_I);
-        html += renderEpicSection('Note', card.retro?.note);
-      } else {
-        html += renderAliases(card.retro?.aka);
-        html += renderEpicSection('Domanda esempio', card.retro?.example_q);
-        html += renderEpicSection('Compito / Consapevolezza', card.retro?.example_C);
-        html += renderEpicSection('Fallback', card.retro?.fallback);
-        html += renderEpicSection('Tags', card.retro?.tags);
-        html += renderEpicSection('Note', card.retro?.note);
-      }
-
-      html += '</div>' + renderEpicFooter('EPiC', kind === 'I' ? 'Retro intervento' : 'Retro');
-      return html;
-    }
-
-    function renderEpicHead(id, type) {
-      return '<header class="epic-card-head"><div class="epic-card-id">' + esc(id) + '</div><div class="epic-type-pill">' + esc(type) + '</div></header>';
-    }
-
-    function renderAliases(items) {
-      if (!Array.isArray(items) || !items.length) return '';
-      return '<div class="epic-aliases">' + items.map(esc).join(', ') + '</div>';
-    }
-
-    function renderEpicSection(title, value, extraClass) {
-      if (value == null) return '';
-      let arr = Array.isArray(value) ? value.filter(v => v != null && String(v).trim()) : [value].filter(v => String(v).trim());
-      if (!arr.length) return '';
-      const content = arr.map(v => esc(v)).join(' · ');
-      return '<section class="epic-section">' +
-        (title ? '<div class="epic-section-title">' + esc(title) + '</div>' : '') +
-        '<div class="epic-section-content ' + (extraClass || '') + '">' + content + '</div>' +
-      '</section>';
-    }
-
-    function renderEpicFooter(left, right) {
-      return '<footer class="epic-footer"><span>' + esc(left) + '</span><span>' + esc(right) + '</span></footer>';
-    }
-
-    function renderPatternEnergyStrip(patternId) {
-      const map = livePatternEnergyMap[patternId] || {};
-      const icons = liveEmotionOrder.map(eid => {
-        const level = map[eid] || 'none';
-        const energyClass = (eid === 'E1' || eid === 'E2' || eid === 'E6') ? 'energy-low' : 'energy-high';
-        const src = liveEmotionImages[eid];
-        return '<span class="pattern-energy-icon ' + level + ' ' + energyClass + '"><img src="' + src + '" alt="' + eid + '"></span>';
-      }).join('');
-      return '<div class="pattern-energy-strip" aria-label="Energie del pattern">' + icons + '</div>';
     }
 
     function renderZoomButtons() {
@@ -614,6 +462,9 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      if (window.EPICCardsV1) {
+        window.EPICCardsV1.configure({ data: EPIC_DATA });
+      }
       document.getElementById('newRoomBtn')?.addEventListener('click', () => {
         roomId = createRoomId();
         tableState = createEmptyState(roomId);
