@@ -398,7 +398,7 @@
 
     function renderCrossItem(item, p) {
       return '<article class="live-cross">' +
-        '<div class="live-cross-scroll">' + window.EPICCardsV1.renderCrossFront(p) + '</div>' +
+        window.EPICCardsV1.renderCrossFront(p) +
         renderItemActions(item) +
       '</article>';
     }
