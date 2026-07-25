@@ -363,6 +363,7 @@
     .live-cross{
       --epic-v1-card-w: calc(315px * var(--live-card-scale));
       --epic-v1-card-h: calc(var(--epic-v1-card-w) * 88 / 63);
+      --epic-v1-density: var(--live-card-scale);
     }
 
     .live-cross .epic-v1-cross{
@@ -648,6 +649,7 @@
         width: min(calc(315px * var(--live-card-scale)), 88vw);
         --epic-v1-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
         --epic-v1-card-h: calc(var(--epic-v1-card-w) * 88 / 63);
+        --epic-v1-density: 0.88;
       }
       .live-cross{
         width: 100%;
@@ -655,6 +657,7 @@
       .live-cross .epic-v1-cross,
       .live-shell.viewer-only .live-cross .epic-v1-cross{
         --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
+        --epic-v1-density: 0.88;
       }
       .cross-mini-grid{
         grid-template-columns: 1fr;

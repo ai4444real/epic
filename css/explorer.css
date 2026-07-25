@@ -94,6 +94,7 @@
 
     #view-intervention .epic-v1-cross{
       --epic-v1-cross-card-w: min(315px, calc((100vw - 88px) / 3));
+      --epic-v1-density: 0.9;
     }
 
     @media (max-width: 760px) {
