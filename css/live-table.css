@@ -643,21 +643,21 @@
       .live-table{ padding: 10px; }
       .live-table.zoom-large{ --live-card-scale: 1.02; }
       .table-grid{
-        grid-template-columns: min(315px, 88vw);
+        grid-template-columns: min(calc(360px * var(--live-card-scale)), calc(100vw - 24px));
       }
       .live-card-wrap{
-        width: min(calc(315px * var(--live-card-scale)), 88vw);
-        --epic-v1-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
+        width: min(calc(360px * var(--live-card-scale)), calc(100vw - 24px));
+        --epic-v1-card-w: min(calc(360px * var(--live-card-scale)), calc(100vw - 24px));
         --epic-v1-card-h: calc(var(--epic-v1-card-w) * 88 / 63);
-        --epic-v1-density: 0.88;
+        --epic-v1-density: 0.95;
       }
       .live-cross{
         width: 100%;
       }
       .live-cross .epic-v1-cross,
       .live-shell.viewer-only .live-cross .epic-v1-cross{
-        --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
-        --epic-v1-density: 0.88;
+        --epic-v1-cross-card-w: min(calc(360px * var(--live-card-scale)), calc(100vw - 24px));
+        --epic-v1-density: 0.95;
       }
       .cross-mini-grid{
         grid-template-columns: 1fr;
