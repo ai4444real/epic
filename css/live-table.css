@@ -353,11 +353,17 @@
 
     .live-cross{
       grid-column: 1 / -1;
-      width: max-content;
-      max-width: 100%;
-      overflow-x: auto;
+      width: 100%;
+      overflow: visible;
       padding: 12px;
       background: rgba(56,189,248,0.04);
+    }
+
+    .live-cross-scroll{
+      width: 100%;
+      overflow-x: auto;
+      overflow-y: hidden;
+      padding: 2px 0 12px;
     }
 
     .live-card-wrap,
@@ -368,6 +374,8 @@
 
     .live-cross .epic-v1-cross{
       --epic-v1-cross-card-w: calc(315px * var(--live-card-scale));
+      width: max-content;
+      justify-content: start;
     }
 
     .cross-mini-grid{
