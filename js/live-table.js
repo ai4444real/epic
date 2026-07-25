@@ -130,6 +130,11 @@
       liveEls.setupWarning.innerHTML = '';
     }
 
+    function isDeletedRoom(rowOrPayload) {
+      const payload = rowOrPayload?.payload || rowOrPayload || {};
+      return Boolean(payload.deleted_at);
+    }
+
     async function saveRoom() {
       if (!IS_PRESENTER) return;
       ensureRoomId();
@@ -176,6 +181,10 @@
           .eq('room_id', roomId)
           .maybeSingle();
         if (error) throw error;
+        if (data?.payload && isDeletedRoom(data.payload)) {
+          if (!IS_PRESENTER) setStatus('Stanza non trovata.');
+          return;
+        }
         if (data?.payload) {
           const stamp = data.updated_at || data.payload.updated_at || '';
           if (stamp !== lastRemoteStamp) {
@@ -208,7 +217,7 @@
           .order('updated_at', { ascending: false })
           .limit(30);
         if (error) throw error;
-        savedRooms = Array.isArray(data) ? data : [];
+        savedRooms = (Array.isArray(data) ? data : []).filter(row => !isDeletedRoom(row));
         renderSavedRooms();
         clearSetupWarning();
       } catch (error) {
@@ -230,11 +239,31 @@
         return;
       }
       try {
-        const { error } = await client
+        const { data: deletedRows, error } = await client
           .from(LIVE_TABLE_NAME)
           .delete()
-          .eq('room_id', target);
+          .eq('room_id', target)
+          .select('room_id');
         if (error) throw error;
+        if (!Array.isArray(deletedRows) || deletedRows.length === 0) {
+          const deletedPayload = {
+            ...(row?.payload || createEmptyState(target)),
+            room_id: target,
+            deleted_at: new Date().toISOString()
+          };
+          const { data: updatedRows, error: updateError } = await client
+            .from(LIVE_TABLE_NAME)
+            .update({
+              payload: deletedPayload,
+              updated_at: deletedPayload.deleted_at
+            })
+            .eq('room_id', target)
+            .select('room_id');
+          if (updateError) throw updateError;
+          if (!Array.isArray(updatedRows) || updatedRows.length === 0) {
+            throw new Error('Nessuna riga cancellata. Verifica le policy Supabase per delete/update.');
+          }
+        }
         savedRooms = savedRooms.filter(item => item.room_id !== target);
         if (target === roomId) {
           const fallbackRoomId = savedRooms[0]?.room_id || '';
