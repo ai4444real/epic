@@ -247,8 +247,8 @@
 
 .epic-v1-intervention {
   display: grid;
-  grid-template-rows: auto 1fr auto;
-  gap: calc(14px * var(--epic-v1-density));
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: calc(11px * var(--epic-v1-density));
   background: #fff;
 }
 
@@ -268,13 +268,13 @@
 .epic-v1-intervention-main {
   display: grid;
   align-content: start;
-  gap: calc(9px * var(--epic-v1-density));
+  gap: calc(7px * var(--epic-v1-density));
   text-align: center;
-  padding-top: calc(10px * var(--epic-v1-density));
+  padding-top: calc(7px * var(--epic-v1-density));
 }
 
 .epic-v1-principle {
-  font-size: calc(22px * var(--epic-v1-density));
+  font-size: calc(20px * var(--epic-v1-density));
   font-weight: 800;
   line-height: 1.12;
 }
@@ -285,17 +285,17 @@
 
 .epic-v1-why {
   color: var(--epic-v1-muted);
-  font-size: calc(14px * var(--epic-v1-density));
+  font-size: calc(13px * var(--epic-v1-density));
   font-style: italic;
 }
 
 .epic-v1-example {
-  font-size: calc(16px * var(--epic-v1-density));
+  font-size: calc(15px * var(--epic-v1-density));
 }
 
 .epic-v1-lever {
   position: relative;
-  min-height: calc(112px * var(--epic-v1-density));
+  min-height: calc(96px * var(--epic-v1-density));
   display: grid;
   align-content: center;
   justify-items: center;
@@ -336,8 +336,8 @@
   position: relative;
   z-index: 1;
   max-width: 88%;
-  margin-top: calc(8px * var(--epic-v1-density));
-  font-size: calc(15px * var(--epic-v1-density));
+  margin-top: calc(6px * var(--epic-v1-density));
+  font-size: calc(14px * var(--epic-v1-density));
 }
 
 .epic-v1-rescue {
@@ -346,6 +346,7 @@
   border-radius: 8px;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  min-height: calc(72px * var(--epic-v1-density));
   overflow: hidden;
   background: rgba(255, 255, 255, 0.92);
 }
@@ -362,9 +363,9 @@
 
 .epic-v1-rescue-item {
   min-width: 0;
-  padding: calc(12px * var(--epic-v1-density));
-  font-size: calc(13px * var(--epic-v1-density));
-  line-height: 1.14;
+  padding: calc(9px * var(--epic-v1-density));
+  font-size: calc(11.5px * var(--epic-v1-density));
+  line-height: 1.08;
   overflow-wrap: anywhere;
 }
 
