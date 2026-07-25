@@ -666,6 +666,17 @@
         min-height: calc(var(--epic-v1-cross-card-w) * 88 / 63);
         overflow: visible;
       }
+      .live-card-wrap .epic-v1-intervention,
+      .live-cross .epic-v1-cross .epic-v1-intervention{
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .live-card-wrap .epic-v1-rescue,
+      .live-cross .epic-v1-cross .epic-v1-rescue{
+        margin-top: 8px;
+        overflow: visible;
+      }
       .cross-mini-grid{
         grid-template-columns: 1fr;
         grid-template-areas: "pat" "cog" "emo" "comp";
