@@ -166,10 +166,14 @@
         if (!p) return '';
         const shorts = (p.fronte?.shorts?.items || []).map(s => esc(s)).join(' / ');
         const selected = chosenP === pid ? ' selected' : '';
+        const img = pImages[pid] ? '<div class="p-img"><img src="' + pImages[pid] + '" alt="' + esc(pid) + '"></div>' : '';
         return '<div class="p-btn' + selected + '" data-pid="' + pid + '">' +
-          '<div class="p-id">' + esc(pid) + '</div>' +
-          '<div class="p-label">' + esc(p.label) + '</div>' +
-          (shorts ? '<div class="p-shorts">' + shorts + '</div>' : '') +
+          img +
+          '<div class="p-body">' +
+            '<div class="p-id">' + esc(pid) + '</div>' +
+            '<div class="p-label">' + esc(p.label) + '</div>' +
+            (shorts ? '<div class="p-shorts">' + shorts + '</div>' : '') +
+          '</div>' +
         '</div>';
       }).join('');
 
