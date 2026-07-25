@@ -4,8 +4,9 @@
 :root {
   --epic-v1-card-w: 315px;
   --epic-v1-card-h: 440px;
+  --epic-v1-density: calc(var(--epic-v1-card-w) / 315px);
   --epic-v1-radius: 8px;
-  --epic-v1-pad: 18px;
+  --epic-v1-pad: calc(18px * var(--epic-v1-density));
   --epic-v1-fg: #050505;
   --epic-v1-muted: #6f7480;
   --epic-v1-soft: #f6f7f8;
@@ -247,15 +248,15 @@
 .epic-v1-intervention {
   display: grid;
   grid-template-rows: auto 1fr auto;
-  gap: 14px;
+  gap: calc(14px * var(--epic-v1-density));
   background: #fff;
 }
 
 .epic-v1-type-pill {
   justify-self: end;
-  padding: 4px 8px;
+  padding: calc(4px * var(--epic-v1-density)) calc(8px * var(--epic-v1-density));
   border-radius: 6px;
-  font-size: 12px;
+  font-size: calc(12px * var(--epic-v1-density));
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -267,13 +268,13 @@
 .epic-v1-intervention-main {
   display: grid;
   align-content: start;
-  gap: 9px;
+  gap: calc(9px * var(--epic-v1-density));
   text-align: center;
-  padding-top: 10px;
+  padding-top: calc(10px * var(--epic-v1-density));
 }
 
 .epic-v1-principle {
-  font-size: 22px;
+  font-size: calc(22px * var(--epic-v1-density));
   font-weight: 800;
   line-height: 1.12;
 }
@@ -284,17 +285,17 @@
 
 .epic-v1-why {
   color: var(--epic-v1-muted);
-  font-size: 14px;
+  font-size: calc(14px * var(--epic-v1-density));
   font-style: italic;
 }
 
 .epic-v1-example {
-  font-size: 16px;
+  font-size: calc(16px * var(--epic-v1-density));
 }
 
 .epic-v1-lever {
   position: relative;
-  min-height: 112px;
+  min-height: calc(112px * var(--epic-v1-density));
   display: grid;
   align-content: center;
   justify-items: center;
@@ -303,7 +304,7 @@
 
 .epic-v1-lever-watermark {
   position: absolute;
-  width: 145px;
+  width: calc(145px * var(--epic-v1-density));
   opacity: 0.22;
   pointer-events: none;
 }
@@ -327,7 +328,7 @@
 .epic-v1-verb {
   position: relative;
   z-index: 1;
-  font-size: 18px;
+  font-size: calc(18px * var(--epic-v1-density));
   font-weight: 800;
 }
 
@@ -335,8 +336,8 @@
   position: relative;
   z-index: 1;
   max-width: 88%;
-  margin-top: 8px;
-  font-size: 15px;
+  margin-top: calc(8px * var(--epic-v1-density));
+  font-size: calc(15px * var(--epic-v1-density));
 }
 
 .epic-v1-rescue {
@@ -352,24 +353,26 @@
 .epic-v1-rescue::before {
   content: "";
   position: absolute;
-  top: 8px;
-  bottom: 8px;
+  top: calc(8px * var(--epic-v1-density));
+  bottom: calc(8px * var(--epic-v1-density));
   left: 50%;
   width: 1px;
   background: var(--epic-v1-line);
 }
 
 .epic-v1-rescue-item {
-  padding: 12px 12px 12px;
-  font-size: 13px;
+  min-width: 0;
+  padding: calc(12px * var(--epic-v1-density));
+  font-size: calc(13px * var(--epic-v1-density));
   line-height: 1.14;
+  overflow-wrap: anywhere;
 }
 
 .epic-v1-rescue-icon {
   display: block;
-  width: 15px;
-  height: 15px;
-  margin-bottom: 6px;
+  width: calc(15px * var(--epic-v1-density));
+  height: calc(15px * var(--epic-v1-density));
+  margin-bottom: calc(6px * var(--epic-v1-density));
   color: var(--epic-v1-muted);
 }
 
@@ -442,6 +445,7 @@
 }
 
 .epic-v1-cross .epic-v1-card {
+  --epic-v1-density: calc(var(--epic-v1-cross-card-w) / 315px);
   width: var(--epic-v1-cross-card-w);
   height: calc(var(--epic-v1-cross-card-w) * 88 / 63);
 }

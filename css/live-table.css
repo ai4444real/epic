@@ -367,35 +367,10 @@
 
     .live-cross .epic-v1-cross{
       --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), calc((100vw - 420px) / 3));
-      grid-template-rows: auto auto;
-      align-items: start;
     }
 
     .live-shell.viewer-only .live-cross .epic-v1-cross{
       --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), calc((100vw - 96px) / 3));
-    }
-
-    .live-card-wrap .epic-v1-intervention,
-    .live-cross .epic-v1-cross .epic-v1-intervention{
-      aspect-ratio: auto;
-      height: auto;
-      min-height: var(--epic-v1-card-h);
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .live-card-wrap .epic-v1-rescue,
-    .live-cross .epic-v1-cross .epic-v1-rescue{
-      margin-top: 8px;
-      overflow: visible;
-    }
-
-    .live-card-wrap .epic-v1-rescue-item,
-    .live-cross .epic-v1-cross .epic-v1-rescue-item{
-      min-width: 0;
-      overflow-wrap: anywhere;
     }
 
     .cross-mini-grid{
@@ -672,13 +647,7 @@
       .live-card-wrap{
         width: min(calc(315px * var(--live-card-scale)), 88vw);
         --epic-v1-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
-        --epic-v1-card-h: auto;
-      }
-      .live-card-wrap .epic-v1-card{
-        aspect-ratio: auto;
-        height: auto;
-        min-height: calc(var(--epic-v1-card-w) * 88 / 63);
-        overflow: visible;
+        --epic-v1-card-h: calc(var(--epic-v1-card-w) * 88 / 63);
       }
       .live-cross{
         width: 100%;
@@ -686,12 +655,6 @@
       .live-cross .epic-v1-cross,
       .live-shell.viewer-only .live-cross .epic-v1-cross{
         --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), 88vw);
-      }
-      .live-cross .epic-v1-cross .epic-v1-card{
-        aspect-ratio: auto;
-        height: auto;
-        min-height: calc(var(--epic-v1-cross-card-w) * 88 / 63);
-        overflow: visible;
       }
       .cross-mini-grid{
         grid-template-columns: 1fr;

@@ -127,9 +127,9 @@
         "emo  pat  comp"
         ".    .    .";
       grid-template-columns: var(--epic-v1-card-w) var(--epic-v1-card-w) var(--epic-v1-card-w);
-      grid-template-rows: auto auto auto;
+      grid-template-rows: var(--epic-v1-card-h) var(--epic-v1-card-h) auto;
       gap: 14px;
-      align-items: start;
+      align-items: center;
       justify-items: center;
     }
 
@@ -206,32 +206,6 @@
     .card-container{
       width: var(--epic-v1-card-w);
       height: var(--epic-v1-card-h);
-    }
-
-    .wing-slot.open,
-    .wing-slot.open .card-container{
-      height: auto;
-      min-height: var(--epic-v1-card-h);
-    }
-
-    .cross-view .epic-v1-intervention{
-      aspect-ratio: auto;
-      height: auto;
-      min-height: var(--epic-v1-card-h);
-      overflow: visible;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
-
-    .cross-view .epic-v1-rescue{
-      margin-top: 8px;
-      overflow: visible;
-    }
-
-    .cross-view .epic-v1-rescue-item{
-      min-width: 0;
-      overflow-wrap: anywhere;
     }
 
     .pattern-card-button{
@@ -519,10 +493,4 @@
         height: calc(min(var(--epic-v1-card-w), 90vw) * 88 / 63);
       }
 
-      .wing-slot.open,
-      .wing-slot.open .card-container,
-      .wing-slot.open .epic-v1-card{
-        height: auto;
-        min-height: calc(min(var(--epic-v1-card-w), 90vw) * 88 / 63);
-      }
     }
