@@ -28,11 +28,12 @@
 
     // ---- Init ----
     window.addEventListener('DOMContentLoaded', () => {
+      if (window.EPICCardsV1) {
+        window.EPICCardsV1.configure({ data: EPIC_DATA });
+      }
       applyExplorerConfig();
       renderStep1();
     });
-
-    window.addEventListener('resize', scaleCross);
 
     function renderStepBar(step) {
       const labels = ['E + Intent', 'P', 'I'];
@@ -62,7 +63,6 @@
       document.getElementById('btnIDetail').classList.toggle('active', mode === 'detail');
       document.getElementById('iCompactView').style.display = mode === 'compact' ? '' : 'none';
       document.getElementById('crossContainer').style.display = mode === 'detail' ? '' : 'none';
-      if (mode === 'detail') requestAnimationFrame(scaleCross);
     }
 
     // ---- Intent ----
@@ -207,23 +207,13 @@
 
       // Cross view
       const layout = document.getElementById('crossLayout');
-      const cogExtra = highlightTypes.has('Cog') ? 'intent-match' : '';
-      const emoExtra = highlightTypes.has('Emo') ? 'intent-match' : '';
-      const compExtra = highlightTypes.has('Comp') ? 'intent-match' : '';
-
-      layout.innerHTML =
-        '<div class="cross-top">' + renderISelectable(cog, cogExtra) + '</div>' +
-        '<div class="cross-left">' + renderISelectable(emo, emoExtra) + '</div>' +
-        '<div class="cross-center">' + renderPCard(p) + '</div>' +
-        '<div class="cross-right">' + renderISelectable(comp, compExtra) + '</div>';
+      layout.innerHTML = window.EPICCardsV1.renderCrossFront(p);
 
       // Show correct view
       document.getElementById('iCompactView').style.display = iViewMode === 'compact' ? '' : 'none';
       document.getElementById('crossContainer').style.display = iViewMode === 'detail' ? '' : 'none';
       document.getElementById('btnICompact').classList.toggle('active', iViewMode === 'compact');
       document.getElementById('btnIDetail').classList.toggle('active', iViewMode === 'detail');
-
-      if (iViewMode === 'detail') requestAnimationFrame(scaleCross);
     }
 
     function renderICompactExplorer(p, cog, emo, comp, highlightTypes) {

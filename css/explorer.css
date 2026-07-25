@@ -69,8 +69,35 @@
     .intent-badge.badge-capire{ background: rgba(59,130,246,0.15); color: #2563eb; }
     .intent-badge.badge-allinearsi{ background: rgba(251,146,60,0.15); color: #ea580c; }
 
+    #view-intervention{
+      max-width: min(1180px, 100vw);
+    }
+
     /* Cross view intent highlight */
     .i-selectable.intent-match{
       border-color: var(--fg) !important;
       box-shadow: 0 0 0 3px rgba(0,0,0,0.1);
+    }
+
+    #view-intervention .cross-container{
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 8px 0 18px;
+    }
+
+    #view-intervention .cross-layout{
+      display: block;
+      width: max-content;
+      max-width: none;
+      transform: none !important;
+    }
+
+    #view-intervention .epic-v1-cross{
+      --epic-v1-cross-card-w: min(315px, calc((100vw - 88px) / 3));
+    }
+
+    @media (max-width: 760px) {
+      #view-intervention .cross-layout{
+        width: min(315px, 88vw);
+      }
     }
