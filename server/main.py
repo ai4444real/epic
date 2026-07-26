@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+import json
 import secrets
 import sqlite3
 import time
@@ -24,6 +25,8 @@ load_dotenv(APP_ROOT / ".env")
 DEFAULT_DB_PATH = SERVER_ROOT / "var" / "access_log.sqlite3"
 DB_PATH = Path(os.getenv("EPIC_ACCESS_DB", str(DEFAULT_DB_PATH))).resolve()
 AUTH_DB_PATH = Path(os.getenv("EPIC_AUTH_DB", str(SERVER_ROOT / "var" / "auth.sqlite3"))).resolve()
+CONTENT_DB_PATH = Path(os.getenv("EPIC_CONTENT_DB", str(SERVER_ROOT / "var" / "content.sqlite3"))).resolve()
+SCENARIOS_SEED_PATH = SERVER_ROOT / "seeds" / "scenarios.json"
 SERVICE_NAME = os.getenv("EPIC_SERVICE_NAME", "epic-web")
 SESSION_COOKIE_NAME = "epic_auth"
 SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 30
@@ -92,6 +95,7 @@ def create_app() -> FastAPI:
     app = FastAPI(title="EPiC Web", docs_url=None, redoc_url=None)
     init_access_db()
     init_auth_db()
+    init_content_db()
     app.add_middleware(
         SessionMiddleware,
         secret_key=SESSION_SECRET or secrets.token_urlsafe(32),
@@ -168,6 +172,25 @@ def create_app() -> FastAPI:
         if not user:
             return JSONResponse({"authenticated": False}, status_code=401)
         return JSONResponse({"authenticated": True, "user": user})
+
+    @app.get("/api/scenarios")
+    async def api_scenarios(request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_protected(user):
+            return JSONResponse({"error": "unlocked_required"}, status_code=403)
+        return JSONResponse(list_scenarios())
+
+    @app.get("/api/scenarios/random")
+    async def api_scenarios_random(request: Request, limit: int | None = None) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_protected(user):
+            return JSONResponse({"error": "unlocked_required"}, status_code=403)
+        safe_limit = limit if limit and limit > 0 else None
+        return JSONResponse(list_scenarios(random_order=True, limit=safe_limit))
 
     @app.get("/{path:path}")
     async def serve(path: str, request: Request) -> Response:
@@ -321,6 +344,77 @@ def init_auth_db() -> None:
         conn.execute("CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires_at ON auth_sessions(expires_at)")
 
 
+def init_content_db() -> None:
+    CONTENT_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS scenarios (
+                scenario_id TEXT PRIMARY KEY,
+                title TEXT NOT NULL,
+                difficulty TEXT NOT NULL DEFAULT '',
+                payload TEXT NOT NULL,
+                seed_hash TEXT NOT NULL DEFAULT '',
+                updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_scenarios_difficulty ON scenarios(difficulty)")
+    seed_scenarios_from_file()
+
+
+def seed_scenarios_from_file() -> None:
+    if not SCENARIOS_SEED_PATH.is_file():
+        return
+    scenarios = json.loads(SCENARIOS_SEED_PATH.read_text(encoding="utf-8"))
+    if not isinstance(scenarios, list):
+        raise RuntimeError(f"Invalid scenarios seed: {SCENARIOS_SEED_PATH}")
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        for scenario in scenarios:
+            if not isinstance(scenario, dict) or not scenario.get("id"):
+                continue
+            payload = json.dumps(scenario, ensure_ascii=False, sort_keys=True)
+            seed_hash = sha256(payload.encode("utf-8")).hexdigest()
+            conn.execute(
+                """
+                INSERT INTO scenarios (scenario_id, title, difficulty, payload, seed_hash, updated_at)
+                VALUES (?, ?, ?, ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+                ON CONFLICT(scenario_id) DO UPDATE SET
+                    title = excluded.title,
+                    difficulty = excluded.difficulty,
+                    payload = excluded.payload,
+                    seed_hash = excluded.seed_hash,
+                    updated_at = CASE
+                        WHEN scenarios.seed_hash <> excluded.seed_hash
+                        THEN strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+                        ELSE scenarios.updated_at
+                    END
+                """,
+                (
+                    scenario["id"],
+                    scenario.get("title") or scenario["id"],
+                    scenario.get("difficulty") or "",
+                    payload,
+                    seed_hash,
+                ),
+            )
+
+
+def list_scenarios(random_order: bool = False, limit: int | None = None) -> list[dict]:
+    sql = "SELECT payload FROM scenarios"
+    if random_order:
+        sql += " ORDER BY random()"
+    else:
+        sql += " ORDER BY scenario_id"
+    params: tuple = ()
+    if limit:
+        sql += " LIMIT ?"
+        params = (limit,)
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        rows = conn.execute(sql, params).fetchall()
+    return [json.loads(row[0]) for row in rows]
+
+
 def upsert_user(google_sub: str, email: str, name: str, picture: str) -> str:
     with sqlite3.connect(AUTH_DB_PATH) as conn:
         existing = conn.execute("SELECT role FROM users WHERE google_sub = ? OR email = ?", (google_sub, email)).fetchone()
@@ -438,6 +532,11 @@ def page_response(file_path: Path) -> Response:
 def static_file_response(request_path: str) -> Response | None:
     normalized = request_path.lstrip("/")
     if not normalized:
+        return None
+    normalized_lower = normalized.replace("\\", "/").lower()
+    if normalized_lower.startswith("server/"):
+        return None
+    if normalized_lower == "data/scenarios.js":
         return None
 
     candidate = (APP_ROOT / normalized).resolve()

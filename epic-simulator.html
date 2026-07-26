@@ -13,7 +13,7 @@
     <h1>EPiC <span class="sub">Coach Simulator</span></h1>
     <div class="toolbar-actions">
       <a class="btn" href="epic.html">Home</a>
-      <button class="btn" id="fetchScenariosBtn" onclick="fetchScenariosFromSupabase()">Scarica scenari</button>
+      <button class="btn" id="fetchScenariosBtn" onclick="fetchScenariosFromServer()">Scarica scenari</button>
       <button class="btn" onclick="showLog()">Log</button>
       <button class="btn" id="backBtn" style="display:none" onclick="goBack()">Indietro</button>
     </div>
@@ -116,11 +116,9 @@
     window.EPIC_SIMULATOR_CONFIG = {"mode":"locked","scenarioRefresh":true,"label":"Completo"};
   </script>
   <script src="data/EPIC_data.js"></script>
-  <script src="data/scenarios.js"></script>
     <script src="cards/web-v1/epic-cards-v1.js"></script>
     <script src="js/shared.js"></script>
     <script src="js/simulator.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/app-config.js"></script>
   <script src="js/auth.js"></script>
 </body>

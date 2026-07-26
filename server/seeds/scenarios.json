@@ -1,0 +1,2623 @@
+[
+  {
+    "id": "S107",
+    "why": {
+      "E": {
+        "E1": "Tensione da approvazione.",
+        "E4": "Pressione sociale.",
+        "E6": "Disconnessione da sé."
+      },
+      "I": {
+        "I-P4-Emo": "Dignità come limite.",
+        "I-P10-Cog": "Distinguere valore interno/esterno.",
+        "I-P10-Emo": "Verificare congruenza interna.",
+        "I-P10-Comp": "Autorizzarsi senza conferma."
+      },
+      "P": {
+        "P4": "Confini non emergono.",
+        "P10": "Valore spostato all’esterno."
+      }
+    },
+    "tags": [
+      "conformità",
+      "autenticità"
+    ],
+    "title": "Mi adeguo e poi mi perdo",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E4": 1,
+        "E6": 2
+      },
+      "I": {
+        "I-P4-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P10-Emo": 2,
+        "I-P10-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P10": 2
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Mi adeguo a quello che vogliono gli altri e poi mi sento distante da me. Vorrei capire cosa conta per me e ritrovare un minimo di allineamento."
+  },
+  {
+    "id": "S103",
+    "why": {
+      "E": {
+        "E1": "Preoccupazione e tensione alimentano il loop.",
+        "E4": "Pressione aumenta l’overthinking."
+      },
+      "I": {
+        "I-P6-Cog": "Valutare l’utilità del pensiero e scegliere cosa tenere vs lasciare.",
+        "I-P6-Emo": "Rientrare nel presente quando la mente gira e si incastra.",
+        "I-P11-Emo": "Aprire spazio intermedio tra i poli (non tutto-o-niente).",
+        "I-P12-Emo": "Ammettere il dubbio per restare aperti a alternative credibili.",
+        "I-P6-Comp": "Interrompere il loop con un gesto semplice che riporta al fare."
+      },
+      "P": {
+        "P6": "Ruminazione/loop mentale centrale.",
+        "P11": "Binario blocca una scelta imperfetta.",
+        "P12": "Cerco conferme, ignoro alternative."
+      }
+    },
+    "tags": [
+      "ruminazione",
+      "decisione"
+    ],
+    "title": "Penso e ripenso e non decido",
+    "intent": [
+      "capire",
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P11",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P6-Cog": 2,
+        "I-P6-Emo": 2,
+        "I-P11-Emo": 1,
+        "I-P12-Emo": 1,
+        "I-P6-Comp": 1
+      },
+      "P": {
+        "P6": 2,
+        "P11": 1,
+        "P12": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Ho mille pensieri in testa, faccio liste, confronto opzioni… e poi non scelgo. Vorrei capire cosa conta davvero e, appena è più chiaro, decidere finalmente."
+  },
+  {
+    "id": "S120",
+    "why": {
+      "E": {
+        "E1": "Tensione tra criteri di valore.",
+        "E2": "Allarme sul rischio di deludere.",
+        "E4": "Pressione dell’aspettativa."
+      },
+      "I": {
+        "I-P4-Emo": "Dignità nel proteggere scelta personale.",
+        "I-P10-Cog": "Distinguere sorgente del valore interna vs esterna.",
+        "I-P10-Emo": "Verificare congruenza interna (‘ok per me’).",
+        "I-P10-Comp": "Autorizzarsi a un’azione autonoma."
+      },
+      "P": {
+        "P4": "Confini/ruoli da ridefinire.",
+        "P6": "Loop mentale ‘se faccio X allora…’.",
+        "P10": "Valore spostato all’esterno (aspettative)."
+      }
+    },
+    "tags": [
+      "famiglia",
+      "aspettative"
+    ],
+    "title": "Tirato tra due lealtà",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P4-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P10-Emo": 2,
+        "I-P10-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P6": 1,
+        "P10": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Sono tirato tra quello che voglio io e quello che si aspettano gli altri. Vorrei capire cosa è davvero mio e sentirmi più allineato nel scegliere."
+  },
+  {
+    "id": "S121",
+    "why": {
+      "E": {
+        "E1": "Preoccupazione e pensieri che girano sulla scelta.",
+        "E2": "Allarme/ritiro sul rischio di fallire o essere scoperto.",
+        "E4": "Pressione della scadenza (entro domani)."
+      },
+      "I": {
+        "I-P6-Cog": "Valutare utilità dei pensieri e scegliere cosa tenere vs lasciare.",
+        "I-P9-Emo": "Notare l’emozione senza giudizio e senza identificarvisi.",
+        "I-P10-Cog": "Distinguere valore interno vs valore esterno per decidere con più autonomia.",
+        "I-P6-Comp": "Interrompere il loop con un gesto semplice che porta alla risposta."
+      },
+      "P": {
+        "P6": "Ruminazione e scenari impediscono la decisione.",
+        "P9": "Etichetta personale (“non sono all’altezza”) colora la valutazione.",
+        "P10": "Valore spostato all’esterno (giudizio/approvazione)."
+      }
+    },
+    "tags": [
+      "lavoro",
+      "decisione",
+      "promozione"
+    ],
+    "title": "Promozione: entusiasmo e paura insieme",
+    "intent": [
+      "capire",
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P9",
+        "P10"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P6-Cog": 2,
+        "I-P9-Emo": 1,
+        "I-P10-Cog": 1,
+        "I-P6-Comp": 2
+      },
+      "P": {
+        "P6": 2,
+        "P9": 1,
+        "P10": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Mi hanno proposto una promozione. Una parte di me è contenta, un’altra pensa subito: “non sono all’altezza, mi sgamano”. Continuo a rimuginare e a fare scenari. Vorrei capire quali criteri contano davvero per decidere… e poi dare una risposta chiara entro domani."
+  },
+  {
+    "id": "S125",
+    "why": {
+      "E": {
+        "E1": "Tensione nel ruolo.",
+        "E2": "Allarme nel rischio di perdere posizione.",
+        "E4": "Pressione delle aspettative."
+      },
+      "I": {
+        "I-P10-Cog": "Separare valore personale da ruolo/immagine.",
+        "I-P10-Emo": "Verificare congruenza interna prima di agire.",
+        "I-P11-Emo": "Aprire uno spazio intermedio tra sicurezza e dubbio.",
+        "I-P12-Cog": "Cercare contro-evidenze alla narrativa dominante."
+      },
+      "P": {
+        "P10": "Identità legata allo sguardo degli altri.",
+        "P11": "Rigidità: forte o debole.",
+        "P12": "Ricerca di prove a sostegno della propria immagine."
+      }
+    },
+    "tags": [
+      "leadership",
+      "ruolo",
+      "decisione"
+    ],
+    "title": "Leader sotto pressione",
+    "intent": [
+      "allinearsi",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P11",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P10-Cog": 1,
+        "I-P10-Emo": 2,
+        "I-P11-Emo": 1,
+        "I-P12-Cog": 1
+      },
+      "P": {
+        "P10": 2,
+        "P11": 1,
+        "P12": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Tutti si aspettano che io tenga la barra dritta, ma dentro sono in dubbio. Se mostro incertezza perdo autorevolezza, se tiro dritto rischio di fare una scelta sbagliata. Vorrei restare centrato e prendere una decisione chiara, senza farmi guidare solo dall’immagine."
+  },
+  {
+    "id": "S106",
+    "why": {
+      "E": {
+        "E4": "Pressione peggiora l’avvio.",
+        "E6": "Spento/vuoto: poca spinta."
+      },
+      "I": {
+        "I-P5-Emo": "Consentire l’avvio senza slancio.",
+        "I-P8-Emo": "Ritrovarsi nel sé futuro.",
+        "I-P5-Comp": "Micro-azione immediata.",
+        "I-P8-Comp": "Gesto oggi allineato."
+      },
+      "P": {
+        "P5": "Evitamento/inerzia.",
+        "P8": "Futuro poco rilevante nel presente."
+      }
+    },
+    "tags": [
+      "apatia",
+      "avvio"
+    ],
+    "title": "So cosa fare ma non parte niente",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P5",
+        "P8"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E4": 1,
+        "E6": 2
+      },
+      "I": {
+        "I-P5-Emo": 2,
+        "I-P8-Emo": 1,
+        "I-P5-Comp": 2,
+        "I-P8-Comp": 1
+      },
+      "P": {
+        "P5": 2,
+        "P8": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Razionalmente so cosa fare, ma non parte. È come se mi mancasse energia. Se riuscissi solo a cominciare, anche senza entusiasmo, sarebbe già tanto."
+  },
+  {
+    "id": "S102",
+    "why": {
+      "E": {
+        "E1": "Tensione nel dire sì.",
+        "E4": "Sovraccarico dopo troppi sì.",
+        "E5": "Irritazione quando il limite è superato."
+      },
+      "I": {
+        "I-P4-Emo": "Dignità come innesco del limite.",
+        "I-P11-Emo": "Aprire a una via di mezzo.",
+        "I-P4-Comp": "Dire no assertivo.",
+        "I-P10-Comp": "Agire senza chiedere conferma."
+      },
+      "P": {
+        "P4": "Confini assenti o non dichiarati.",
+        "P10": "Approvazione/adattamento automatico.",
+        "P11": "O cedo o esplodo."
+      }
+    },
+    "tags": [
+      "confini",
+      "conformità"
+    ],
+    "title": "Dico sempre sì e poi esplodo",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P4",
+        "P10",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E4": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P4-Emo": 1,
+        "I-P11-Emo": 1,
+        "I-P4-Comp": 2,
+        "I-P10-Comp": 1
+      },
+      "P": {
+        "P4": 2,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Accetto richieste anche quando non vorrei. Poi mi ritrovo sfinito e nervoso. So che dovrei muovermi diversamente: mi servirebbe definire un’azione concreta invece di restare lì ad accumulare."
+  },
+  {
+    "id": "S124",
+    "why": {
+      "E": {
+        "E1": "Tensione nel decidere.",
+        "E2": "Allarme sull’idea di mollare.",
+        "E6": "Svuotamento dopo mesi di resistenza."
+      },
+      "I": {
+        "I-P6-Emo": "Rientrare nel presente quando la mente gira.",
+        "I-P10-Cog": "Distinguere valore interno vs valore esterno per chiarire la scelta.",
+        "I-P10-Emo": "Verificare congruenza interna: cosa è davvero ok per me.",
+        "I-P5-Comp": "Fare un micro-passo concreto verso una delle due direzioni."
+      },
+      "P": {
+        "P5": "Inerzia nel non scegliere.",
+        "P6": "Loop mentale tra restare e mollare.",
+        "P10": "Valore spostato all’esterno (fuga vs dovere)."
+      }
+    },
+    "tags": [
+      "scelta",
+      "stanchezza",
+      "valori"
+    ],
+    "title": "Restare o mollare tutto",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P6",
+        "P5"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E2": 1,
+        "E6": 2
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P10-Emo": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P5": 1,
+        "P6": 1,
+        "P10": 2
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Sono esausto. Da mesi penso di mollare questo progetto, ma ogni volta mi dico che sarebbe una fuga. Poi resto… e mi svuoto ancora di più. Vorrei capire se sto resistendo per valore o per paura, e riuscire a fare una scelta che sia davvero mia."
+  },
+  {
+    "id": "S110",
+    "why": {
+      "E": {
+        "E1": "Preoccupazione sul futuro.",
+        "E2": "Allarme quando lo senti minaccioso."
+      },
+      "I": {
+        "I-P6-Emo": "Rientrare nel presente.",
+        "I-P8-Cog": "Consultare sé futuro.",
+        "I-P8-Emo": "Ritrovarsi nel sé futuro.",
+        "I-P5-Comp": "Definire una micro-azione immediata e verificabile per rompere l’inerzia."
+      },
+      "P": {
+        "P5": "Evitamento quando aumenta allarme.",
+        "P6": "Loop mentale sul futuro.",
+        "P8": "Futuro non integrato nel presente."
+      }
+    },
+    "tags": [
+      "futuro",
+      "ansia"
+    ],
+    "title": "Futuro lontano e minaccioso",
+    "intent": [
+      "capire",
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P8",
+        "P6",
+        "P5"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P8-Cog": 2,
+        "I-P8-Emo": 2,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P5": 1,
+        "P6": 1,
+        "P8": 2
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Penso troppo al futuro e poi mi blocco. Vorrei rimettere i piedi nel presente, capire cosa è realistico e fare un passo concreto."
+  },
+  {
+    "id": "S101",
+    "why": {
+      "E": {
+        "E1": "Tensione/preoccupazione prima di iniziare.",
+        "E2": "Evitamento e blocco legati al timore di fallire.",
+        "E4": "Senso di pressione che alimenta il rimando."
+      },
+      "I": {
+        "I-P1-Cog": "Definire una soglia di “buono abbastanza” per sbloccare la chiusura.",
+        "I-P5-Emo": "Consentire l’avvio senza slancio.",
+        "I-P6-Emo": "Rientrare nel presente.",
+        "I-P9-Emo": "Notare l’emozione/vergogna senza giudizio e senza identificarvisi.",
+        "I-P5-Comp": "Micro-azione per rompere l’inerzia."
+      },
+      "P": {
+        "P1": "Standard/perfezione amplifica la soglia.",
+        "P5": "Il rimando è il comportamento centrale.",
+        "P6": "Il loop mentale mantiene lo stallo.",
+        "P9": "Giudizio su merito/capacità colora l’azione."
+      }
+    },
+    "tags": [
+      "procrastinazione",
+      "evitamento"
+    ],
+    "title": "Rimando sempre e poi mi giudico",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P5",
+        "P1",
+        "P9",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 1,
+        "I-P5-Emo": 2,
+        "I-P6-Emo": 1,
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 2
+      },
+      "P": {
+        "P1": 1,
+        "P5": 2,
+        "P6": 1,
+        "P9": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Continuo a rimandare. Quando penso di iniziare mi sale una tensione e poi mi dico che non sono capace. In realtà quello che vorrei è solo partire, anche con qualcosa di piccolo. Mi basterebbe fare il primo passo."
+  },
+  {
+    "id": "S112",
+    "why": {
+      "E": {
+        "E3": "Frustrazione per l’incoerenza tra parole e azioni.",
+        "E4": "Pressione di ‘far funzionare’ la sessione.",
+        "E5": "Fastidio/risentimento verso ‘sì sì’ e poi nulla."
+      },
+      "I": {
+        "I-P5-Emo": "Dare permesso di partire senza motivazione.",
+        "I-P11-Emo": "Aprire una via di mezzo (non ‘o fai tutto o niente’).",
+        "I-P4-Comp": "Confine/accordo: cosa è sessione vs cosa è azione.",
+        "I-P5-Comp": "Definire micro-azione verificabile entro 24h.",
+        "I-P10-Comp": "Scelta autonoma senza cercare approvazione del coach."
+      },
+      "P": {
+        "P4": "Serve un confine operativo (contratto d’azione).",
+        "P5": "Evitamento dell’azione tra una sessione e l’altra.",
+        "P10": "Conformità: dire ciò che l’altro vuole sentire.",
+        "P11": "Rigidità del coach (mi irrigidisco)."
+      }
+    },
+    "tags": [
+      "coaching",
+      "accountability"
+    ],
+    "title": "Cliente ‘bravo’ che poi sparisce",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P5",
+        "P10",
+        "P11",
+        "P4"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E3": 2,
+        "E4": 1,
+        "E5": 1
+      },
+      "I": {
+        "I-P5-Emo": 1,
+        "I-P11-Emo": 1,
+        "I-P4-Comp": 1,
+        "I-P5-Comp": 2,
+        "I-P10-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P5": 2,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "In sessione il cliente è d’accordo su tutto, poi non fa nulla. Io mi irrigidisco. Vorrei portarlo all’azione, ma anche capire cosa lo sta davvero fermando."
+  },
+  {
+    "id": "S127",
+    "why": {
+      "E": {
+        "E3": "Fastidio per le continue interruzioni.",
+        "E4": "Pressione costante delle richieste.",
+        "E6": "Svuotamento a fine giornata."
+      },
+      "I": {
+        "I-P10-Emo": "Verificare cosa è davvero ok per me.",
+        "I-P11-Emo": "Aprire spazio tra i poli.",
+        "I-P4-Comp": "Mettere un confine operativo concreto."
+      },
+      "P": {
+        "P4": "Confini poco espliciti.",
+        "P10": "Adattamento continuo agli altri.",
+        "P11": "Oscillazione tra disponibilità e chiusura."
+      }
+    },
+    "tags": [
+      "confini",
+      "lavoro",
+      "disponibilità"
+    ],
+    "title": "Sempre disponibile",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E3": 1,
+        "E4": 2,
+        "E6": 1
+      },
+      "I": {
+        "I-P10-Emo": 2,
+        "I-P11-Emo": 1,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P10": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Ricevo messaggi a tutte le ore e rispondo quasi sempre subito. Poi mi accorgo che la mia giornata è un continuo interrompersi. Dentro sbuffo, ma continuo a esserci. Mi dico che è normale, che è il mio ruolo. Alla sera sono esausto. Vorrei sentirmi più centrato senza dover sparire dal mondo."
+  },
+  {
+    "id": "S128",
+    "why": {
+      "E": {
+        "E1": "Tensione nel rimandare.",
+        "E3": "Fastidio verso se stesso.",
+        "E4": "Pressione del ‘dovrei’.",
+        "E6": "Energia bassa."
+      },
+      "I": {
+        "I-P5-Emo": "Permesso di partire anche senza slancio.",
+        "I-P9-Emo": "Notare il giudizio senza identificarsi.",
+        "I-P5-Comp": "Micro-azione immediata."
+      },
+      "P": {
+        "P5": "Inerzia operativa.",
+        "P6": "Pensiero che gira.",
+        "P9": "Giudizio personale."
+      }
+    },
+    "tags": [
+      "procrastinazione",
+      "avvio"
+    ],
+    "title": "So cosa fare, ma non parto",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P5",
+        "P6",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P5-Emo": 1,
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 2
+      },
+      "P": {
+        "P5": 2,
+        "P6": 1,
+        "P9": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Ho chiaro cosa dovrei fare per migliorare la situazione, eppure continuo a rimandare. Ogni tanto ci penso, faccio un piano mentale, poi passa la giornata. Mi sento stupido per questo. Vorrei riuscire a fare almeno un primo passo."
+  },
+  {
+    "id": "S108",
+    "why": {
+      "E": {
+        "E1": "Tensione su standard.",
+        "E3": "Frustrazione sull’imperfezione."
+      },
+      "I": {
+        "I-P1-Cog": "Buono abbastanza.",
+        "I-P11-Emo": "Aprire spazio intermedio.",
+        "I-P11-Comp": "Passo utile non perfetto."
+      },
+      "P": {
+        "P1": "Perfezionismo come radice.",
+        "P11": "Rigidità binaria."
+      }
+    },
+    "tags": [
+      "rigidità",
+      "tutto_o_niente"
+    ],
+    "title": "O perfetto o niente",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P11",
+        "P1"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1
+      },
+      "I": {
+        "I-P1-Cog": 1,
+        "I-P11-Emo": 1,
+        "I-P11-Comp": 2
+      },
+      "P": {
+        "P1": 1,
+        "P11": 2
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "O la faccio bene o non la faccio. Quando qualcosa è imperfetto mi blocco. In realtà vorrei muovermi lo stesso, magari chiarendo cosa è abbastanza."
+  },
+  {
+    "id": "S129",
+    "why": {
+      "E": {
+        "E1": "Agitazione nel decidere.",
+        "E2": "Timore di deludere.",
+        "E4": "Pressione interna."
+      },
+      "I": {
+        "I-P6-Emo": "Interrompere il loop.",
+        "I-P10-Cog": "Separare valore interno ed esterno.",
+        "I-P10-Emo": "Rientrare in congruenza.",
+        "I-P12-Cog": "Cercare contro-evidenze."
+      },
+      "P": {
+        "P6": "Loop mentale.",
+        "P10": "Valore spostato sugli altri.",
+        "P12": "Razionalizzazione."
+      }
+    },
+    "tags": [
+      "decisione",
+      "identità"
+    ],
+    "title": "Non so più cosa è mio",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P6",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P10-Emo": 1,
+        "I-P12-Cog": 1
+      },
+      "P": {
+        "P6": 1,
+        "P10": 2,
+        "P12": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Mi trovo spesso a fare scelte che sembrano giuste, ma dentro qualcosa non torna. Poi mi metto a pensarci sopra, confronto mille opzioni e alla fine resto fermo. Ho paura di deludere qualcuno. Vorrei capire cosa conta davvero per me."
+  },
+  {
+    "id": "S109",
+    "why": {
+      "E": {
+        "E1": "Tensione sulla disconferma.",
+        "E5": "Fastidio quando contraddetto."
+      },
+      "I": {
+        "I-P11-Emo": "Aprire spazio intermedio.",
+        "I-P12-Cog": "Cercare contro-evidenze.",
+        "I-P12-Emo": "Ammettere possibilità alternativa."
+      },
+      "P": {
+        "P11": "Rigidità nel tenere posizione.",
+        "P12": "Bias di conferma centrale."
+      }
+    },
+    "tags": [
+      "bias_conferma"
+    ],
+    "title": "Cerco solo conferme",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P11-Emo": 1,
+        "I-P12-Cog": 2,
+        "I-P12-Emo": 1
+      },
+      "P": {
+        "P11": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Quando qualcuno mi contraddice mi irrigidisco. Cerco prove che ho ragione. Mi servirebbe capire meglio cosa sto difendendo… e restare aperto."
+  },
+  {
+    "id": "S117",
+    "why": {
+      "E": {
+        "E1": "Tensione e urgenza.",
+        "E4": "Sovraccarico e pressione."
+      },
+      "I": {
+        "I-P1-Cog": "Buono abbastanza per chiudere.",
+        "I-P4-Emo": "Dignità nel proteggere tempo/energia.",
+        "I-P4-Comp": "Confine operativo: blocchi, no, priorità visibile.",
+        "I-P6-Comp": "Reset: una cosa alla volta."
+      },
+      "P": {
+        "P1": "Standard eccessivi su ‘devo fare tutto bene’.",
+        "P4": "Confini con richieste altrui/interrupt non gestiti.",
+        "P5": "Evitamento del compito importante via micro-task.",
+        "P6": "Salto mentale continuo alimenta dispersione."
+      }
+    },
+    "tags": [
+      "produttività",
+      "sovraccarico"
+    ],
+    "title": "Troppo da fare: salto tra cose e concludo poco",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P4",
+        "P6",
+        "P1",
+        "P5"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E4": 2
+      },
+      "I": {
+        "I-P1-Cog": 1,
+        "I-P4-Emo": 1,
+        "I-P4-Comp": 2,
+        "I-P6-Comp": 1
+      },
+      "P": {
+        "P1": 1,
+        "P4": 2,
+        "P5": 1,
+        "P6": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Inizio mille cose, cambio priorità, rispondo a tutti. La sera non ho concluso nulla. Vorrei proteggere meglio il mio tempo e chiudere almeno una cosa."
+  },
+  {
+    "id": "S105",
+    "why": {
+      "E": {
+        "E1": "Tensione legata a standard interni.",
+        "E4": "Pressione/consumo di energia."
+      },
+      "I": {
+        "I-P1-Cog": "Buono abbastanza.",
+        "I-P1-Emo": "Non invalidare la scelta quando c’è tensione.",
+        "I-P1-Comp": "Ridurre costo della perfezione.",
+        "I-P11-Emo": "Aprire a un passo intermedio."
+      },
+      "P": {
+        "P1": "Perfezionismo/standard troppo alti.",
+        "P11": "Rigidità binaria."
+      }
+    },
+    "tags": [
+      "perfezionismo"
+    ],
+    "title": "Non faccio mai abbastanza",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P1-Emo": 1,
+        "I-P1-Comp": 2,
+        "I-P11-Emo": 1
+      },
+      "P": {
+        "P1": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Anche quando finisco qualcosa, sento che manca sempre un pezzo. Mi irrigidisco sui dettagli, ma in fondo vorrei consegnare e basta… magari chiarendo anche cosa è davvero essenziale."
+  },
+  {
+    "id": "S126",
+    "why": {
+      "E": {
+        "E1": "Tensione sul passo da fare.",
+        "E2": "Allarme sul ferire l’altro.",
+        "E3": "Frustrazione verso se stessi.",
+        "E6": "Svuotamento nel restare."
+      },
+      "I": {
+        "I-P9-Emo": "Notare il giudizio senza identificarvisi.",
+        "I-P5-Comp": "Micro-passo reale verso il cambiamento.",
+        "I-P12-Comp": "Fare un mini test/azione che rompe la narrativa attuale."
+      },
+      "P": {
+        "P5": "Rimando della scelta.",
+        "P9": "Giudizio personale (‘sono egoista’).",
+        "P12": "Razionalizzazioni che tengono fermo."
+      }
+    },
+    "tags": [
+      "relazione",
+      "colpa",
+      "scelta"
+    ],
+    "title": "Relazione che non funziona più",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P5",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E3": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 1,
+        "I-P12-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P9": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "So che questa relazione non mi nutre più, ma ogni volta che penso di chiudere mi sento in colpa. Razionalizzo, rimando, poi resto e mi spengo. Vorrei smettere di raccontarmela e fare un passo vero, senza farmi guidare solo dalla paura di ferire."
+  },
+  {
+    "id": "S114",
+    "why": {
+      "E": {
+        "E1": "Tensione nel perdere posizione.",
+        "E5": "Fastidio/irritazione in contraddizione."
+      },
+      "I": {
+        "I-P11-Emo": "Aprire una via di mezzo (non vittoria/sconfitta).",
+        "I-P12-Cog": "Cercare contro-evidenza credibile.",
+        "I-P12-Emo": "Ammettere per un attimo la possibilità alternativa.",
+        "I-P4-Comp": "Regola operativa: pausa/turni/obiettivo del dialogo."
+      },
+      "P": {
+        "P4": "Confine comunicativo: come discutiamo senza schiacciare.",
+        "P11": "Rigidità della posizione.",
+        "P12": "Ricerca di conferma e chiusura ad alternative."
+      }
+    },
+    "tags": [
+      "conflitto",
+      "bias_conferma"
+    ],
+    "title": "Conflitto: ho ragione e basta",
+    "intent": [
+      "capire",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P11",
+        "P4"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P11-Emo": 1,
+        "I-P12-Cog": 2,
+        "I-P12-Emo": 2,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P11": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Quando discuto mi sento certo. Se l’altro insiste mi sale fastidio. Vorrei capire cosa mi fa reagire così e restare più aperto nel confronto."
+  },
+  {
+    "id": "S111",
+    "why": {
+      "E": {
+        "E1": "Preoccupazione e pensieri su scenari futuri.",
+        "E2": "Allarme sul rischio/perdita.",
+        "E4": "Pressione della decisione."
+      },
+      "I": {
+        "I-P5-Emo": "Consentire un passo anche senza certezza.",
+        "I-P6-Emo": "Rientrare nel presente per scegliere.",
+        "I-P8-Emo": "Ritrovarsi nel sé futuro e valutare coerenza.",
+        "I-P12-Emo": "Ammettere il dubbio e considerare alternativa.",
+        "I-P6-Comp": "Interrompere il loop con un gesto semplice (es. bozza risposta)."
+      },
+      "P": {
+        "P5": "Rimando la risposta come evitamento.",
+        "P6": "Il loop mentale ‘tutto quello che può andare storto’.",
+        "P8": "Il futuro è sentito come lontano/minaccioso: serve renderlo concreto.",
+        "P12": "Cerco prove che confermino il timore."
+      }
+    },
+    "tags": [
+      "decisione",
+      "cambiamento"
+    ],
+    "title": "Cambio lavoro: eccitazione e panico insieme",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P5",
+        "P8",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P5-Emo": 1,
+        "I-P6-Emo": 1,
+        "I-P8-Emo": 1,
+        "I-P12-Emo": 1,
+        "I-P6-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P6": 2,
+        "P8": 1,
+        "P12": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Ho un’offerta interessante. Una parte di me è gasata, un’altra vede solo i rischi. Se riuscissi a fare un primo passo, magari dopo aver messo ordine nei pensieri, potrei rispondere."
+  },
+  {
+    "id": "S115",
+    "why": {
+      "E": {
+        "E1": "Tensione nel dire la propria.",
+        "E2": "Allarme nel rischio di conflitto.",
+        "E4": "Pressione gerarchica.",
+        "E6": "Svuotamento dopo adattamento."
+      },
+      "I": {
+        "I-P4-Emo": "Dignità come base del confine.",
+        "I-P5-Emo": "Consentire un primo passo senza sicurezza.",
+        "I-P10-Cog": "Distinguere valore interno/esterno prima di rispondere.",
+        "I-P4-Comp": "Formula di confine operativo (richiesta/limite).",
+        "I-P10-Comp": "Fare una scelta/affermazione senza chiedere conferma."
+      },
+      "P": {
+        "P4": "Confini non espressi con chiarezza.",
+        "P5": "Evitamento della conversazione difficile.",
+        "P6": "Ruminazione dopo (lamentele/loop).",
+        "P10": "Conformità al giudizio esterno del capo."
+      }
+    },
+    "tags": [
+      "lavoro",
+      "conformità",
+      "confini"
+    ],
+    "title": "Mi adeguo ai superiori e poi mi lamento",
+    "intent": [
+      "fare",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P5",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P4-Emo": 1,
+        "I-P5-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P4-Comp": 1,
+        "I-P10-Comp": 2
+      },
+      "P": {
+        "P4": 2,
+        "P5": 1,
+        "P6": 1,
+        "P10": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Con il capo dico sempre sì, poi mi lamento. Vorrei riuscire a dire la mia, ma anche sentirmi legittimato nel farlo."
+  },
+  {
+    "id": "S122",
+    "why": {
+      "E": {
+        "E1": "Tensione nel confronto e nel perdere posizione.",
+        "E4": "Pressione emotiva che spinge al “tutto o niente”.",
+        "E5": "Fastidio/irritazione durante il conflitto."
+      },
+      "I": {
+        "I-P11-Emo": "Aprire spazio intermedio tra i poli (non tutto-o-niente).",
+        "I-P12-Emo": "Ammettere il dubbio per restare aperti a alternative credibili.",
+        "I-P4-Comp": "Mettere un confine operativo (no/limite/richiesta) in modo pratico e chiaro."
+      },
+      "P": {
+        "P4": "Confine comunicativo da esplicitare (cosa accetto / cosa chiedo).",
+        "P11": "Polarizzazione: o cedo o attacco.",
+        "P12": "Chiusura ad alternative: cerco solo di confermare la mia posizione."
+      }
+    },
+    "tags": [
+      "coppia",
+      "conflitto",
+      "comunicazione"
+    ],
+    "title": "Discussione in coppia: o cedo o attacco",
+    "intent": [
+      "allinearsi",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P11",
+        "P4",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1,
+        "E5": 1
+      },
+      "I": {
+        "I-P11-Emo": 2,
+        "I-P12-Emo": 1,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P11": 2,
+        "P12": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Quando discutiamo, dopo un po’ mi irrigidisco: o cedo per farla finita oppure attacco per avere ragione. Poi mi pento. Vorrei restare più centrato e capire cosa mi fa scattare… e riuscire a dire una cosa chiara senza finire nel solito schema."
+  },
+  {
+    "id": "S119",
+    "why": {
+      "E": {
+        "E1": "Tensione nel riprovare.",
+        "E2": "Allarme nel riprovare dopo l’errore (timore di ripetere lo sbaglio).",
+        "E3": "Frustrazione dopo errore.",
+        "E6": "Ritiro/spento."
+      },
+      "I": {
+        "I-P5-Cog": "Rendere l’avvio più semplice: chiarire il prossimo micro-passo e ridurre l’attrito mentale.",
+        "I-P5-Emo": "Consentire il ritorno all’azione anche senza fiducia.",
+        "I-P6-Emo": "Rientrare nel presente.",
+        "I-P9-Emo": "Notare emozione senza giudizio.",
+        "I-P5-Comp": "Micro-riprova controllata."
+      },
+      "P": {
+        "P5": "Evitamento del tentativo successivo.",
+        "P6": "Ruminazione sull’errore.",
+        "P9": "Giudizio su valore/merito (‘sono stupido’)."
+      }
+    },
+    "tags": [
+      "errore",
+      "ritiro"
+    ],
+    "title": "Dopo un errore, mi chiudo e non riprovo",
+    "intent": [
+      "fare",
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P5",
+        "P6",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E2": 2,
+        "E3": 1
+      },
+      "I": {
+        "I-P5-Cog": 1,
+        "I-P5-Emo": 2,
+        "I-P6-Emo": 1,
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 2
+      },
+      "P": {
+        "P5": 2,
+        "P6": 1,
+        "P9": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Ho fatto un errore e ora mi sento stupido. Evito di riprovarci. In realtà vorrei rimettermi in movimento, senza continuare a giudicarmi."
+  },
+  {
+    "id": "S113",
+    "why": {
+      "E": {
+        "E1": "Tensione su giudizio/standard.",
+        "E4": "Pressione di consegna."
+      },
+      "I": {
+        "I-P1-Cog": "Definire soglia ‘buono abbastanza’.",
+        "I-P1-Comp": "Tagliare requisiti non essenziali e consegnare.",
+        "I-P11-Emo": "Aprire a versione intermedia (v1 non perfetta).",
+        "I-P5-Comp": "Micro-passo di consegna (invio bozza)."
+      },
+      "P": {
+        "P1": "Standard troppo alti mascherati da ‘qualità’.",
+        "P5": "Ritardo come forma di evitamento della consegna.",
+        "P11": "Binario: o perfetto o non consegno."
+      }
+    },
+    "tags": [
+      "perfezionismo",
+      "consegna"
+    ],
+    "title": "Perfezionismo travestito da qualità",
+    "intent": [
+      "fare",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P5",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P1-Comp": 2,
+        "I-P11-Emo": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P1": 2,
+        "P5": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Voglio farlo bene, però riscrivo mille volte e consegno tardi. In fondo vorrei chiudere e basta, magari ridimensionando un po’ gli standard."
+  },
+  {
+    "id": "S118",
+    "why": {
+      "E": {
+        "E1": "Preoccupazione e indecisione.",
+        "E4": "Pressione della scelta."
+      },
+      "I": {
+        "I-P1-Cog": "Soglia ‘buono abbastanza’.",
+        "I-P6-Emo": "Rientrare nel presente per decidere.",
+        "I-P12-Cog": "Contro-evidenze e ipotesi opposta.",
+        "I-P12-Emo": "Ammettere dubbio per aprire alternative."
+      },
+      "P": {
+        "P1": "Standard eccessivo sulla scelta.",
+        "P6": "Overthinking.",
+        "P11": "Rigidità sulla perfezione.",
+        "P12": "Cerco conferme della ‘scelta giusta’, scarto alternative."
+      }
+    },
+    "tags": [
+      "decisione",
+      "perfezione"
+    ],
+    "title": "Scelta importante: cerco la scelta ‘giusta’",
+    "intent": [
+      "capire",
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P6",
+        "P11",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 1,
+        "I-P6-Emo": 1,
+        "I-P12-Cog": 2,
+        "I-P12-Emo": 1
+      },
+      "P": {
+        "P1": 1,
+        "P6": 1,
+        "P11": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Devo scegliere tra due opzioni e cerco la scelta perfetta. Mi servirebbe capire cosa pesa davvero e poi decidere."
+  },
+  {
+    "id": "S116",
+    "why": {
+      "E": {
+        "E1": "Tensione quando compare dissonanza.",
+        "E5": "Fastidio verso segnali contrari."
+      },
+      "I": {
+        "I-P6-Emo": "Rientrare nel presente quando la mente gira.",
+        "I-P12-Cog": "Cercare contro-evidenze e ipotesi opposta.",
+        "I-P12-Emo": "Ammettere dubbio per aprire alternative.",
+        "I-P12-Comp": "Mini test di realtà che può falsificare."
+      },
+      "P": {
+        "P6": "Giro mentale a supporto.",
+        "P8": "Visione di futuro filtrata: scelgo ciò che ‘voglio’ vedere.",
+        "P12": "Bias di conferma e razionalizzazione."
+      }
+    },
+    "tags": [
+      "razionalizzazione",
+      "scelte"
+    ],
+    "title": "Mi convinco con razionalizzazioni",
+    "intent": [
+      "capire",
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P8",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E5": 1
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P12-Cog": 2,
+        "I-P12-Emo": 1,
+        "I-P12-Comp": 1
+      },
+      "P": {
+        "P6": 1,
+        "P8": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "So che non mi fa bene, però mi convinco che stavolta è diverso. Se riuscissi a guardare davvero i fatti e poi provare qualcosa di diverso…"
+  },
+  {
+    "id": "S104",
+    "why": {
+      "E": {
+        "E1": "Tensione sul giudizio esterno.",
+        "E2": "Allarme/ritiro: paura di essere smascherati."
+      },
+      "I": {
+        "I-P9-Cog": "Attribuire merito alle azioni.",
+        "I-P9-Emo": "Notare emozione senza giudizio.",
+        "I-P9-Comp": "Esporsi con contributo concreto.",
+        "I-P10-Comp": "Agire senza conferma."
+      },
+      "P": {
+        "P9": "Impostura dichiarata.",
+        "P10": "Giudizio esterno come amplificatore."
+      }
+    },
+    "tags": [
+      "impostura",
+      "merito"
+    ],
+    "title": "Mi sento un impostore quando va bene",
+    "intent": [
+      "allinearsi",
+      "capire"
+    ],
+    "subset": {
+      "P": [
+        "P9",
+        "P10"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E2": 2
+      },
+      "I": {
+        "I-P9-Cog": 2,
+        "I-P9-Emo": 2,
+        "I-P9-Comp": 1,
+        "I-P10-Comp": 1
+      },
+      "P": {
+        "P9": 2,
+        "P10": 1
+      }
+    },
+    "difficulty": "easy",
+    "client_text": "Quando ottengo un risultato penso che sia fortuna. Se mi fanno un complimento mi sento scoperto. Prima di andare avanti, vorrei riuscire a sentirmi un po’ più a posto con me stesso e poi capire cosa ho fatto davvero."
+  },
+  {
+    "id": "S123",
+    "why": {
+      "E": {
+        "E1": "Tensione quando compare dissonanza tra ‘so’ e ‘faccio’.",
+        "E3": "Frustrazione e giudizio il giorno dopo.",
+        "E4": "Pressione del “devo cambiare” che può bloccare.",
+        "E6": "Stanchezza/svuotamento che abbassa la soglia."
+      },
+      "I": {
+        "I-P9-Emo": "Notare l’emozione senza giudizio e senza identificarvisi.",
+        "I-P5-Comp": "Definire una micro-azione immediata e verificabile per rompere l’inerzia.",
+        "I-P12-Comp": "Fare un mini test/esperimento che può smentire l’ipotesi dominante."
+      },
+      "P": {
+        "P5": "Rimando e inerzia dopo la ricaduta.",
+        "P9": "Auto-etichetta e giudizio (“mi giudico”).",
+        "P12": "Razionalizzazioni e selezione di prove a favore del ‘solo stavolta’."
+      }
+    },
+    "tags": [
+      "abitudini",
+      "ricaduta",
+      "autocontrollo"
+    ],
+    "title": "Ricado nel vizio e poi mi racconto storie",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P5",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 1,
+        "I-P12-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P9": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "So che mi fa male, però quando sono stanco mi dico: “solo stavolta, me lo merito”. Poi il giorno dopo mi giudico e rimando di nuovo. Vorrei smettere di raccontarmela e fare un cambiamento piccolo ma reale già questa settimana."
+  },
+  {
+    "id": "S131",
+    "why": {
+      "E": {
+        "E1": "Tensione.",
+        "E3": "Fastidio verso se stesso.",
+        "E4": "Pressione del cambiamento.",
+        "E6": "Stanchezza."
+      },
+      "I": {
+        "I-P9-Emo": "Notare il giudizio senza identificarvisi.",
+        "I-P5-Comp": "Primo passo concreto.",
+        "I-P12-Comp": "Mini-azione che rompe la narrativa."
+      },
+      "P": {
+        "P5": "Inerzia.",
+        "P9": "Giudizio personale.",
+        "P12": "Razionalizzazione."
+      }
+    },
+    "tags": [
+      "abitudini",
+      "cambiamento"
+    ],
+    "title": "Mi racconto che va bene così",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P12",
+        "P5",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P9-Emo": 1,
+        "I-P5-Comp": 1,
+        "I-P12-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P9": 1,
+        "P12": 2
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Ci sono cose che so non mi fanno bene, ma mi dico che è solo un periodo. Poi passa tempo e sono ancora lì. Ogni tanto mi arrabbio con me stesso, poi lascio perdere. Vorrei smettere di raccontarmela e muovermi davvero."
+  },
+  {
+    "id": "S130",
+    "why": {
+      "E": {
+        "E1": "Tensione sulla consegna.",
+        "E3": "Frustrazione.",
+        "E4": "Pressione del risultato.",
+        "E6": "Sfinimento."
+      },
+      "I": {
+        "I-P1-Cog": "Ridefinire il ‘sufficiente’.",
+        "I-P9-Emo": "Separare valore e risultato.",
+        "I-P1-Comp": "Chiudere una versione utile.",
+        "I-P11-Emo": "Aprire spazio intermedio."
+      },
+      "P": {
+        "P1": "Standard troppo alto.",
+        "P9": "Valore personale legato all’esito.",
+        "P11": "Polarità perfetto/niente."
+      }
+    },
+    "tags": [
+      "perfezionismo"
+    ],
+    "title": "O perfetto o niente",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P11",
+        "P9"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P9-Emo": 1,
+        "I-P1-Comp": 1,
+        "I-P11-Emo": 1
+      },
+      "P": {
+        "P1": 2,
+        "P9": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Quando devo presentare qualcosa, continuo a rifinirla. Trovo sempre un dettaglio da migliorare. Alla fine o consegno in ritardo o mollo. Dentro mi dico che se non è fatta bene non vale. Vorrei riuscire a chiudere senza distruggermi."
+  },
+  {
+    "id": "S132",
+    "why": {
+      "E": {
+        "E1": "Tensione nel trattenersi.",
+        "E5": "Rabbia rivolta verso se stesso.",
+        "E6": "Svuotamento dopo essersi adattato."
+      },
+      "I": {
+        "I-P6-Emo": "Interrompere il rimuginio.",
+        "I-P10-Emo": "Rientrare in congruenza interna.",
+        "I-P4-Comp": "Esplicitare un confine piccolo ma reale."
+      },
+      "P": {
+        "P4": "Confini non espressi.",
+        "P6": "Ripensamenti dopo l’incontro.",
+        "P10": "Adattamento agli altri."
+      }
+    },
+    "tags": [
+      "relazioni",
+      "autenticità"
+    ],
+    "title": "Faccio il bravo, poi mi spengo",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E5": 1,
+        "E6": 2
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 2,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P6": 1,
+        "P10": 2
+      }
+    },
+    "difficulty": "middle",
+    "client_text": "Quando sono con certe persone sorrido, annuisco e faccio andare bene tutto. Dentro però mi ritiro. Tornato a casa mi sento vuoto e un po’ arrabbiato con me stesso. Mi dico che non vale la pena creare problemi. Vorrei riuscire a restare me stesso senza chiudermi."
+  },
+  {
+    "id": "S133",
+    "why": {
+      "E": {
+        "E1": "Agitazione nel rimandare.",
+        "E3": "Frustrazione per il tempo che passa.",
+        "E4": "Pressione del ‘dovrei partire’."
+      },
+      "I": {
+        "I-P6-Cog": "Valutare utilità del pensiero e scegliere di fermarlo.",
+        "I-P8-Cog": "Rendere il futuro concreto con criteri pratici.",
+        "I-P5-Comp": "Micro-azione immediata."
+      },
+      "P": {
+        "P5": "Inerzia nell’avvio.",
+        "P6": "Loop mentale sull’idea.",
+        "P8": "Futuro tenuto astratto."
+      }
+    },
+    "tags": [
+      "progetti",
+      "avvio"
+    ],
+    "title": "Aspetto il momento giusto",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P8",
+        "P5"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P6-Cog": 2,
+        "I-P8-Cog": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P5": 1,
+        "P6": 2,
+        "P8": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Ho un’idea che mi gira in testa da mesi. Ogni tanto mi entusiasmo, poi mi dico che non è ancora il momento giusto. Continuo a pensarci, aggiungo dettagli, immagino scenari. Intanto passa il tempo. Vorrei smettere di prepararmi e iniziare davvero."
+  },
+  {
+    "id": "S134",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria e peso interno legati alla scelta e alle sue conseguenze.",
+        "E2": "Timore di essere 'quello che fa male' e di affrontare una reazione/rottura.",
+        "E4": "Pressione sostenuta tra dovere di tutelarsi e costo emotivo percepito."
+      },
+      "I": {
+        "I-P4-Cog": "Rende legittimo e chiaro il confine: tutela ≠ cattiveria, è responsabilità verso di sé.",
+        "I-P6-Emo": "Riduce il loop riportando presenza, ma da sola rischia di calmare senza sbloccare la scelta.",
+        "I-P10-Emo": "Riporta al metro interno e riduce l’identificazione con lo sguardo morale su di sé.",
+        "I-P11-Cog": "Apre la zona grigia: posso essere fermo e rispettoso insieme, senza scegliere 'buono/cattivo'.",
+        "I-P4-Comp": "Azione concreta di confine, ma se fatta senza aver sciolto la polarità può aumentare colpa/rigidità."
+      },
+      "P": {
+        "P4": "Il nodo è mettere un confine reale senza ricadere nell’adattamento/quieto vivere.",
+        "P6": "Il pensiero gira tra opzioni e giustificazioni, alimentando lo stallo.",
+        "P10": "La scelta viene letta come giudizio sulla propria bontà/valore personale.",
+        "P11": "Polarizzazione morale: o mi tutelo e sono cattivo, o sono buono e mi danneggio."
+      }
+    },
+    "tags": [
+      "confini",
+      "congruenza",
+      "zona_grigia",
+      "senso_di_colpa",
+      "decisione"
+    ],
+    "title": "Tutela o danno?",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P4",
+        "P10",
+        "P11",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P4-Cog": 2,
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 1,
+        "I-P11-Cog": 2,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 2,
+        "P6": 1,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Dopo l’ultima discussione con il mio inquilino ho deciso che dovrei dargli la disdetta. Razionalmente sarebbe la scelta più tutelante per me.\n\nPerò appena ci penso mi si chiude lo stomaco. È come se, per proteggere i miei interessi, stessi facendo del male a qualcuno.\n\nUna parte di me vorrebbe aspettare ancora un po’, sperando che si sistemi. Un’altra parte sa che così mi sto solo adattando e poi, prima o poi, mi trovo pieno di risentimento.\n\nVorrei riuscire a fare una scelta che mi tuteli senza sentirmi una persona sbagliata."
+  },
+  {
+    "id": "S135",
+    "why": {
+      "E": {
+        "E1": "Anticipazione e rimuginio prima dell’azione, con focus su scenari possibili.",
+        "E2": "Allarme sociale: paura della reazione e della perdita di status/relazione.",
+        "E4": "Pressione sostenuta legata al ‘devo farlo bene’ e al peso della conseguenza."
+      },
+      "I": {
+        "I-P6-Emo": "Riduce il loop riportando presenza e abbassando la carica prima della scelta.",
+        "I-P9-Emo": "Disinnesca l’autogiudizio che alimenta la spirale dopo ogni rinvio.",
+        "I-P10-Cog": "Rende esplicito il criterio interno della richiesta (non è un processo, è un confine operativo).",
+        "I-P11-Cog": "Allenta il tutto-o-niente rendendo ‘abbastanza buono’ accettabile per muovere.",
+        "I-P4-Comp": "Introduce un confine/azione minima reale (invio con set di condizioni chiare) invece di ‘prepararsi ancora’."
+      },
+      "P": {
+        "P5": "La non-azione diventa la strategia automatica per ridurre il disagio immediato.",
+        "P6": "Il loop mentale sostituisce la decisione: più pensa, più si blocca.",
+        "P9": "Quando rimanda, attiva giudizio su di sé e svalutazione.",
+        "P10": "Lo sguardo esterno e la percezione di giudizio rendono la richiesta ‘pericolosa’.",
+        "P11": "Oscilla tra ‘o perfetto o niente’: o mail impeccabile o meglio non inviare."
+      }
+    },
+    "tags": [
+      "richieste",
+      "giudizio",
+      "overthinking",
+      "confini",
+      "azione_minima"
+    ],
+    "title": "La mail che non mando mai",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P10",
+        "P5",
+        "P9",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P6-Emo": 1,
+        "I-P9-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P11-Cog": 1,
+        "I-P4-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P6": 2,
+        "P9": 1,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Ho scritto una mail importante al mio capo per chiedere un cambiamento concreto sul progetto. È pronta, riletta mille volte.\n\nOgni volta che sto per premere invio mi viene una specie di tensione nello stomaco e inizio a immaginare tutte le reazioni possibili: che mi giudichi, che si irrigidisca, che mi etichetti come quello che crea problemi.\n\nAllora mi dico che non è il momento giusto, che devo chiarirmi meglio le idee, che magari domani la riscrivo ancora un po’.\n\nPoi però passa una settimana e mi sento stupido: continuo a lamentarmi con me stesso ma non faccio mai il passo.\n\nVorrei riuscire a fare una richiesta chiara senza trasformarla in un processo contro di me."
+  },
+  {
+    "id": "S136",
+    "why": {
+      "E": {
+        "E3": "Frustrazione per energia bloccata: il desiderio di continuità si strozza nel tutto-o-niente.",
+        "E5": "Attacco verso se stesso dopo lo ‘sgarro’: energia che spinge a tagliare e giudicare.",
+        "E6": "Dopo il crollo arriva spegnimento e ritiro: cala la spinta e cresce la vergogna."
+      },
+      "I": {
+        "I-P1-Cog": "Ricalibra lo standard in modo operativo (criterio di successo basato su processo, non su purezza).",
+        "I-P9-Emo": "Disinnesca vergogna/autogiudizio che blocca la ripresa.",
+        "I-P11-Cog": "Rende visibile la falsa alternativa e apre la zona grigia: continuità ≠ perfezione.",
+        "I-P12-Cog": "Smonta la storia ‘tanto è inutile’ che mantiene fermo il circuito.",
+        "I-P5-Comp": "Micro-ripartenza concreta e minima per spezzare il ritiro senza ‘rifare tutto’."
+      },
+      "P": {
+        "P1": "Standard rigidi che rendono fragile la continuità: basta poco per sentirsi ‘fuori’.",
+        "P5": "Il ritiro diventa la scelta per non sentire il peso emotivo del ricominciare.",
+        "P9": "Svalutazione identitaria: ‘sono fatto così’ e il valore personale crolla.",
+        "P11": "Polarizzazione: o perfetto o inutile. Un salto diventa ‘fine del percorso’.",
+        "P12": "Razionalizzazioni post-crollo (‘non ha senso a metà’) che proteggono dallo sforzo."
+      }
+    },
+    "tags": [
+      "abitudini",
+      "tutto_o_niente",
+      "standard",
+      "ricominciare",
+      "autocritica"
+    ],
+    "title": "Mi alleno… e poi sparisco",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P11",
+        "P1",
+        "P9",
+        "P5",
+        "P12"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E3": 2,
+        "E5": 1,
+        "E6": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P9-Emo": 1,
+        "I-P11-Cog": 2,
+        "I-P12-Cog": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P1": 1,
+        "P5": 1,
+        "P9": 1,
+        "P11": 2,
+        "P12": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Quando inizio un programma di allenamento parto bene: prima settimana perfetta, mi sento carico.\n\nPoi arriva una giornata storta, salto un allenamento, e subito mi si accende una rabbia contro di me: ‘ecco, sei sempre uguale’.\n\nA quel punto mi viene voglia di mollare tutto. Mi dico che tanto non ha senso fare le cose a metà e che se non riesco a farlo bene allora non lo farò proprio.\n\nDopo qualche giorno mi sento vuoto e mi vergogno perfino a riprendere, come se ricominciare fosse ammettere che ho fallito.\n\nVorrei riuscire a ripartire senza trasformare un inciampo in una sentenza."
+  },
+  {
+    "id": "S137",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria legata al dire no e alle possibili reazioni altrui.",
+        "E4": "Pressione sostenuta: il carico cresce e resta addosso fino a irrigidire.",
+        "E5": "Sotto la pressione emerge attacco/irritazione che rischia di esplodere nei modi sbagliati."
+      },
+      "I": {
+        "I-P4-Cog": "Dà criteri chiari su cosa è un sì, un no, un ‘posso ma con condizioni’.",
+        "I-P6-Emo": "Abbassa la carica per evitare che il confine esca come rigidità o aggressività.",
+        "I-P10-Emo": "Riporta al metro interno: essere corretto include anche prendersi sul serio e non tradirsi.",
+        "I-P11-Cog": "Spegne la trappola ‘cedo o taglio’ aprendo una terza via praticabile.",
+        "I-P4-Comp": "Introduce un confine reale e concreto (richiesta/limite specifico) prima che diventi esplosione."
+      },
+      "P": {
+        "P4": "Confini non dichiarati: il sì automatico sostituisce la scelta consapevole.",
+        "P6": "Ruminazione su cosa sia giusto e su come verrà interpretato, che ritarda il confine.",
+        "P10": "Adeguamento e ricerca di essere ‘corretto’ secondo criteri esterni.",
+        "P11": "Polarità relazionale: ‘o cedo o taglio’ quando il limite non è esplicitato."
+      }
+    },
+    "tags": [
+      "confini",
+      "relazioni",
+      "adeguamento",
+      "risentimento",
+      "zona_grigia"
+    ],
+    "title": "Accetto sempre… poi mi irrigidisco",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P11",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E4": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P4-Cog": 1,
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 2,
+        "I-P11-Cog": 1,
+        "I-P4-Comp": 2
+      },
+      "P": {
+        "P4": 2,
+        "P6": 1,
+        "P10": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Una persona a me vicina continua a chiedermi favori e tempo. Io dico quasi sempre di sì, anche quando sono stanco.\n\nNel momento in cui accetto mi sembra la cosa giusta: non voglio deludere e non voglio passare per egoista.\n\nPoi però, dopo qualche giorno, mi accorgo che mi sto caricando addosso troppo e mi sale una pressione costante. Inizio a diventare freddo, a rispondere secco, e dentro cresce un risentimento che non mi piace.\n\nMi capita perfino di pensare: ‘se devo essere disponibile così, allora tanto vale tagliare i rapporti’, e mi spaventa avere pensieri così estremi.\n\nVorrei riuscire a restare una persona corretta senza perdere me stesso."
+  },
+  {
+    "id": "S138",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria legata all’esposizione pubblica e al giudizio.",
+        "E4": "Pressione interna sul dover essere impeccabile prima di esporsi."
+      },
+      "I": {
+        "I-P1-Cog": "Ridefinisce il criterio di ‘abbastanza buono’ in modo operativo.",
+        "I-P6-Emo": "Interrompe il loop prima dell’ennesima revisione.",
+        "I-P10-Emo": "Riporta al metro interno riducendo il peso dello sguardo esterno.",
+        "I-P11-Cog": "Rompe la polarità perfetto/niente aprendo una soglia concreta.",
+        "I-P5-Comp": "Micro-azione di pubblicazione controllata invece di rimando."
+      },
+      "P": {
+        "P1": "Standard elevato che rende il ‘pronto’ sempre spostato più avanti.",
+        "P5": "La non-pubblicazione diventa strategia per evitare disagio.",
+        "P6": "Rimuginio continuo su dettagli e possibili scenari.",
+        "P10": "Preoccupazione per come verrà percepito e valutato dagli altri.",
+        "P11": "O perfetto o non pubblico."
+      }
+    },
+    "tags": [
+      "perfezionismo",
+      "visibilità",
+      "giudizio",
+      "procrastinazione"
+    ],
+    "title": "Pubblico o aspetto ancora?",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P10",
+        "P5",
+        "P11",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 1,
+        "I-P11-Cog": 2,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P1": 2,
+        "P5": 1,
+        "P6": 1,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Ho finito di scrivere un articolo a cui tengo molto. È pronto, potrei pubblicarlo oggi.\n\nPerò ogni volta che lo rileggo trovo qualcosa che non mi convince del tutto. Mi dico che forse manca ancora un pezzo, una rifinitura, una frase più forte.\n\nIntanto immagino già le reazioni: chi potrebbe criticarlo, chi potrebbe non capirlo, chi magari penserà che sto cercando visibilità.\n\nCosì lo tengo in bozza. Mi rassicuro dicendomi che sto solo aspettando il momento giusto.\n\nVorrei smettere di perfezionare all’infinito e capire quando è davvero abbastanza."
+  },
+  {
+    "id": "S139",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria rispetto a una possibile svolta.",
+        "E2": "Allarme legato al rischio e alla perdita di sicurezza.",
+        "E3": "Frustrazione per energia bloccata in una scelta sospesa."
+      },
+      "I": {
+        "I-P6-Cog": "Struttura l’analisi in modo finito invece che circolare.",
+        "I-P9-Emo": "Rafforza il senso di legittimità personale nel desiderare altro.",
+        "I-P10-Cog": "Chiarisce il criterio interno di scelta separandolo da quello esterno.",
+        "I-P11-Cog": "Apre una terza via tra restare per paura e scappare per impulso.",
+        "I-P5-Comp": "Introduce un micro-esperimento invece di una decisione totale."
+      },
+      "P": {
+        "P5": "Inerzia come strategia di protezione.",
+        "P6": "Analisi continua che sostituisce la decisione.",
+        "P9": "Dubbio sul proprio valore/capacità di reggere il cambiamento.",
+        "P10": "Conflitto tra aspettative esterne e senso di coerenza personale.",
+        "P11": "Oscillazione tra salto drastico e immobilità."
+      }
+    },
+    "tags": [
+      "transizione",
+      "identità",
+      "scelte",
+      "ambivalenza"
+    ],
+    "title": "Cambio lavoro o resto?",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P9",
+        "P6",
+        "P5",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E2": 1,
+        "E3": 1
+      },
+      "I": {
+        "I-P6-Cog": 1,
+        "I-P9-Emo": 2,
+        "I-P10-Cog": 2,
+        "I-P11-Cog": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P5": 1,
+        "P6": 1,
+        "P9": 1,
+        "P10": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Negli ultimi mesi penso spesso di cambiare lavoro. Non sto male, ma sento che qualcosa non mi rappresenta più.\n\nOgni volta che valuto seriamente l’idea mi viene un misto di eccitazione e timore. Mi chiedo se sto inseguendo un capriccio o se sto finalmente ascoltando me stesso.\n\nPoi guardo la stabilità che ho costruito e mi dico che forse sarebbe irresponsabile rischiare.\n\nPassano le settimane e resto in questa zona sospesa: non mi muovo, ma non mi sento neanche pienamente dentro.\n\nVorrei capire se questa spinta è fuga o coerenza."
+  },
+  {
+    "id": "S140",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria rispetto a un possibile confronto.",
+        "E3": "Energia bloccata che non trova canale di espressione.",
+        "E5": "Spinta all’attacco quando immagina di dire tutto senza filtri."
+      },
+      "I": {
+        "I-P4-Cog": "Chiarisce cosa è accettabile e cosa no prima del confronto.",
+        "I-P6-Emo": "Riduce la carica per evitare confronto reattivo.",
+        "I-P10-Emo": "Riporta al metro interno anziché al solo clima esterno.",
+        "I-P11-Cog": "Rompe la polarità ‘taccio o attacco’ aprendo una via intermedia.",
+        "I-P4-Comp": "Introduce un confine espresso in modo operativo e specifico."
+      },
+      "P": {
+        "P4": "Confine non espresso nel momento in cui sarebbe stato utile.",
+        "P6": "Rimuginio continuo sull’episodio.",
+        "P10": "Timore di rovinare l’immagine o creare tensione nel gruppo.",
+        "P11": "Oscillazione tra lasciar perdere ed esplodere."
+      }
+    },
+    "tags": [
+      "confini",
+      "relazioni",
+      "confronto",
+      "polarità"
+    ],
+    "title": "Lo confronto o lascio perdere?",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P4",
+        "P11",
+        "P6",
+        "P10"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 1,
+        "E3": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P4-Cog": 1,
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 1,
+        "I-P11-Cog": 2,
+        "I-P4-Comp": 2
+      },
+      "P": {
+        "P4": 2,
+        "P6": 1,
+        "P10": 1,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Un collega ha fatto un commento che mi ha dato fastidio davanti agli altri. Sul momento ho sorriso e sono andato avanti.\n\nDa allora continuo a ripensarci. Più ci penso, più mi viene voglia di dirgli qualcosa, ma allo stesso tempo temo di creare tensione inutile.\n\nMi dico che forse sto esagerando e che è meglio non farne un problema. Però dentro sento una specie di rigidità che non passa.\n\nA volte mi viene il pensiero opposto: la prossima volta glielo dico in faccia senza filtri.\n\nVorrei trovare un modo di gestirla senza accumulare o esplodere."
+  },
+  {
+    "id": "S141",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria legata all’esposizione.",
+        "E3": "Frustrazione per energia che non trova uscita.",
+        "E4": "Pressione sul dover essere impeccabile."
+      },
+      "I": {
+        "I-P1-Cog": "Ridefinisce il criterio di qualità in modo operativo.",
+        "I-P6-Emo": "Interrompe il loop prima dell’ennesima revisione.",
+        "I-P9-Emo": "Rafforza il senso di legittimità personale nell’esporsi.",
+        "I-P10-Cog": "Separa valore del progetto dal giudizio esterno.",
+        "I-P5-Comp": "Introduce una pubblicazione minima e concreta."
+      },
+      "P": {
+        "P1": "Standard elevato che sposta sempre avanti la soglia del ‘pronto’.",
+        "P5": "Ritiro strategico per evitare disagio.",
+        "P6": "Rimuginio su dettagli e possibili critiche.",
+        "P9": "Dubbio sul proprio valore rispetto agli altri.",
+        "P10": "Confronto con lo sguardo esterno e paura di giudizio."
+      }
+    },
+    "tags": [
+      "perfezionismo",
+      "visibilità",
+      "confronto",
+      "procrastinazione"
+    ],
+    "title": "Il progetto che non è mai pronto",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P1",
+        "P9",
+        "P10",
+        "P5",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P6-Emo": 1,
+        "I-P9-Emo": 2,
+        "I-P10-Cog": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P1": 2,
+        "P5": 1,
+        "P6": 1,
+        "P9": 1,
+        "P10": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Sto lavorando a un nuovo progetto personale da mesi. Ogni tanto lo riprendo, lo miglioro, aggiungo dettagli.\n\nOgni volta mi sembra che manchi ancora qualcosa prima di poterlo mostrare. Una parte di me dice che devo aspettare di essere davvero pronto.\n\nIntanto guardo altri che pubblicano cose molto più semplici e mi irrito. Mi dico che io voglio fare le cose fatte bene.\n\nLa verità è che continuo a tenerlo nel cassetto.\n\nVorrei capire se sto cercando qualità o se mi sto solo proteggendo."
+  },
+  {
+    "id": "S142",
+    "why": {
+      "E": {
+        "E3": "Energia bloccata che genera fastidio crescente.",
+        "E4": "Pressione sostenuta per carico non allineato."
+      },
+      "I": {
+        "I-P4-Cog": "Chiarisce criteri per futuri sì/no.",
+        "I-P6-Emo": "Riduce la carica prima di riformulare la posizione.",
+        "I-P10-Emo": "Riporta al metro interno della correttezza.",
+        "I-P11-Cog": "Apre una via intermedia tra sì automatico e rottura.",
+        "I-P4-Comp": "Introduce un confine operativo e specifico."
+      },
+      "P": {
+        "P4": "Confine non espresso nel momento della richiesta.",
+        "P6": "Rimuginio su come verrà interpretato un eventuale passo indietro.",
+        "P10": "Adeguamento alle aspettative esterne.",
+        "P11": "Oscillazione tra adattamento e taglio drastico."
+      }
+    },
+    "tags": [
+      "confini",
+      "responsabilità",
+      "relazioni",
+      "congruenza"
+    ],
+    "title": "Dico sì e poi mi pesa",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P11",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E3": 1,
+        "E4": 2
+      },
+      "I": {
+        "I-P4-Cog": 1,
+        "I-P6-Emo": 1,
+        "I-P10-Emo": 2,
+        "I-P11-Cog": 1,
+        "I-P4-Comp": 2
+      },
+      "P": {
+        "P4": 2,
+        "P6": 1,
+        "P10": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Mi hanno chiesto di prendere in carico un’altra responsabilità. Ho risposto subito di sì, quasi automaticamente.\n\nSul momento mi sembrava la scelta giusta, non volevo deludere nessuno.\n\nAdesso però mi sento schiacciato. Ho la sensazione di aver detto sì più per non creare attrito che per reale disponibilità.\n\nDentro cresce un fastidio che non mi piace, ma l’idea di tornare indietro mi mette in imbarazzo.\n\nVorrei capire come restare corretto senza accumulare risentimento."
+  },
+  {
+    "id": "S143",
+    "why": {
+      "E": {
+        "E1": "Tensione anticipatoria rispetto alla prova.",
+        "E4": "Pressione interna legata alla performance."
+      },
+      "I": {
+        "I-P1-Cog": "Ridefinisce il criterio di ‘sufficiente’ per passare all’azione.",
+        "I-P6-Cog": "Struttura l’analisi in modo finito e misurabile.",
+        "I-P6-Emo": "Riduce la carica prima della decisione.",
+        "I-P11-Cog": "Rompe la polarità perfetto/rinvio.",
+        "I-P5-Comp": "Introduce iscrizione o prova simulata come micro-azione."
+      },
+      "P": {
+        "P1": "Standard elevato che sposta sempre avanti la soglia.",
+        "P5": "Rinvio come strategia di riduzione dell’ansia.",
+        "P6": "Analisi continua di lacune che sostituisce la decisione.",
+        "P11": "O perfettamente pronto o meglio aspettare."
+      }
+    },
+    "tags": [
+      "esame",
+      "ansia",
+      "perfezionismo",
+      "rinvio"
+    ],
+    "title": "Studio ma non mi sento mai pronto",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P6",
+        "P1",
+        "P5",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E4": 1
+      },
+      "I": {
+        "I-P1-Cog": 2,
+        "I-P6-Cog": 2,
+        "I-P6-Emo": 1,
+        "I-P11-Cog": 1,
+        "I-P5-Comp": 1
+      },
+      "P": {
+        "P1": 1,
+        "P5": 1,
+        "P6": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Sto preparando un esame importante. Studio con costanza, faccio riassunti, ripasso.\n\nOgni volta che penso di essere pronto, trovo un argomento che non conosco abbastanza.\n\nMi dico che è meglio rimandare l’iscrizione alla sessione successiva, così avrò più tempo.\n\nDentro però sento che sto solo allungando l’ansia.\n\nVorrei capire quando è davvero il momento di provarci."
+  },
+  {
+    "id": "S144",
+    "why": {
+      "E": {
+        "E3": "Energia bloccata quando l’altro non segue le indicazioni.",
+        "E5": "Spinta all’attacco quando sente di non essere ascoltato."
+      },
+      "I": {
+        "I-P4-Cog": "Chiarisce il confine tra supporto e responsabilità dell’altro.",
+        "I-P6-Emo": "Riduce la carica prima di intervenire.",
+        "I-P10-Cog": "Separa il valore personale dall’esito delle scelte altrui.",
+        "I-P11-Cog": "Evita polarità salvare/abbandonare.",
+        "I-P4-Comp": "Introduce una modalità di supporto con confini espliciti."
+      },
+      "P": {
+        "P4": "Confine tra supporto e sostituzione poco chiaro.",
+        "P6": "Rimuginio su cosa sia giusto fare.",
+        "P10": "Identificazione del proprio valore con l’essere utile.",
+        "P11": "Oscillazione tra salvare e ritirarsi."
+      }
+    },
+    "tags": [
+      "aiuto",
+      "confini",
+      "relazioni",
+      "controllo"
+    ],
+    "title": "Lo aiuto o mi sostituisco?",
+    "intent": [
+      "allinearsi"
+    ],
+    "subset": {
+      "P": [
+        "P10",
+        "P4",
+        "P11",
+        "P6"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E3": 2,
+        "E5": 1
+      },
+      "I": {
+        "I-P4-Cog": 2,
+        "I-P6-Emo": 1,
+        "I-P10-Cog": 2,
+        "I-P11-Cog": 1,
+        "I-P4-Comp": 1
+      },
+      "P": {
+        "P4": 1,
+        "P6": 1,
+        "P10": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Una persona a cui tengo sta attraversando un momento difficile. Mi viene spontaneo darle consigli e soluzioni.\n\nQuando però non li segue, mi irrito. Mi sembra che non stia facendo abbastanza per cambiare.\n\nAllo stesso tempo mi dico che forse sto cercando di controllare troppo.\n\nMi sento diviso tra il voler essere di supporto e il rischio di invadere.\n\nVorrei capire qual è il mio ruolo giusto in questa situazione."
+  },
+  {
+    "id": "S145",
+    "why": {
+      "E": {
+        "E1": "Attivazione iniziale che si trasforma in tensione dispersiva.",
+        "E3": "Frustrazione per energia che non si concretizza."
+      },
+      "I": {
+        "I-P6-Cog": "Limita il numero di opzioni in modo strutturato.",
+        "I-P6-Emo": "Riduce la dispersione prima della scelta.",
+        "I-P8-Cog": "Rende concreto il futuro in un obiettivo definito e vicino.",
+        "I-P11-Cog": "Rompe la polarità entusiasmo/abbandono.",
+        "I-P5-Comp": "Introduce una micro-azione immediata e verificabile."
+      },
+      "P": {
+        "P5": "Inerzia nel passaggio all’azione concreta.",
+        "P6": "Analisi continua di opzioni che sostituisce la scelta.",
+        "P8": "Futuro ampio e astratto che resta lontano dal presente.",
+        "P11": "Oscillazione tra entusiasmo totale e abbandono."
+      }
+    },
+    "tags": [
+      "motivazione",
+      "dispersione",
+      "azione",
+      "futuro"
+    ],
+    "title": "Parto motivato, poi mi disperdo",
+    "intent": [
+      "fare"
+    ],
+    "subset": {
+      "P": [
+        "P8",
+        "P6",
+        "P5",
+        "P11"
+      ]
+    },
+    "answer_key": {
+      "E": {
+        "E1": 2,
+        "E3": 1
+      },
+      "I": {
+        "I-P6-Cog": 1,
+        "I-P6-Emo": 1,
+        "I-P8-Cog": 2,
+        "I-P11-Cog": 1,
+        "I-P5-Comp": 2
+      },
+      "P": {
+        "P5": 1,
+        "P6": 1,
+        "P8": 2,
+        "P11": 1
+      }
+    },
+    "difficulty": "hard",
+    "client_text": "Quando mi viene un’idea nuova mi entusiasmo subito. Inizio a cercare informazioni, strumenti, corsi.\n\nDopo qualche giorno però mi accorgo che sto accumulando materiale senza aver fatto nulla di concreto.\n\nMi dico che mi sto preparando bene, ma sotto sento che sto evitando il primo passo vero.\n\nAlla fine mi ritrovo con tante possibilità aperte e nessuna scelta fatta.\n\nVorrei riuscire a trasformare l’entusiasmo iniziale in qualcosa di reale."
+  }
+]

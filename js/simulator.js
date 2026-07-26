@@ -4,6 +4,7 @@
       scenarioRefresh: true,
       label: ''
     };
+    var SCENARIOS = window.SCENARIOS || [];
 
     function applySimulatorConfig() {
       const btn = document.getElementById('fetchScenariosBtn');
@@ -17,11 +18,8 @@
       }
     }
 
-    // ---- Supabase ----
-    const SUPABASE_URL = 'https://afbecjijvzalkycttqtj.supabase.co';
-    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmYmVjamlqdnphbGt5Y3R0cXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjA1NDMsImV4cCI6MjA2ODQ5NjU0M30.xVn-2xeYMuq230CPizJxn5ac8fcO2siFWAIj0gSDeB0';
-
-    async function fetchScenariosFromSupabase() {
+    // ---- Server scenarios ----
+    async function fetchScenariosFromServer() {
       if (SIMULATOR_CONFIG.scenarioRefresh === false) return;
       const btn = document.getElementById('fetchScenariosBtn');
       btn.disabled = true;
@@ -29,16 +27,17 @@
       btn.style.color = '';
       btn.style.borderColor = '';
       try {
-        const resp = await fetch(
-          SUPABASE_URL + '/rest/v1/rpc/get_random_epic_scenarios_fresh_first',
-          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + SUPABASE_KEY, 'Accept': 'application/json' } }
-        );
+        const resp = await fetch('/api/scenarios/random', {
+          credentials: 'same-origin',
+          headers: { 'Accept': 'application/json' }
+        });
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
         const data = await resp.json();
         const arr = Array.isArray(data) ? data : [data];
-        const scenarios = arr.map(r => r.payload || r).filter(r => r && r.id);
+        const scenarios = arr.filter(r => r && r.id);
         if (scenarios.length === 0) throw new Error('Nessuno scenario trovato');
         SCENARIOS = scenarios;
+        window.SCENARIOS = scenarios;
         renderDifficultyFilter();
         renderScenarioList();
         btn.textContent = '\u2713 ' + scenarios.length + ' scenari';
@@ -48,7 +47,7 @@
         btn.textContent = 'Errore';
         btn.style.color = '#dc2626';
         btn.style.borderColor = '#fca5a5';
-        console.error('Supabase fetch error:', e);
+        console.error('EPiC scenarios fetch error:', e);
       } finally {
         btn.disabled = false;
       }
@@ -436,6 +435,7 @@
         showIFeedback();
       }
     }
+    window.fetchScenariosFromServer = fetchScenariosFromServer;
 
     function markCrossIntervention(slot, intervention) {
       if (!intervention) return;

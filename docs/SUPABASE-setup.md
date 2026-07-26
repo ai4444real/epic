@@ -1,8 +1,18 @@
-# Supabase Setup
+# Supabase Setup legacy
 
 ## Scopo
 
-Questo file descrive il setup Supabase attuale usato da EPiC per gli scenari del simulatore.
+Questo file descrive il setup Supabase storico usato da EPiC per gli scenari del simulatore.
+
+Dal 26 luglio 2026 gli scenari completi del simulatore sono stati esportati e migrati su DB locale FastAPI/SQLite.
+
+Documento attuale:
+
+```text
+docs/SCENARIOS_LOCAL_DB.md
+```
+
+Supabase non e' piu' la sorgente runtime degli scenari del simulatore.
 
 Serve a ricordare:
 

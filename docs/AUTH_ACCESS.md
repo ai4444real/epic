@@ -12,7 +12,9 @@ https://simonegenini.com
 
 Il login e' gestito direttamente dal server FastAPI con Google OAuth.
 
-Supabase resta usato dove serve per dati applicativi, per esempio scenari online e Live Table, ma non gestisce piu' l'autenticazione utenti.
+Supabase resta temporaneamente usato dove serve per dati applicativi non ancora migrati, in particolare Live Table, ma non gestisce piu' l'autenticazione utenti.
+
+Gli scenari completi del simulatore sono gia' stati migrati su DB locale; vedi `docs/SCENARIOS_LOCAL_DB.md`.
 
 ## Flusso login
 

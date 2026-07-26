@@ -106,6 +106,7 @@ Runtime:
 - reverse proxy: Caddy with automatic Let's Encrypt HTTPS
 - access log database: `/opt/epic/app/var/access_log.sqlite3`
 - auth database: `/opt/epic/app/var/auth.sqlite3`
+- content database: `/opt/epic/app/var/content.sqlite3`
 - private runtime config: `/opt/epic/app/.env`
 
 Public routes:
