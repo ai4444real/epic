@@ -82,6 +82,11 @@ img {
   display: none;
 }
 
+.is-future,
+.is-hidden-for-now {
+  display: none !important;
+}
+
 .hero,
 .nucleus,
 .experience,
@@ -438,7 +443,7 @@ h1 {
   .nav {
     display: flex;
     align-items: center;
-    gap: 22px;
+    gap: 14px;
   }
 
   .nav a {
@@ -446,6 +451,26 @@ h1 {
     font-size: 11px;
     letter-spacing: 1px;
     text-decoration: none;
+  }
+
+  .nav .nav-epic {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    min-height: 36px;
+    padding: 0 12px;
+    border: 1px solid rgba(16, 20, 39, .42);
+    background: rgba(255, 255, 255, .18);
+  }
+
+  .nav .nav-epic img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+  }
+
+  .nav .nav-epic:hover {
+    border-color: var(--ink);
   }
 
   .nav .nav-cta {
@@ -499,11 +524,21 @@ h1 {
   .nav {
     margin-left: auto;
     margin-right: 31px;
-    gap: 40px;
+    gap: 18px;
   }
 
   .nav a {
     font-size: 12px;
+  }
+
+  .nav .nav-epic {
+    min-height: 40px;
+    padding: 0 14px;
+  }
+
+  .nav .nav-epic img {
+    width: 26px;
+    height: 26px;
   }
 
   .nav .nav-cta {
