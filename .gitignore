@@ -15,3 +15,5 @@ server/var/
 Thumbs.db
 *.tmp
 *.log
+desktop-check.png
+mobile-check.png

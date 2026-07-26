@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Callable
 
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 
@@ -19,8 +19,8 @@ DB_PATH = Path(os.getenv("EPIC_ACCESS_DB", str(DEFAULT_DB_PATH))).resolve()
 SERVICE_NAME = os.getenv("EPIC_SERVICE_NAME", "epic-web")
 
 PAGE_ALIASES = {
-    "/": APP_ROOT / "simonegenini.com" / "index.html",
-    "/epic": APP_ROOT / "simonegenini.com" / "epic.html",
+    "/": APP_ROOT / "index.html",
+    "/epic": APP_ROOT / "epic.html",
     "/epic/simulator": APP_ROOT / "epic-simulator-free.html",
     "/epic/explorer": APP_ROOT / "epic-explorer-free.html",
     "/epic/cards": APP_ROOT / "epic-all-cards-free.html",
@@ -56,7 +56,7 @@ def create_app() -> FastAPI:
     async def serve(path: str) -> Response:
         request_path = "/" + path
         if request_path in PAGE_ALIASES:
-            return page_response(request_path, PAGE_ALIASES[request_path])
+            return page_response(PAGE_ALIASES[request_path])
 
         static_response = static_file_response(request_path)
         if static_response:
@@ -157,22 +157,11 @@ def write_access_log(request: Request, status_code: int, duration_ms: int, sessi
         )
 
 
-def page_response(route_path: str, file_path: Path) -> Response:
+def page_response(file_path: Path) -> Response:
     if not is_safe_app_path(file_path) or not file_path.is_file():
         return PlainTextResponse("Not found", status_code=404)
 
-    if route_path in {"/", "/epic"}:
-        html = file_path.read_text(encoding="utf-8")
-        html = inject_base_href(html, "/simonegenini.com/")
-        return HTMLResponse(html)
-
     return FileResponse(file_path)
-
-
-def inject_base_href(html: str, base_href: str) -> str:
-    if "<base " in html:
-        return html
-    return html.replace("<head>", f'<head>\n  <base href="{base_href}">', 1)
 
 
 def static_file_response(request_path: str) -> Response | None:
