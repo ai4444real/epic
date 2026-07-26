@@ -1,0 +1,17 @@
+# Python/server runtime
+.venv/
+__pycache__/
+*.py[cod]
+
+# Local server state
+server/var/
+
+# Local environment files
+.env
+.env.*
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.log

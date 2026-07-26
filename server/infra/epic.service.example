@@ -1,0 +1,18 @@
+[Unit]
+Description=EPiC Web FastAPI
+After=network.target
+
+[Service]
+Type=simple
+User=ubuntu
+Group=ubuntu
+WorkingDirectory=/opt/epic/app
+Environment=PYTHONUNBUFFERED=1
+Environment=EPIC_SERVICE_NAME=epic-web
+Environment=EPIC_ACCESS_DB=/opt/epic/app/var/access_log.sqlite3
+ExecStart=/opt/epic/app/.venv/bin/uvicorn server.main:app --host 127.0.0.1 --port 8080
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

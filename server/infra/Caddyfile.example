@@ -1,0 +1,7 @@
+simonegenini.com {
+    reverse_proxy 127.0.0.1:8080
+}
+
+www.simonegenini.com {
+    redir https://simonegenini.com{uri} permanent
+}
