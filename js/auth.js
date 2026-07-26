@@ -1,19 +1,9 @@
 (function () {
   const config = window.EPIC_APP_CONFIG || {};
   const authEnabled = !!config.authEnabled;
-  const publicPages = Array.isArray(config.publicPages) ? config.publicPages.map((p) => String(p).toLowerCase()) : [];
 
   const pageName = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
   const isLoginPage = pageName === 'login' || pageName === 'login.html';
-  const isPublicPage = publicPages.includes(pageName);
-
-  function requestedPath() {
-    return window.location.pathname + window.location.search + window.location.hash;
-  }
-
-  function loginUrl(next) {
-    return '/login?next=' + encodeURIComponent(next || '/');
-  }
 
   async function fetchMe() {
     const response = await fetch('/me', {
@@ -102,11 +92,6 @@
     const user = await fetchMe();
     if (user) {
       mountUser(user);
-      return;
-    }
-
-    if (!isPublicPage) {
-      window.location.replace(loginUrl(requestedPath()));
     }
   }
 
