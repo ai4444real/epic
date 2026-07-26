@@ -1,4 +1,8 @@
-# EPiC Live Table - Supabase setup
+# EPiC Live Table - Supabase setup legacy
+
+Questo documento conserva il setup storico della Live Table su Supabase.
+
+La Live Table non usa piu' Supabase a runtime. Le stanze sono ora salvate nel DB locale del server EPiC; vedi `LIVE_TABLE_LOCAL_DB.md`.
 
 La Live Table usa una tabella dedicata per salvare lo stato della stanza.
 

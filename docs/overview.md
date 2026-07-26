@@ -28,7 +28,7 @@ Funzioni principali:
 - percorso E -> P -> I
 - scoring e soluzione commentata
 - log locale, note ed export
-- scenari aggiornabili da Supabase
+- scenari completi serviti dal DB locale per utenti sbloccati
 
 ## All Cards
 
@@ -60,12 +60,13 @@ Serve per confrontare le leve disponibili, studiare le sinergie e allenare la sc
 
 ## Accesso e pubblicazione
 
-La suite e' pubblicata tramite GitHub e Cloudflare Pages.
+La suite e' servita dal VPS `simonegenini.com`.
 
-- gli strumenti principali richiedono login Google tramite Supabase Auth
+- le pagine pubbliche e le demo free non richiedono login
+- gli strumenti completi richiedono login Google diretto sul server e ruolo sbloccato
 - la vista studenti della Live Table e' pubblica tramite link della stanza
-- Supabase gestisce scenari, stanze Live Table e autenticazione
-- la versione pubblicata si trova nel repository `app/`
+- scenari completi e stanze Live Table sono salvati nel DB locale del server
+- la versione deployata si trova nel repository `app/`
 
 ## Direzione prodotto
 

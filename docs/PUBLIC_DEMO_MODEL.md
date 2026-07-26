@@ -149,14 +149,13 @@ Ruoli minimi:
 - `unlocked`: utente autorizzato
 - `admin/presenter`: gestione, live table, eventuale promozione utenti
 
-Possibile implementazione futura:
+Implementazione attuale:
 
-- Supabase Auth
-- Google login o magic link
-- tabella `user_access`
-- promozione manuale utente tramite email
+- Google OAuth diretto sul server FastAPI
+- utenti e ruoli in SQLite locale
+- promozione manuale utente tramite email nel DB locale
 
-Google OAuth e approvazione accesso sono un tema separato da valutare tecnicamente e burocraticamente.
+Google OAuth e approvazione accesso restano un tema burocratico Google, ma non passano piu' da Supabase.
 
 ## Regola tecnica
 

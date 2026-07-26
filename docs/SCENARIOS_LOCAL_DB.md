@@ -99,5 +99,3 @@ Con utente `unlocked`:
 ## Nota legacy
 
 Supabase non e' piu' sorgente runtime per gli scenari del simulatore.
-
-Resta ancora da migrare la Live Table, che usa ancora `epic_live_rooms`.

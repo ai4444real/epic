@@ -1,5 +1,4 @@
 // ---- LIVE-TABLE JS ----
-    const LIVE_TABLE_NAME = 'epic_live_rooms';
     const POLL_MS = 1600;
     const LIVE_MODE = document.body.dataset.liveMode || 'presenter';
     const IS_PRESENTER = LIVE_MODE === 'presenter';
@@ -19,7 +18,6 @@
       libraryList: document.getElementById('libraryList')
     };
 
-    const liveConfig = window.EPIC_APP_CONFIG || {};
     const liveEmotionOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
     const liveEmotionImages = {
       E1: 'images/E1b.png',
@@ -29,7 +27,6 @@
       E5: 'images/E5b.png',
       E6: 'images/E6b.png'
     };
-    let liveClient = null;
     let roomId = new URLSearchParams(window.location.search).get('room') || '';
     let libraryFilter = 'all';
     let lastRemoteStamp = '';
@@ -52,12 +49,6 @@
       let out = '';
       for (let i = 0; i < 8; i++) out += chars[Math.floor(Math.random() * chars.length)];
       return out;
-    }
-
-    function getLiveClient() {
-      if (!window.supabase || !liveConfig.supabaseUrl || !liveConfig.supabaseAnonKey) return null;
-      if (!liveClient) liveClient = window.supabase.createClient(liveConfig.supabaseUrl, liveConfig.supabaseAnonKey);
-      return liveClient;
     }
 
     function allCards() {
@@ -120,7 +111,7 @@
       if (!liveEls.setupWarning) return;
       liveEls.setupWarning.classList.add('active');
       liveEls.setupWarning.innerHTML =
-        'Live sync non disponibile. Verifica la tabella Supabase <strong>epic_live_rooms</strong>. ' +
+        'Live sync non disponibile. Verifica il server EPiC. ' +
         'Dettaglio: ' + esc(error?.message || error || 'errore sconosciuto');
     }
 
@@ -130,33 +121,33 @@
       liveEls.setupWarning.innerHTML = '';
     }
 
-    function isDeletedRoom(rowOrPayload) {
-      const payload = rowOrPayload?.payload || rowOrPayload || {};
-      return Boolean(payload.deleted_at);
+    async function liveFetch(url, options) {
+      const response = await fetch(url, {
+        ...(options || {}),
+        credentials: 'same-origin',
+        headers: {
+          'Accept': 'application/json',
+          ...(options?.body ? { 'Content-Type': 'application/json' } : {}),
+          ...(options?.headers || {})
+        }
+      });
+      if (!response.ok) {
+        const text = await response.text();
+        throw new Error('HTTP ' + response.status + (text ? ': ' + text.slice(0, 160) : ''));
+      }
+      return response.status === 204 ? null : response.json();
     }
 
     async function saveRoom() {
       if (!IS_PRESENTER) return;
       ensureRoomId();
-      const client = getLiveClient();
-      if (!client) {
-        showSetupWarning('Supabase client non disponibile');
-        return;
-      }
       tableState.updated_at = new Date().toISOString();
       renderTable();
       try {
-        const { data: authData } = await client.auth.getSession();
-        const email = authData?.session?.user?.email || null;
-        const { error } = await client
-          .from(LIVE_TABLE_NAME)
-          .upsert({
-            room_id: roomId,
-            owner_email: email,
-            payload: tableState,
-            updated_at: tableState.updated_at
-          }, { onConflict: 'room_id' });
-        if (error) throw error;
+        await liveFetch('/api/live/rooms/' + encodeURIComponent(roomId), {
+          method: 'PUT',
+          body: JSON.stringify(tableState)
+        });
         lastRemoteStamp = tableState.updated_at;
         clearSetupWarning();
         setStatus('Sincronizzato ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
@@ -169,21 +160,20 @@
 
     async function loadRoom() {
       if (!roomId) return;
-      const client = getLiveClient();
-      if (!client) {
-        showSetupWarning('Supabase client non disponibile');
-        return;
-      }
       try {
-        const { data, error } = await client
-          .from(LIVE_TABLE_NAME)
-          .select('payload,updated_at')
-          .eq('room_id', roomId)
-          .maybeSingle();
-        if (error) throw error;
-        if (data?.payload && isDeletedRoom(data.payload)) {
-          if (!IS_PRESENTER) setStatus('Stanza non trovata.');
-          return;
+        let data = null;
+        try {
+          data = await liveFetch('/api/live/rooms/' + encodeURIComponent(roomId));
+        } catch (error) {
+          if (String(error?.message || '').includes('HTTP 404')) {
+            if (IS_PRESENTER) {
+              await saveRoom();
+            } else {
+              setStatus('Stanza non trovata.');
+            }
+            return;
+          }
+          throw error;
         }
         if (data?.payload) {
           const stamp = data.updated_at || data.payload.updated_at || '';
@@ -194,10 +184,6 @@
           }
           clearSetupWarning();
           if (!IS_PRESENTER) setStatus('Aggiornato ' + new Date().toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit', second: '2-digit' }));
-        } else if (IS_PRESENTER) {
-          await saveRoom();
-        } else {
-          setStatus('Stanza non trovata.');
         }
       } catch (error) {
         console.warn('Live table load failed:', error);
@@ -208,16 +194,9 @@
 
     async function loadSavedRooms() {
       if (!IS_PRESENTER) return;
-      const client = getLiveClient();
-      if (!client) return;
       try {
-        const { data, error } = await client
-          .from(LIVE_TABLE_NAME)
-          .select('room_id,payload,updated_at')
-          .order('updated_at', { ascending: false })
-          .limit(30);
-        if (error) throw error;
-        savedRooms = (Array.isArray(data) ? data : []).filter(row => !isDeletedRoom(row));
+        const data = await liveFetch('/api/live/rooms?limit=30');
+        savedRooms = Array.isArray(data) ? data : [];
         renderSavedRooms();
         clearSetupWarning();
       } catch (error) {
@@ -233,37 +212,8 @@
       const row = savedRooms.find(item => item.room_id === target);
       const title = row?.payload?.title || target;
       if (!confirm('Cancellare il tavolo "' + title + '"?')) return;
-      const client = getLiveClient();
-      if (!client) {
-        showSetupWarning('Supabase client non disponibile');
-        return;
-      }
       try {
-        const { data: deletedRows, error } = await client
-          .from(LIVE_TABLE_NAME)
-          .delete()
-          .eq('room_id', target)
-          .select('room_id');
-        if (error) throw error;
-        if (!Array.isArray(deletedRows) || deletedRows.length === 0) {
-          const deletedPayload = {
-            ...(row?.payload || createEmptyState(target)),
-            room_id: target,
-            deleted_at: new Date().toISOString()
-          };
-          const { data: updatedRows, error: updateError } = await client
-            .from(LIVE_TABLE_NAME)
-            .update({
-              payload: deletedPayload,
-              updated_at: deletedPayload.deleted_at
-            })
-            .eq('room_id', target)
-            .select('room_id');
-          if (updateError) throw updateError;
-          if (!Array.isArray(updatedRows) || updatedRows.length === 0) {
-            throw new Error('Nessuna riga cancellata. Verifica le policy Supabase per delete/update.');
-          }
-        }
+        await liveFetch('/api/live/rooms/' + encodeURIComponent(target), { method: 'DELETE' });
         savedRooms = savedRooms.filter(item => item.room_id !== target);
         if (target === roomId) {
           const fallbackRoomId = savedRooms[0]?.room_id || '';

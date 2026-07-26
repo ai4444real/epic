@@ -8,9 +8,10 @@ Ordine di lettura consigliato:
 
 1. `EPIC_playground.md`
 2. `EPIC_simulator_spec.md`
-3. `DEPLOY-Cloudflare.md`
-4. `SUPABASE-setup.md`
-5. `AUTH_ACCESS.md`
+3. `VPS_INFOMANIAK_ACCESS.md`
+4. `AUTH_ACCESS.md`
+5. `SCENARIOS_LOCAL_DB.md`
+6. `LIVE_TABLE_LOCAL_DB.md`
 
 ## Documenti principali
 
@@ -26,11 +27,14 @@ Ordine di lettura consigliato:
 - `EPIC_DOCUMENTATION.md`
   documentazione piu' ampia su dati, viewer, build e struttura
 
-- `DEPLOY-Cloudflare.md`
-  deploy reale verso GitHub + Cloudflare Pages
+- `VPS_INFOMANIAK_ACCESS.md`
+  accesso VPS, chiavi, Caddy, systemd e deploy manuale
 
-- `SUPABASE-setup.md`
-  setup attuale di Supabase per gli scenari
+- `SCENARIOS_LOCAL_DB.md`
+  scenari completi migrati sul DB locale del server
+
+- `LIVE_TABLE_LOCAL_DB.md`
+  stanze Live Table sul DB locale del server
 
 - `AUTH_ACCESS.md`
   accesso utenti, login Google, pagine pubbliche/protette e rischi signup
@@ -53,4 +57,4 @@ I file di lavoro applicativo restano nella root del progetto, in particolare:
 - template HTML
 - dataset
 - cartella `app/`
-- cartella `data/`
+- cartella `workspace/` per materiali non deployati o legacy

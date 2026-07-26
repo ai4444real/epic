@@ -192,6 +192,46 @@ def create_app() -> FastAPI:
         safe_limit = limit if limit and limit > 0 else None
         return JSONResponse(list_scenarios(random_order=True, limit=safe_limit))
 
+    @app.get("/api/live/rooms")
+    async def api_live_rooms(request: Request, limit: int = 30) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_protected(user):
+            return JSONResponse({"error": "unlocked_required"}, status_code=403)
+        return JSONResponse(list_live_rooms(limit=limit))
+
+    @app.get("/api/live/rooms/{room_id}")
+    async def api_live_room(room_id: str) -> JSONResponse:
+        room = get_live_room(room_id)
+        if not room:
+            return JSONResponse({"error": "not_found"}, status_code=404)
+        return JSONResponse(room)
+
+    @app.put("/api/live/rooms/{room_id}")
+    async def api_save_live_room(room_id: str, request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_protected(user):
+            return JSONResponse({"error": "unlocked_required"}, status_code=403)
+        try:
+            payload = await request.json()
+            saved = save_live_room(room_id, payload, user)
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        return JSONResponse(saved)
+
+    @app.delete("/api/live/rooms/{room_id}")
+    async def api_delete_live_room(room_id: str, request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_protected(user):
+            return JSONResponse({"error": "unlocked_required"}, status_code=403)
+        deleted = delete_live_room(room_id)
+        return JSONResponse({"deleted": deleted})
+
     @app.get("/{path:path}")
     async def serve(path: str, request: Request) -> Response:
         request_path = "/" + path
@@ -360,6 +400,19 @@ def init_content_db() -> None:
             """
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_scenarios_difficulty ON scenarios(difficulty)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS live_rooms (
+                room_id TEXT PRIMARY KEY,
+                owner_email TEXT NOT NULL DEFAULT '',
+                payload TEXT NOT NULL,
+                updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                deleted_at TEXT NOT NULL DEFAULT ''
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_live_rooms_updated_at ON live_rooms(updated_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_live_rooms_deleted_at ON live_rooms(deleted_at)")
     seed_scenarios_from_file()
 
 
@@ -413,6 +466,91 @@ def list_scenarios(random_order: bool = False, limit: int | None = None) -> list
     with sqlite3.connect(CONTENT_DB_PATH) as conn:
         rows = conn.execute(sql, params).fetchall()
     return [json.loads(row[0]) for row in rows]
+
+
+def normalize_room_id(room_id: str) -> str:
+    return "".join(ch for ch in (room_id or "").strip().upper() if ch.isalnum())[:32]
+
+
+def list_live_rooms(limit: int = 30) -> list[dict]:
+    safe_limit = min(max(limit or 30, 1), 100)
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        rows = conn.execute(
+            """
+            SELECT room_id, payload, updated_at
+            FROM live_rooms
+            WHERE deleted_at = ''
+            ORDER BY updated_at DESC
+            LIMIT ?
+            """,
+            (safe_limit,),
+        ).fetchall()
+    return [{"room_id": row[0], "payload": json.loads(row[1]), "updated_at": row[2]} for row in rows]
+
+
+def get_live_room(room_id: str) -> dict | None:
+    normalized = normalize_room_id(room_id)
+    if not normalized:
+        return None
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        row = conn.execute(
+            """
+            SELECT room_id, payload, updated_at
+            FROM live_rooms
+            WHERE room_id = ? AND deleted_at = ''
+            """,
+            (normalized,),
+        ).fetchone()
+    if not row:
+        return None
+    return {"room_id": row[0], "payload": json.loads(row[1]), "updated_at": row[2]}
+
+
+def save_live_room(room_id: str, payload: dict, user: dict) -> dict:
+    normalized = normalize_room_id(room_id)
+    if not normalized:
+        raise ValueError("Invalid room id")
+    if not isinstance(payload, dict):
+        raise ValueError("Invalid room payload")
+    payload["room_id"] = normalized
+    updated_at = payload.get("updated_at") or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    payload["updated_at"] = updated_at
+    payload_text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+    owner_email = user.get("email") or ""
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        conn.execute(
+            """
+            INSERT INTO live_rooms (room_id, owner_email, payload, updated_at, deleted_at)
+            VALUES (?, ?, ?, ?, '')
+            ON CONFLICT(room_id) DO UPDATE SET
+                owner_email = CASE
+                    WHEN live_rooms.owner_email = '' THEN excluded.owner_email
+                    ELSE live_rooms.owner_email
+                END,
+                payload = excluded.payload,
+                updated_at = excluded.updated_at,
+                deleted_at = ''
+            """,
+            (normalized, owner_email, payload_text, updated_at),
+        )
+    return {"room_id": normalized, "payload": payload, "updated_at": updated_at}
+
+
+def delete_live_room(room_id: str) -> bool:
+    normalized = normalize_room_id(room_id)
+    if not normalized:
+        return False
+    deleted_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        cur = conn.execute(
+            """
+            UPDATE live_rooms
+            SET deleted_at = ?, updated_at = ?
+            WHERE room_id = ? AND deleted_at = ''
+            """,
+            (deleted_at, deleted_at, normalized),
+        )
+    return cur.rowcount > 0
 
 
 def upsert_user(google_sub: str, email: str, name: str, picture: str) -> str:

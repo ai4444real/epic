@@ -1,32 +1,4 @@
 window.EPIC_APP_CONFIG = {
   authEnabled: true,
-  eventLoggingEnabled: false,
-  supabaseUrl: 'https://afbecjijvzalkycttqtj.supabase.co',
-  supabaseAnonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFmYmVjamlqdnphbGt5Y3R0cXRqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTI5MjA1NDMsImV4cCI6MjA2ODQ5NjU0M30.xVn-2xeYMuq230CPizJxn5ac8fcO2siFWAIj0gSDeB0',
-  loginProvider: 'google',
-  loginRedirectPath: 'auth-callback',
-  postLoginDefaultPath: '',
-  appEventsTable: 'app_events',
-  publicPages: [
-    'epic-live-view',
-    'epic-live-view.html',
-    'epic-simulator',
-    'epic-simulator.html',
-    'epic-simulator-free',
-    'epic-simulator-free.html',
-    'epic-simulator-locked',
-    'epic-simulator-locked.html',
-    'epic-explorer',
-    'epic-explorer.html',
-    'epic-explorer-free',
-    'epic-explorer-free.html',
-    'epic-explorer-locked',
-    'epic-explorer-locked.html',
-    'epic-all-cards',
-    'epic-all-cards.html',
-    'epic-all-cards-free',
-    'epic-all-cards-free.html',
-    'epic-all-cards-locked',
-    'epic-all-cards-locked.html'
-  ]
+  eventLoggingEnabled: false
 };

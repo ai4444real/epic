@@ -12,9 +12,9 @@ https://simonegenini.com
 
 Il login e' gestito direttamente dal server FastAPI con Google OAuth.
 
-Supabase resta temporaneamente usato dove serve per dati applicativi non ancora migrati, in particolare Live Table, ma non gestisce piu' l'autenticazione utenti.
+Supabase non gestisce piu' autenticazione o dati runtime dell'app.
 
-Gli scenari completi del simulatore sono gia' stati migrati su DB locale; vedi `docs/SCENARIOS_LOCAL_DB.md`.
+Gli scenari completi del simulatore e le stanze Live Table usano il DB locale del server; vedi `docs/SCENARIOS_LOCAL_DB.md` e `docs/LIVE_TABLE_LOCAL_DB.md`.
 
 ## Flusso login
 
@@ -111,6 +111,7 @@ SESSION_SECRET=...
 EPIC_COOKIE_SECURE=true
 EPIC_ACCESS_DB=/opt/epic/app/var/access_log.sqlite3
 EPIC_AUTH_DB=/opt/epic/app/var/auth.sqlite3
+EPIC_CONTENT_DB=/opt/epic/app/var/content.sqlite3
 ```
 
 Generare `SESSION_SECRET` sul server:
