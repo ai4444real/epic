@@ -89,7 +89,7 @@
     }
 
     function viewerUrl() {
-      const url = new URL('epic-live-view.html', window.location.href);
+      const url = new URL('/epic-live-view.html', window.location.href);
       url.searchParams.set('room', roomId);
       return url.toString();
     }

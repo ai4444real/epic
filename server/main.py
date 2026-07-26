@@ -14,7 +14,7 @@ from urllib.parse import quote
 from authlib.integrations.starlette_client import OAuth
 from dotenv import load_dotenv
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse, RedirectResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 
@@ -241,10 +241,10 @@ def create_app() -> FastAPI:
                 return redirect_to_login(request_path)
             if not can_access_protected(user):
                 return PlainTextResponse("Accesso non autorizzato.", status_code=403)
-            return page_response(PROTECTED_ALIASES[request_path])
+            return page_response(PROTECTED_ALIASES[request_path], with_root_base=True)
 
         if request_path in PAGE_ALIASES:
-            return page_response(PAGE_ALIASES[request_path])
+            return page_response(PAGE_ALIASES[request_path], with_root_base=True)
 
         if is_protected_page(request_path):
             user = get_current_user(request)
@@ -660,9 +660,15 @@ def write_access_log(request: Request, status_code: int, duration_ms: int, sessi
         )
 
 
-def page_response(file_path: Path) -> Response:
+def page_response(file_path: Path, with_root_base: bool = False) -> Response:
     if not is_safe_app_path(file_path) or not file_path.is_file():
         return PlainTextResponse("Not found", status_code=404)
+
+    if with_root_base and file_path.suffix.lower() == ".html":
+        html = file_path.read_text(encoding="utf-8")
+        if "<base " not in html.lower():
+            html = html.replace("<head>", '<head>\n  <base href="/">', 1)
+        return HTMLResponse(html)
 
     return FileResponse(file_path)
 
