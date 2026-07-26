@@ -71,10 +71,12 @@ PROTECTED_ALIASES = {
 
 ADMIN_PAGES = {
     "/admin-users.html",
+    "/admin-logs.html",
 }
 
 ADMIN_ALIASES = {
     "/admin/users": APP_ROOT / "admin-users.html",
+    "/admin/logs": APP_ROOT / "admin-logs.html",
 }
 
 ASSET_EXTENSIONS = {
@@ -303,6 +305,21 @@ def create_app() -> FastAPI:
         except ValueError as error:
             return JSONResponse({"error": str(error)}, status_code=400)
         return JSONResponse({"deleted": deleted})
+
+    @app.get("/api/admin/logs")
+    async def api_admin_logs(
+        request: Request,
+        limit: int = 200,
+        path: str = "",
+        session_id: str = "",
+        status: int | None = None,
+    ) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status))
 
     @app.get("/{path:path}")
     async def serve(path: str, request: Request) -> Response:
@@ -821,6 +838,94 @@ def ensure_not_last_admin(email_to_change: str) -> None:
         ).fetchone()
     if not row or row[0] < 1:
         raise ValueError("Cannot remove the last admin")
+
+
+def get_access_log_report(limit: int = 200, path: str = "", session_id: str = "", status: int | None = None) -> dict:
+    safe_limit = min(max(limit or 200, 1), 1000)
+    where_sql, params = build_access_log_filters(path=path, session_id=session_id, status=status)
+    with sqlite3.connect(DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            f"""
+            SELECT id, created_at, method, path, query_string, status_code, duration_ms,
+                   client_ip, forwarded_for, user_agent, referer, session_id
+            FROM access_log
+            {where_sql}
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (*params, safe_limit),
+        ).fetchall()
+        summary = conn.execute(
+            f"""
+            SELECT COUNT(*) AS total,
+                   COUNT(DISTINCT session_id) AS sessions,
+                   MIN(created_at) AS first_seen,
+                   MAX(created_at) AS last_seen,
+                   ROUND(AVG(duration_ms), 1) AS avg_duration_ms,
+                   SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
+            FROM access_log
+            {where_sql}
+            """,
+            params,
+        ).fetchone()
+        top_paths = conn.execute(
+            f"""
+            SELECT path, COUNT(*) AS hits, COUNT(DISTINCT session_id) AS sessions
+            FROM access_log
+            {where_sql}
+            GROUP BY path
+            ORDER BY hits DESC, path ASC
+            LIMIT 12
+            """,
+            params,
+        ).fetchall()
+        recent_sessions = conn.execute(
+            f"""
+            SELECT session_id, COUNT(*) AS hits, MAX(created_at) AS last_seen
+            FROM access_log
+            {where_sql}
+            GROUP BY session_id
+            ORDER BY last_seen DESC
+            LIMIT 12
+            """,
+            params,
+        ).fetchall()
+    return {
+        "filters": {
+            "limit": safe_limit,
+            "path": path or "",
+            "session_id": session_id or "",
+            "status": status,
+        },
+        "summary": dict(summary) if summary else {},
+        "top_paths": [dict(row) for row in top_paths],
+        "recent_sessions": [dict(row) for row in recent_sessions],
+        "logs": [dict(row) for row in rows],
+    }
+
+
+def build_access_log_filters(path: str = "", session_id: str = "", status: int | None = None) -> tuple[str, tuple]:
+    clauses = []
+    params: list = []
+    path_filter = (path or "").strip()
+    if path_filter:
+        clauses.append("path LIKE ? ESCAPE '\\'")
+        params.append("%" + escape_like(path_filter) + "%")
+    session_filter = (session_id or "").strip()
+    if session_filter:
+        clauses.append("session_id = ?")
+        params.append(session_filter)
+    if status:
+        clauses.append("status_code = ?")
+        params.append(status)
+    if not clauses:
+        return "", tuple()
+    return "WHERE " + " AND ".join(clauses), tuple(params)
+
+
+def escape_like(value: str) -> str:
+    return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_")
 
 
 def create_auth_session(email: str, google_sub: str) -> str:

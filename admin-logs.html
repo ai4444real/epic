@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Admin - Log</title>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Admin log</span></h1>
+    <div class="toolbar-actions">
+      <a class="btn" href="/admin/users">Utenti</a>
+      <a class="btn" href="/epic">EPiC</a>
+      <a class="btn" href="/logout">Esci</a>
+    </div>
+  </div>
+
+  <main class="admin-shell">
+    <section class="admin-panel">
+      <div class="panel-head">
+        <div>
+          <h2>Accessi</h2>
+          <p>Pagine visitate, sessioni anonime, status e tempi di risposta.</p>
+        </div>
+        <button class="btn" id="refreshLogsBtn">Aggiorna</button>
+      </div>
+
+      <form class="log-filter-form" id="logFilterForm">
+        <input class="input" id="pathFilter" placeholder="filtra path, es. /epic" />
+        <input class="input" id="sessionFilter" placeholder="session id" />
+        <select class="input" id="statusFilter">
+          <option value="">tutti gli status</option>
+          <option value="200">200</option>
+          <option value="303">303</option>
+          <option value="401">401</option>
+          <option value="403">403</option>
+          <option value="404">404</option>
+          <option value="500">500</option>
+        </select>
+        <select class="input" id="limitFilter">
+          <option value="100">100 righe</option>
+          <option value="200" selected>200 righe</option>
+          <option value="500">500 righe</option>
+          <option value="1000">1000 righe</option>
+        </select>
+        <button class="btn primary" type="submit">Filtra</button>
+      </form>
+
+      <div class="admin-status" id="adminStatus"></div>
+
+      <div class="metric-grid" id="metricGrid"></div>
+
+      <div class="admin-grid">
+        <section class="mini-panel">
+          <h3>Top pagine</h3>
+          <div id="topPaths"></div>
+        </section>
+        <section class="mini-panel">
+          <h3>Sessioni recenti</h3>
+          <div id="recentSessions"></div>
+        </section>
+      </div>
+
+      <div class="users-table-wrap">
+        <table class="users-table logs-table">
+          <thead>
+            <tr>
+              <th>Quando</th>
+              <th>Path</th>
+              <th>Status</th>
+              <th>ms</th>
+              <th>Sessione</th>
+              <th>IP</th>
+              <th>Referer</th>
+            </tr>
+          </thead>
+          <tbody id="logsBody">
+            <tr><td colspan="7">Caricamento...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/admin-logs.js"></script>
+</body>
+</html>

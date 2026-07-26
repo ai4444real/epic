@@ -174,6 +174,14 @@ Gli utenti pending vengono agganciati al primo login Google tramite la stessa em
 
 `EPIC_ADMIN_EMAILS` contiene gli admin bootstrap, separati da virgola. Questi utenti vengono creati o promossi automaticamente ad `admin` all'avvio del server.
 
+La pagina:
+
+```text
+/admin/logs
+```
+
+mostra i log di accesso salvati in `EPIC_ACCESS_DB`: riepilogo, top pagine, sessioni recenti e ultime righe filtrabili.
+
 ## Verifica rapida
 
 Da server:
