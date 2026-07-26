@@ -432,6 +432,8 @@ def should_log_access(path: str, method: str) -> bool:
         return False
     if path == "/health":
         return False
+    if path.startswith("/api/"):
+        return False
     suffix = Path(path).suffix.lower()
     return not suffix or suffix == ".html"
 

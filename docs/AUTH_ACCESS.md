@@ -182,6 +182,8 @@ La pagina:
 
 mostra i log di accesso salvati in `EPIC_ACCESS_DB`: riepilogo, top pagine, sessioni recenti e ultime righe filtrabili.
 
+Il log accessi registra solo navigazioni/pagine (`/epic`, `/admin/users`, `.html`, ecc.). Le API (`/api/...`) sono escluse per non riempire il DB con polling tecnico, in particolare Live Table.
+
 ## Verifica rapida
 
 Da server:
