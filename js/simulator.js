@@ -9,7 +9,11 @@
     function applySimulatorConfig() {
       const btn = document.getElementById('fetchScenariosBtn');
       if (btn && SIMULATOR_CONFIG.scenarioRefresh === false) {
-        btn.hidden = true;
+        btn.disabled = true;
+        btn.classList.add('locked-feature');
+        btn.textContent = 'Scenari completi';
+        btn.title = 'Disponibile nella versione completa';
+        btn.setAttribute('aria-disabled', 'true');
       }
 
       if (SIMULATOR_CONFIG.label) {
@@ -159,6 +163,9 @@
       renderDifficultyFilter();
       renderScenarioList();
       checkResume();
+      if (SIMULATOR_CONFIG.scenarioRefresh !== false) {
+        fetchScenariosFromServer();
+      }
     });
 
     function renderStepBar(step) {

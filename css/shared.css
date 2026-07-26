@@ -76,6 +76,13 @@ html, body{
 .btn.primary{ background: var(--fg); color: #fff; border-color: var(--fg); }
 .btn.primary:hover{ opacity: 0.9; }
 .btn:disabled{ opacity: 0.4; cursor: not-allowed; }
+.btn.locked-feature{
+  background: #f4f4f5;
+  border-color: #d4d4d8;
+  color: #71717a;
+  opacity: 1;
+}
+.btn.locked-feature:hover{ background: #f4f4f5; }
 
 .demo-notice{
   max-width: 800px;
