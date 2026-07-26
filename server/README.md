@@ -72,5 +72,8 @@ Reference files:
 
 - `server/infra/epic.service.example`
 - `server/infra/Caddyfile.example`
+- `server/infra/Caddyfile.http-bootstrap.example`
 - `server/deploy.sh`
 - `server/healthcheck.sh`
+
+Use `Caddyfile.http-bootstrap.example` before DNS points to the VPS, because it serves plain HTTP on port 80 and also responds by direct IP. Once `simonegenini.com` points to the server, switch to `Caddyfile.example` for Caddy-managed HTTPS.

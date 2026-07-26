@@ -73,3 +73,57 @@ ssh -i $key ubuntu@179.237.107.160
 - Never paste the private key into docs, tickets, chat, or code.
 - If the key is exposed, revoke it from the VPS/provider and generate a new one.
 - Prefer one key per deployment/admin context so access can be rotated cleanly.
+
+## EPiC deployment state
+
+Initial VPS setup was started on July 26, 2026.
+
+Current server layout:
+
+```text
+/opt/epic/app
+```
+
+Runtime:
+
+- Python app: FastAPI served by Uvicorn
+- service name: `epic-web`
+- internal listen address: `127.0.0.1:8080`
+- reverse proxy: Caddy
+- access log database: `/opt/epic/app/var/access_log.sqlite3`
+
+Useful checks on the server:
+
+```bash
+cd /opt/epic/app
+./server/deploy.sh
+curl http://127.0.0.1:8080/health
+curl http://127.0.0.1/health
+sudo systemctl status epic-web --no-pager
+sudo systemctl status caddy --no-pager
+journalctl -u epic-web -n 100 --no-pager
+journalctl -u caddy -n 100 --no-pager
+```
+
+Temporary Caddy mode:
+
+```text
+server/infra/Caddyfile.http-bootstrap.example
+```
+
+This serves plain HTTP on port 80 and responds by direct IP. It is useful before DNS is fully pointed to the VPS.
+
+Final Caddy mode:
+
+```text
+server/infra/Caddyfile.example
+```
+
+Use it after `simonegenini.com` and `www.simonegenini.com` point to `179.237.107.160`, so Caddy can manage HTTPS certificates.
+
+DNS still required:
+
+```text
+simonegenini.com      A      179.237.107.160
+www.simonegenini.com  CNAME  simonegenini.com
+```
