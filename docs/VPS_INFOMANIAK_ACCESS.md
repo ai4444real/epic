@@ -105,6 +105,8 @@ Runtime:
 - internal listen address: `127.0.0.1:8080`
 - reverse proxy: Caddy with automatic Let's Encrypt HTTPS
 - access log database: `/opt/epic/app/var/access_log.sqlite3`
+- auth database: `/opt/epic/app/var/auth.sqlite3`
+- private runtime config: `/opt/epic/app/.env`
 
 Public routes:
 
@@ -116,6 +118,18 @@ Public routes:
 /epic/cards       -> public cards demo
 /health           -> service health check
 ```
+
+Protected tool routes use direct Google OAuth on the FastAPI server:
+
+```text
+/login
+/auth/google/start
+/auth/google/callback
+/logout
+/me
+```
+
+OAuth and session variables live in `/opt/epic/app/.env`; see `docs/AUTH_ACCESS.md`.
 
 Useful checks on the server:
 

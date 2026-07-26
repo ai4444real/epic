@@ -10,6 +10,8 @@ WorkingDirectory=/opt/epic/app
 Environment=PYTHONUNBUFFERED=1
 Environment=EPIC_SERVICE_NAME=epic-web
 Environment=EPIC_ACCESS_DB=/opt/epic/app/var/access_log.sqlite3
+Environment=EPIC_AUTH_DB=/opt/epic/app/var/auth.sqlite3
+EnvironmentFile=-/opt/epic/app/.env
 ExecStart=/opt/epic/app/.venv/bin/uvicorn server.main:app --host 127.0.0.1 --port 8080
 Restart=always
 RestartSec=3

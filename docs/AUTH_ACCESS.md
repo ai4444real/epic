@@ -1,183 +1,168 @@
-# EPiC - Accesso utenti
+# EPiC - accesso utenti
 
-Questo documento descrive lo stato attuale dell'accesso alla suite EPiC pubblicata su Cloudflare Pages.
+Questo documento descrive il modello di login della suite EPiC servita dal VPS.
 
 ## Stato attuale
 
-La suite pubblicata e' in:
+Produzione:
 
 ```text
-https://epic-f58.pages.dev
+https://simonegenini.com
 ```
 
-L'accesso e' gestito da Supabase Auth con provider Google.
+Il login e' gestito direttamente dal server FastAPI con Google OAuth.
 
-Configurazione client:
+Supabase resta usato dove serve per dati applicativi, per esempio scenari online e Live Table, ma non gestisce piu' l'autenticazione utenti.
 
-- `_app_config.js`
-- `app/js/app-config.js`
+## Flusso login
 
-Valori attuali rilevanti:
+1. L'utente apre `/login`.
+2. Clicca `Entra con Google`.
+3. Il server manda l'utente a Google OAuth.
+4. Google richiama:
 
-```js
-authEnabled: true
-loginProvider: 'google'
-loginRedirectPath: 'auth-callback'
-publicPages: ['epic-live-view', 'epic-live-view.html']
+```text
+https://simonegenini.com/auth/google/callback
 ```
 
-In pratica:
+5. Il server crea/aggiorna l'utente nel database locale.
+6. Il server crea una sessione HTTP-only nel cookie `epic_auth`.
+7. L'utente viene rimandato alla pagina richiesta.
 
-- tutte le pagine principali richiedono login
-- la pagina studenti della Live Table e' pubblica
-- il login avviene via Google
+Il browser non vede il client secret Google e non gestisce token OAuth.
 
-## Pagine protette
+## Ruoli
 
-Richiedono sessione Supabase valida:
+Gli utenti sono salvati in SQLite:
 
-- `index.html`
-- `epic-simulator.html`
-- `epic-live-table.html`
-- `epic-all-cards.html`
-- `epic-explorer.html`
-- `epic-cross.html`
+```text
+/opt/epic/app/var/auth.sqlite3
+```
+
+Ruoli previsti:
+
+- `public`: utente loggato ma non sbloccato
+- `unlocked`: accesso agli strumenti completi
+- `admin`: accesso agli strumenti completi, riservato a gestione futura
+
+I nuovi utenti Google entrano come `public`.
+
+Per sbloccare manualmente un utente sul server:
+
+```bash
+sqlite3 /opt/epic/app/var/auth.sqlite3 \
+  "UPDATE users SET role = 'unlocked' WHERE email = 'utente@example.com';"
+```
+
+Per vedere gli utenti:
+
+```bash
+sqlite3 /opt/epic/app/var/auth.sqlite3 \
+  "SELECT email, role, last_login_at FROM users ORDER BY last_login_at DESC;"
+```
+
+## Configurazione Google
+
+Nel progetto Google Cloud creare un OAuth Client di tipo `Web application`.
+
+Origine JavaScript autorizzata:
+
+```text
+https://simonegenini.com
+```
+
+Redirect URI autorizzato:
+
+```text
+https://simonegenini.com/auth/google/callback
+```
+
+Scope richiesti:
+
+```text
+openid
+email
+profile
+```
+
+## Variabili server
+
+Sul VPS il file non versionato e':
+
+```text
+/opt/epic/app/.env
+```
+
+Template versionato:
+
+```text
+.env.example
+```
+
+Valori necessari:
+
+```text
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GOOGLE_REDIRECT_URI=https://simonegenini.com/auth/google/callback
+SESSION_SECRET=...
+EPIC_COOKIE_SECURE=true
+EPIC_ACCESS_DB=/opt/epic/app/var/access_log.sqlite3
+EPIC_AUTH_DB=/opt/epic/app/var/auth.sqlite3
+```
+
+Generare `SESSION_SECRET` sul server:
+
+```bash
+openssl rand -hex 32
+```
+
+Dopo modifiche a `.env`:
+
+```bash
+sudo systemctl restart epic-web
+```
 
 ## Pagine pubbliche
 
-Non richiedono login:
+Sono pubbliche senza login:
 
-- `epic-live-view.html?room=ROOM_ID`
+- `/`
+- `/epic`
+- `/epic/simulator`
+- `/epic/explorer`
+- `/epic/cards`
+- `/epic-live-view.html?room=...`
 
-Questa pagina e' pubblica per permettere agli studenti di vedere un tavolo live senza account.
+Le prime tre pagine strumenti sono le demo free.
 
-Gli studenti possono leggere il tavolo via link, ma non hanno i controlli presenter.
+## Pagine protette
 
-## Come dare accesso a un utente
+Richiedono login e ruolo `unlocked` o `admin`:
 
-Nel progetto Supabase:
+- `/epic/cross`
+- `/epic/live-table`
+- `/epic/simulator/full`
+- `/epic/explorer/full`
+- `/epic/cards/full`
+- le vecchie pagine HTML complete equivalenti
 
-1. Apri Supabase.
-2. Entra nel progetto `tools persistence`.
-3. Vai in `Authentication` -> `Users`.
-4. Aggiungi o invita l'utente con la sua email Google.
-5. Comunica all'utente l'URL:
-
-Sbagliato!
-si fa su google cloude console
-https://console.cloud.google.com/auth/audience?project=step-app-460213
-
-progetto step-app, poi (a sinistra) api e servizi, oauth consent screen, audience, add user (almeno finché è in test)
-
-```text
-https://epic-f58.pages.dev/login
-```
-
-6. L'utente clicca `Entra con Google`.
-
-Se la sessione viene creata correttamente, l'app lo rimanda alla home o alla pagina richiesta.
-
-## Punto di attenzione: signup Google aperta
-
-Il codice client EPiC oggi verifica solo:
-
-```text
-esiste una sessione Supabase valida?
-```
-
-Non contiene una whitelist email nel JavaScript.
-
-Quindi la restrizione reale dipende dalla configurazione Supabase Auth.
-
-Da verificare nel dashboard Supabase:
-
-- se Google OAuth consente signup pubblica
-- se gli utenti possono auto-registrarsi
-- se l'accesso e' limitato agli utenti invitati/creati manualmente
-
-Se la signup Google e' aperta, chiunque riesca a completare il login Google potrebbe ottenere una sessione valida.
-
-## Opzione consigliata per accesso chiuso
-
-Per una suite privata, usare uno di questi assetti:
-
-### Opzione A - Signup disabilitata
-
-Nel dashboard Supabase disabilitare la registrazione pubblica e aggiungere manualmente gli utenti autorizzati.
-
-Questa e' la soluzione piu' semplice se il gruppo e' piccolo.
-
-### Opzione B - Whitelist applicativa
-
-Aggiungere una tabella Supabase, per esempio:
-
-```text
-public.epic_allowed_users
-```
-
-con email autorizzate.
-
-Poi il client, dopo il login Google, verifica che `session.user.email` sia nella whitelist.
-
-Questa soluzione e' piu' esplicita e controllabile, ma richiede una piccola modifica al codice.
-
-## Live Table
-
-La Live Table usa due pagine:
-
-- `epic-live-table.html`: presenter, protetta
-- `epic-live-view.html?room=ROOM_ID`: studenti, pubblica
-
-Il presenter deve avere login.
-
-Gli studenti ricevono il link della room e non devono fare login.
-
-## File coinvolti
-
-Sorgenti root:
-
-- `_app_config.js`
-- `_app_auth.js`
-- `build-app-simulator.js`
-
-Output pubblicato in `app/`:
-
-- `app/js/app-config.js`
-- `app/js/auth.js`
-- `app/login.html`
-- `app/auth-callback.html`
-
-Nota: `app/` e' il repository pubblicato su GitHub/Cloudflare. La root contiene i sorgenti e la build.
+La Live View studenti resta pubblica: chi riceve il link puo' vedere il tavolo senza account.
 
 ## Verifica rapida
 
-Controllare che auth sia attiva:
+Da server:
 
-```powershell
-Get-Content app\js\app-config.js
+```bash
+curl -I https://simonegenini.com/login
+curl -I https://simonegenini.com/epic/cross
 ```
 
-Deve contenere:
+Senza sessione, `/epic/cross` deve rispondere con redirect a `/login`.
 
-```js
-authEnabled: true
+Controllare configurazione OAuth:
+
+```bash
+sudo systemctl show epic-web --property=Environment
+journalctl -u epic-web -n 100 --no-pager
 ```
-
-Controllare che la pagina studenti resti pubblica:
-
-```js
-publicPages: ['epic-live-view', 'epic-live-view.html']
-```
-
-## Da fare se si vuole una whitelist
-
-1. Creare tabella `epic_allowed_users`.
-2. Aggiungere policy di lettura o RPC dedicata.
-3. Modificare `_app_auth.js`.
-4. Rigenerare con:
-
-```powershell
-.\build.bat
-```
-
-5. Committare e pushare `app/`.
