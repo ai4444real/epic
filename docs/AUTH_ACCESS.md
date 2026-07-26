@@ -138,7 +138,10 @@ Sono pubbliche senza login:
 - `/epic/cards`
 - `/epic-live-view.html?room=...`
 
-Le prime tre pagine strumenti sono le demo free.
+Gli URL strumenti pubblici sono dinamici:
+
+- utente non loggato o ruolo `public`: pagina free con avviso "Versione di prova"
+- ruolo `unlocked` o `admin`: pagina completa, senza avviso demo
 
 ## Pagine protette
 

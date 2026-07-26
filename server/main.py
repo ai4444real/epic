@@ -44,9 +44,21 @@ BOOTSTRAP_ADMIN_EMAILS = {
 PAGE_ALIASES = {
     "/": APP_ROOT / "index.html",
     "/epic": APP_ROOT / "epic.html",
-    "/epic/simulator": APP_ROOT / "epic-simulator-free.html",
-    "/epic/explorer": APP_ROOT / "epic-explorer-free.html",
-    "/epic/cards": APP_ROOT / "epic-all-cards-free.html",
+}
+
+TOOL_ALIASES = {
+    "/epic/simulator": {
+        "free": APP_ROOT / "epic-simulator-free.html",
+        "unlocked": APP_ROOT / "epic-simulator-locked.html",
+    },
+    "/epic/explorer": {
+        "free": APP_ROOT / "epic-explorer-free.html",
+        "unlocked": APP_ROOT / "epic-explorer-locked.html",
+    },
+    "/epic/cards": {
+        "free": APP_ROOT / "epic-all-cards-free.html",
+        "unlocked": APP_ROOT / "epic-all-cards-locked.html",
+    },
 }
 
 PROTECTED_PAGES = {
@@ -346,6 +358,13 @@ def create_app() -> FastAPI:
             if not can_access_protected(user):
                 return PlainTextResponse("Accesso non autorizzato.", status_code=403)
             return page_response(PROTECTED_ALIASES[request_path], with_root_base=True)
+
+        if request_path in TOOL_ALIASES:
+            user = get_current_user(request)
+            tool_pages = TOOL_ALIASES[request_path]
+            if user and can_access_protected(user):
+                return page_response(tool_pages["unlocked"], with_root_base=True)
+            return page_response(tool_pages["free"], with_root_base=True)
 
         if request_path in PAGE_ALIASES:
             return page_response(PAGE_ALIASES[request_path], with_root_base=True)
