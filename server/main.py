@@ -35,6 +35,11 @@ COOKIE_SECURE = os.getenv("EPIC_COOKIE_SECURE", "true").lower() != "false"
 GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
 GOOGLE_CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET", "")
 GOOGLE_REDIRECT_URI = os.getenv("GOOGLE_REDIRECT_URI", "")
+BOOTSTRAP_ADMIN_EMAILS = {
+    email.strip().lower()
+    for email in os.getenv("EPIC_ADMIN_EMAILS", "genini@gmail.com").split(",")
+    if email.strip()
+}
 
 PAGE_ALIASES = {
     "/": APP_ROOT / "index.html",
@@ -62,6 +67,14 @@ PROTECTED_ALIASES = {
     "/epic/simulator/full": APP_ROOT / "epic-simulator-locked.html",
     "/epic/explorer/full": APP_ROOT / "epic-explorer-locked.html",
     "/epic/cards/full": APP_ROOT / "epic-all-cards-locked.html",
+}
+
+ADMIN_PAGES = {
+    "/admin-users.html",
+}
+
+ADMIN_ALIASES = {
+    "/admin/users": APP_ROOT / "admin-users.html",
 }
 
 ASSET_EXTENSIONS = {
@@ -232,9 +245,83 @@ def create_app() -> FastAPI:
         deleted = delete_live_room(room_id)
         return JSONResponse({"deleted": deleted})
 
+    @app.get("/api/admin/users")
+    async def api_admin_users(request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        return JSONResponse(list_users())
+
+    @app.post("/api/admin/users")
+    async def api_admin_create_user(request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        try:
+            payload = await request.json()
+            created = create_pending_user(
+                email=payload.get("email") if isinstance(payload, dict) else "",
+                role=payload.get("role") if isinstance(payload, dict) else "",
+            )
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        return JSONResponse(created, status_code=201)
+
+    @app.put("/api/admin/users/{email:path}")
+    async def api_admin_update_user(email: str, request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        try:
+            payload = await request.json()
+            updated = update_user_role(
+                email=email,
+                role=payload.get("role") if isinstance(payload, dict) else "",
+                current_admin_email=user.get("email") or "",
+            )
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        if not updated:
+            return JSONResponse({"error": "not_found"}, status_code=404)
+        return JSONResponse(updated)
+
+    @app.delete("/api/admin/users/{email:path}")
+    async def api_admin_delete_user(email: str, request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        try:
+            deleted = delete_user(email=email, current_admin_email=user.get("email") or "")
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        return JSONResponse({"deleted": deleted})
+
     @app.get("/{path:path}")
     async def serve(path: str, request: Request) -> Response:
         request_path = "/" + path
+        if request_path in ADMIN_ALIASES:
+            user = get_current_user(request)
+            if not user:
+                return redirect_to_login(request_path)
+            if not can_access_admin(user):
+                return PlainTextResponse("Accesso admin richiesto.", status_code=403)
+            return page_response(ADMIN_ALIASES[request_path], with_root_base=True)
+
+        if request_path in ADMIN_PAGES:
+            user = get_current_user(request)
+            if not user:
+                return redirect_to_login(request_path)
+            if not can_access_admin(user):
+                return PlainTextResponse("Accesso admin richiesto.", status_code=403)
+
         if request_path in PROTECTED_ALIASES:
             user = get_current_user(request)
             if not user:
@@ -289,6 +376,11 @@ def is_protected_page(request_path: str) -> bool:
 
 def can_access_protected(user: dict) -> bool:
     return user.get("role") in {"unlocked", "admin"}
+
+
+def can_access_admin(user: dict) -> bool:
+    return user.get("role") == "admin"
+
 
 class AccessLogMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
@@ -382,6 +474,7 @@ def init_auth_db() -> None:
             """
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires_at ON auth_sessions(expires_at)")
+    seed_bootstrap_admins()
 
 
 def init_content_db() -> None:
@@ -554,30 +647,180 @@ def delete_live_room(room_id: str) -> bool:
 
 
 def upsert_user(google_sub: str, email: str, name: str, picture: str) -> str:
+    role_override = "admin" if email in BOOTSTRAP_ADMIN_EMAILS else None
     with sqlite3.connect(AUTH_DB_PATH) as conn:
         existing = conn.execute("SELECT role FROM users WHERE google_sub = ? OR email = ?", (google_sub, email)).fetchone()
         if existing:
-            role = existing[0]
+            role = role_override or existing[0]
             conn.execute(
                 """
                 UPDATE users
-                SET google_sub = ?, email = ?, name = ?, picture = ?,
+                SET google_sub = ?, email = ?, name = ?, picture = ?, role = ?,
                     updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now'),
                     last_login_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
                 WHERE google_sub = ? OR email = ?
                 """,
-                (google_sub, email, name, picture, google_sub, email),
+                (google_sub, email, name, picture, role, google_sub, email),
             )
             return role
 
         conn.execute(
             """
             INSERT INTO users (google_sub, email, name, picture, role)
-            VALUES (?, ?, ?, ?, 'public')
+            VALUES (?, ?, ?, ?, ?)
             """,
-            (google_sub, email, name, picture),
+            (google_sub, email, name, picture, role_override or "public"),
         )
-        return "public"
+        return role_override or "public"
+
+
+VALID_ROLES = {"public", "unlocked", "admin"}
+
+
+def normalize_email(email: str) -> str:
+    return (email or "").strip().lower()
+
+
+def normalize_role(role: str) -> str:
+    value = (role or "").strip().lower()
+    if value not in VALID_ROLES:
+        raise ValueError("Invalid role")
+    return value
+
+
+def list_users() -> list[dict]:
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            """
+            SELECT email, name, picture, role, created_at, updated_at, last_login_at,
+                   CASE WHEN google_sub LIKE 'pending:%' THEN 1 ELSE 0 END AS pending
+            FROM users
+            ORDER BY
+                CASE role WHEN 'admin' THEN 0 WHEN 'unlocked' THEN 1 ELSE 2 END,
+                last_login_at DESC,
+                email ASC
+            """
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def get_user_by_email(email: str) -> dict | None:
+    normalized = normalize_email(email)
+    if not normalized:
+        return None
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        row = conn.execute(
+            """
+            SELECT email, name, picture, role, created_at, updated_at, last_login_at,
+                   CASE WHEN google_sub LIKE 'pending:%' THEN 1 ELSE 0 END AS pending
+            FROM users
+            WHERE email = ?
+            """,
+            (normalized,),
+        ).fetchone()
+    return dict(row) if row else None
+
+
+def create_pending_user(email: str, role: str) -> dict:
+    normalized_email = normalize_email(email)
+    if "@" not in normalized_email:
+        raise ValueError("Invalid email")
+    normalized_role = normalize_role(role or "public")
+    google_sub = "pending:" + normalized_email
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        try:
+            conn.execute(
+                """
+                INSERT INTO users (google_sub, email, name, picture, role)
+                VALUES (?, ?, '', '', ?)
+                """,
+                (google_sub, normalized_email, normalized_role),
+            )
+        except sqlite3.IntegrityError as error:
+            raise ValueError("User already exists") from error
+    user = get_user_by_email(normalized_email)
+    if not user:
+        raise RuntimeError("User not found after create")
+    return user
+
+
+def seed_bootstrap_admins() -> None:
+    if not BOOTSTRAP_ADMIN_EMAILS:
+        return
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        for email in sorted(BOOTSTRAP_ADMIN_EMAILS):
+            google_sub = "pending:" + email
+            conn.execute(
+                """
+                INSERT INTO users (google_sub, email, name, picture, role)
+                VALUES (?, ?, '', '', 'admin')
+                ON CONFLICT(email) DO UPDATE SET
+                    role = 'admin',
+                    updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+                """,
+                (google_sub, email),
+            )
+
+
+def update_user_role(email: str, role: str, current_admin_email: str) -> dict | None:
+    normalized_email = normalize_email(email)
+    normalized_role = normalize_role(role)
+    existing = get_user_by_email(normalized_email)
+    if not existing:
+        return None
+    if existing["role"] == "admin" and normalized_role != "admin":
+        ensure_not_last_admin(normalized_email)
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.execute(
+            """
+            UPDATE users
+            SET role = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+            WHERE email = ?
+            """,
+            (normalized_role, normalized_email),
+        )
+        if normalized_email == normalize_email(current_admin_email) and normalized_role != "admin":
+            conn.execute(
+                """
+                DELETE FROM auth_sessions
+                WHERE user_id = (SELECT id FROM users WHERE email = ?)
+                """,
+                (normalized_email,),
+            )
+    return get_user_by_email(normalized_email)
+
+
+def delete_user(email: str, current_admin_email: str) -> bool:
+    normalized_email = normalize_email(email)
+    if not normalized_email:
+        return False
+    existing = get_user_by_email(normalized_email)
+    if not existing:
+        return False
+    if existing["role"] == "admin":
+        ensure_not_last_admin(normalized_email)
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.execute(
+            """
+            DELETE FROM auth_sessions
+            WHERE user_id = (SELECT id FROM users WHERE email = ?)
+            """,
+            (normalized_email,),
+        )
+        cur = conn.execute("DELETE FROM users WHERE email = ?", (normalized_email,))
+    return cur.rowcount > 0
+
+
+def ensure_not_last_admin(email_to_change: str) -> None:
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        row = conn.execute(
+            "SELECT COUNT(*) FROM users WHERE role = 'admin' AND email <> ?",
+            (normalize_email(email_to_change),),
+        ).fetchone()
+    if not row or row[0] < 1:
+        raise ValueError("Cannot remove the last admin")
 
 
 def create_auth_session(email: str, google_sub: str) -> str:

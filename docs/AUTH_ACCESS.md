@@ -112,6 +112,7 @@ EPIC_COOKIE_SECURE=true
 EPIC_ACCESS_DB=/opt/epic/app/var/access_log.sqlite3
 EPIC_AUTH_DB=/opt/epic/app/var/auth.sqlite3
 EPIC_CONTENT_DB=/opt/epic/app/var/content.sqlite3
+EPIC_ADMIN_EMAILS=genini@gmail.com
 ```
 
 Generare `SESSION_SECRET` sul server:
@@ -151,6 +152,27 @@ Richiedono login e ruolo `unlocked` o `admin`:
 - le vecchie pagine HTML complete equivalenti
 
 La Live View studenti resta pubblica: chi riceve il link puo' vedere il tavolo senza account.
+
+## Admin ruoli
+
+La pagina:
+
+```text
+/admin/users
+```
+
+richiede ruolo `admin`.
+
+Permette di:
+
+- vedere gli utenti registrati
+- aggiungere utenti pending tramite email
+- assegnare `public`, `unlocked`, `admin`
+- eliminare utenti
+
+Gli utenti pending vengono agganciati al primo login Google tramite la stessa email.
+
+`EPIC_ADMIN_EMAILS` contiene gli admin bootstrap, separati da virgola. Questi utenti vengono creati o promossi automaticamente ad `admin` all'avvio del server.
 
 ## Verifica rapida
 

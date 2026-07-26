@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Admin - Utenti</title>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Admin utenti</span></h1>
+    <div class="toolbar-actions">
+      <a class="btn" href="/epic">EPiC</a>
+      <a class="btn" href="/logout">Esci</a>
+    </div>
+  </div>
+
+  <main class="admin-shell">
+    <section class="admin-panel">
+      <div class="panel-head">
+        <div>
+          <h2>Ruoli</h2>
+          <p>Aggiungi utenti, sblocca strumenti e mantieni almeno un admin.</p>
+        </div>
+        <button class="btn" id="refreshUsersBtn">Aggiorna</button>
+      </div>
+
+      <form class="user-form" id="createUserForm">
+        <input class="input" id="newUserEmail" type="email" placeholder="email@example.com" autocomplete="email" required />
+        <select class="input" id="newUserRole">
+          <option value="public">public</option>
+          <option value="unlocked">unlocked</option>
+          <option value="admin">admin</option>
+        </select>
+        <button class="btn primary" type="submit">Aggiungi</button>
+      </form>
+
+      <div class="admin-status" id="adminStatus"></div>
+
+      <div class="users-table-wrap">
+        <table class="users-table">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Nome</th>
+              <th>Ruolo</th>
+              <th>Ultimo accesso</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="usersBody">
+            <tr><td colspan="5">Caricamento...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/admin-users.js"></script>
+</body>
+</html>
