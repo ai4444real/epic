@@ -916,8 +916,8 @@ def build_access_log_filters(path: str = "", session_id: str = "", status: int |
         params.append("%" + escape_like(path_filter) + "%")
     session_filter = (session_id or "").strip()
     if session_filter:
-        clauses.append("session_id = ?")
-        params.append(session_filter)
+        clauses.append("session_id LIKE ? ESCAPE '\\'")
+        params.append("%" + escape_like(session_filter) + "%")
     if status:
         clauses.append("status_code = ?")
         params.append(status)
