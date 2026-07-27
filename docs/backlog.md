@@ -2,6 +2,10 @@
 
 ## Pagina Elementi EPiC
 
+Stato: completata.
+
+Pagina: `elementi-epic.html`.
+
 Creare una pagina "Elementi EPiC" raggiungibile cliccando sui pallini con alone del flusso:
 
 - Energia
