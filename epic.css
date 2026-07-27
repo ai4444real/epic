@@ -558,6 +558,12 @@ a.process-item {
   text-decoration: none;
 }
 
+a.process-item:hover .process-dot,
+a.process-item:focus-visible .process-dot {
+  transform: scale(1.18);
+  box-shadow: 0 0 0 8px color-mix(in srgb, currentColor 15%, transparent);
+}
+
 a.process-item:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 8px;
@@ -586,6 +592,7 @@ a.process-item:focus-visible {
   border-radius: 50%;
   background: currentColor;
   box-shadow: 0 0 0 5px color-mix(in srgb, currentColor 12%, transparent);
+  transition: transform .16s ease, box-shadow .16s ease;
 }
 
 .points-halo .process-dot {
@@ -596,6 +603,18 @@ a.process-item:focus-visible {
   font-size: clamp(9px, 2.5vw, 17px);
   font-weight: 500;
   letter-spacing: -.2px;
+}
+
+a.process-item strong::after {
+  content: " →";
+  color: currentColor;
+  font-size: .9em;
+  opacity: .62;
+}
+
+a.process-item:hover strong::after,
+a.process-item:focus-visible strong::after {
+  opacity: 1;
 }
 
 .process-arrow {
