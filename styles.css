@@ -37,11 +37,11 @@ img {
 
 .topbar {
   min-height: 70px;
-  padding: 14px 20px;
+  padding: 14px 12px 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 18px;
+  gap: 10px;
   border-bottom: 1px solid #d4d0ca;
   background: rgba(249, 247, 243, .94);
 }
@@ -52,6 +52,7 @@ img {
   gap: 10px;
   color: var(--ink);
   text-decoration: none;
+  min-width: 0;
 }
 
 .brand-logo {
@@ -66,7 +67,7 @@ img {
 }
 
 .brand-name-image {
-  width: 154px;
+  width: min(154px, 42vw);
   height: auto;
   display: block;
 }
@@ -94,18 +95,25 @@ img {
 .nav .nav-epic {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
+  gap: 0;
+  width: 34px;
+  height: 34px;
   min-height: 34px;
-  padding: 0 10px;
+  padding: 0;
   border: 1px solid rgba(16, 20, 39, .42);
   background: rgba(255, 255, 255, .18);
+  font-size: 0;
   font-weight: 800;
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .nav .nav-epic img {
   width: 22px;
   height: 22px;
   object-fit: contain;
+  flex: 0 0 auto;
 }
 
 .is-future,
@@ -457,7 +465,7 @@ h1 {
 .socials {
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 14px;
   color: var(--anthracite);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
@@ -476,11 +484,15 @@ h1 {
 .socials .social-epic {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
 }
 
 .socials .social-epic img {
-  width: 22px;
-  height: 22px;
+  width: 16px !important;
+  height: 16px !important;
+  max-width: 16px;
   object-fit: contain;
 }
 
@@ -502,10 +514,13 @@ h1 {
     display: inline-flex;
     align-items: center;
     gap: 7px;
+    width: auto;
+    height: auto;
     min-height: 36px;
     padding: 0 12px;
     border: 1px solid rgba(16, 20, 39, .42);
     background: rgba(255, 255, 255, .18);
+    font-size: 11px;
   }
 
   .nav .nav-epic img {
@@ -579,6 +594,7 @@ h1 {
   .nav .nav-epic {
     min-height: 40px;
     padding: 0 14px;
+    font-size: 12px;
   }
 
   .nav .nav-epic img {
