@@ -517,6 +517,19 @@ p {
   font-weight: 700;
 }
 
+.symptom-reveal .archetype-link {
+  display: table;
+  margin: 15px auto 0;
+  border-bottom-color: rgba(34, 38, 41, .38);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.symptom-reveal .archetype-link:hover {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
 .symptom-reveal a span {
   color: var(--green);
   font-size: 17px;
