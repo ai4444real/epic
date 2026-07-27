@@ -11,8 +11,8 @@
     <h1>EPiC All Cards <span class="sub">Viewer completo</span></h1>
     <div class="controls">
       <a href="/epic#strumenti" style="font: inherit; border: 1px solid #e4e4e7; border-radius: 6px; padding: 6px 12px; background: #fff; color: inherit; text-decoration: none; font-size: 13px;">Home</a>
-      <label>
-        Carica EPIC_full.json:
+      <label class="file-load-control">
+        Dati locali:
         <input id="fileInput" type="file" accept="application/json" />
       </label>
       <button id="resetBtn" style="padding: 6px 16px; font: inherit; font-size: 13px; font-weight: 500; border: 1px solid #e4e4e7; border-radius: 6px; background: #fff; cursor: pointer; transition: all 0.15s ease; display: none;">
@@ -32,18 +32,18 @@
   </div>
 
   <div class="stats" id="stats">
-    Nessun file caricato
+    Caricamento carte EPiC...
   </div>
 
   <div class="grid" id="grid">
     <div class="placeholder">
-      <strong>Carica EPIC_full.json per iniziare</strong>
-      Vedrai tutte le carte E, P e I in una griglia navigabile
+      <strong>Caricamento carte EPiC...</strong>
+      Le carte verranno caricate automaticamente
     </div>
   </div>
 
     <script>
-    window.EPIC_ALL_CARDS_CONFIG = {"mode":"locked","label":"Viewer completo","fullDataSrc":"data/EPIC_full.json","allowFileLoad":true};
+    window.EPIC_ALL_CARDS_CONFIG = {"mode":"locked","label":"Viewer completo","fullDataSrc":"data/EPIC_full.json","allowFileLoad":false};
   </script>
   <script src="data/EPIC_data.js"></script>
     <script src="js/all-cards.js"></script>

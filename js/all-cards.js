@@ -9,7 +9,7 @@ const state = {
       mode: 'locked',
       label: '',
       fullDataSrc: 'EPIC_full.json',
-      allowFileLoad: true
+      allowFileLoad: false
     };
 
     function applyAllCardsConfig() {
@@ -54,7 +54,7 @@ const state = {
     });
 
     // File input handler (manual load or override)
-    document.getElementById('fileInput').addEventListener('change', async (e) => {
+    document.getElementById('fileInput')?.addEventListener('change', async (e) => {
       const file = e.target.files?.[0];
       if (!file) return;
 

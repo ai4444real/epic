@@ -431,6 +431,10 @@
       font-weight: 500;
     }
 
+    .toolbar .file-load-control{
+      display: none;
+    }
+
     .toolbar input[type="file"],
     .toolbar select,
     .toolbar input[type="search"]{
@@ -562,21 +566,6 @@
         margin-left: 0;
         width: 100%;
         gap: 8px;
-      }
-
-      /* Nascondi label "Carica EPIC_full.json:" */
-      .toolbar label{
-        font-size: 0;
-        width: auto;
-        flex: 0 0 auto;
-      }
-
-      /* File input mini e discreto */
-      .toolbar input[type="file"]{
-        font-size: 11px;
-        padding: 4px 8px;
-        width: auto;
-        opacity: 0.6;
       }
 
       /* Nascondi dropdown "Mostra" su mobile */
