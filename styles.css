@@ -465,6 +465,14 @@ h1 {
   opacity: .72;
 }
 
+.socials a {
+  color: inherit;
+  font: inherit;
+  letter-spacing: 0;
+  opacity: 1;
+  text-decoration: none;
+}
+
 @media (min-width: 760px) {
   .nav {
     display: flex;
