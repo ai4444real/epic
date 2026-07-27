@@ -19,6 +19,10 @@ Ogni sezione deve richiamare il colore del pallino cliccato. Il testo definitivo
 
 ## Pagina Archetipi
 
+Stato: completata.
+
+Pagina: `archetipi-epic.html`.
+
 Nella pagina "Perche non sono uguali", il link finale attualmente punta alla stessa pagina.
 
 Quel link dovra puntare a una nuova pagina "Archetipi", ancora da creare, nello stesso stile delle altre pagine EPiC.
