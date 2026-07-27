@@ -292,6 +292,12 @@
   padding-bottom: 16px;
 }
 
+@media (max-width: 759px) {
+  .mobile-keep {
+    white-space: nowrap;
+  }
+}
+
 @media (min-width: 760px) {
   .comparison-shell {
     padding: 72px 7vw;
