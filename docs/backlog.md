@@ -31,6 +31,10 @@ Il contenuto definitivo verra fornito dal Product Owner al momento opportuno.
 
 ## Pagina Ordina il Mazzo
 
+Stato: completata in prima versione.
+
+Pagina: `ordina-mazzo.html`.
+
 Nella sezione "Strumenti", sotto la card "Mazzo", aggiungere un link che porti alla pagina per ordinare o richiedere il mazzo EPiC.
 
 La pagina non deve essere un ecommerce completo. Deve funzionare come pagina di interesse / richiesta / pre-ordine:

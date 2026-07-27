@@ -44,6 +44,7 @@ BOOTSTRAP_ADMIN_EMAILS = {
 PAGE_ALIASES = {
     "/": APP_ROOT / "index.html",
     "/epic": APP_ROOT / "epic.html",
+    "/epic/mazzo": APP_ROOT / "ordina-mazzo.html",
 }
 
 TOOL_ALIASES = {
@@ -333,6 +334,15 @@ def create_app() -> FastAPI:
             return JSONResponse({"error": "admin_required"}, status_code=403)
         return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status))
 
+    @app.post("/api/deck-orders")
+    async def api_deck_orders(request: Request) -> JSONResponse:
+        try:
+            payload = await request.json()
+            result = create_deck_order(payload, request)
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        return JSONResponse(result, status_code=201)
+
     @app.get("/{path:path}")
     async def serve(path: str, request: Request) -> Response:
         request_path = "/" + path
@@ -544,6 +554,33 @@ def init_content_db() -> None:
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_live_rooms_updated_at ON live_rooms(updated_at)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_live_rooms_deleted_at ON live_rooms(deleted_at)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS deck_orders (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                public_id TEXT NOT NULL DEFAULT '',
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                location TEXT NOT NULL DEFAULT '',
+                quantity INTEGER NOT NULL DEFAULT 1,
+                note TEXT NOT NULL DEFAULT '',
+                status TEXT NOT NULL DEFAULT 'nuovo',
+                client_ip TEXT NOT NULL DEFAULT '',
+                user_agent TEXT NOT NULL DEFAULT '',
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                updated_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+            )
+            """
+        )
+        deck_order_columns = {row[1] for row in conn.execute("PRAGMA table_info(deck_orders)").fetchall()}
+        if "public_id" not in deck_order_columns:
+            conn.execute("ALTER TABLE deck_orders ADD COLUMN public_id TEXT NOT NULL DEFAULT ''")
+        for row in conn.execute("SELECT id FROM deck_orders WHERE public_id = ''").fetchall():
+            conn.execute("UPDATE deck_orders SET public_id = ? WHERE id = ?", (secrets.token_hex(8), row[0]))
+        conn.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_deck_orders_public_id ON deck_orders(public_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_deck_orders_created_at ON deck_orders(created_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_deck_orders_email ON deck_orders(email)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_deck_orders_status ON deck_orders(status)")
     seed_scenarios_from_file()
 
 
@@ -682,6 +719,69 @@ def delete_live_room(room_id: str) -> bool:
             (deleted_at, deleted_at, normalized),
         )
     return cur.rowcount > 0
+
+
+def create_deck_order(payload: dict, request: Request) -> dict:
+    if not isinstance(payload, dict):
+        raise ValueError("Richiesta non valida")
+
+    # Invisible antispam field. Humans do not see it; bots often fill every input.
+    if str(payload.get("company_website") or "").strip():
+        return {"ok": True, "saved": False, "message": "Richiesta ricevuta."}
+
+    name = normalize_text(payload.get("name"), max_length=120)
+    email = normalize_email(str(payload.get("email") or ""))
+    location = normalize_text(payload.get("location"), max_length=180)
+    note = normalize_text(payload.get("note"), max_length=1200)
+    try:
+        quantity = int(payload.get("quantity") or 1)
+    except (TypeError, ValueError):
+        raise ValueError("Quantità non valida")
+    quantity = min(max(quantity, 1), 20)
+
+    if len(name) < 2:
+        raise ValueError("Nome richiesto")
+    if "@" not in email or "." not in email.rsplit("@", 1)[-1]:
+        raise ValueError("Email non valida")
+    if not location:
+        raise ValueError("Località richiesta")
+    if not payload.get("privacy_accepted") or not payload.get("terms_accepted"):
+        raise ValueError("Privacy e condizioni devono essere accettate")
+
+    client_ip = get_client_ip(request)
+    user_agent = normalize_text(request.headers.get("user-agent", ""), max_length=500)
+    order_id = secrets.token_hex(8)
+
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        conn.execute(
+            """
+            INSERT INTO deck_orders (
+                public_id, name, email, location, quantity, note, status,
+                client_ip, user_agent, created_at, updated_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, 'nuovo', ?, ?, strftime('%Y-%m-%dT%H:%M:%fZ', 'now'), strftime('%Y-%m-%dT%H:%M:%fZ', 'now'))
+            """,
+            (order_id, name, email, location, quantity, note, client_ip, user_agent),
+        )
+
+    return {
+        "ok": True,
+        "saved": True,
+        "order_id": order_id,
+        "message": "Richiesta ricevuta. Ti ricontatteremo per disponibilità, pagamento e spedizione.",
+    }
+
+
+def normalize_text(value: object, max_length: int) -> str:
+    return " ".join(str(value or "").strip().split())[:max_length]
+
+
+def get_client_ip(request: Request) -> str:
+    forwarded_for = request.headers.get("x-forwarded-for", "")
+    client_ip = forwarded_for.split(",", 1)[0].strip()
+    if not client_ip and request.client:
+        client_ip = request.client.host
+    return client_ip or ""
 
 
 def upsert_user(google_sub: str, email: str, name: str, picture: str) -> str:

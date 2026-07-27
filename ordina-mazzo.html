@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Richiedi il mazzo EPiC. La disponibilità, il pagamento e la spedizione vengono confermati manualmente.">
+  <title>Ordina il mazzo EPiC</title>
+  <link rel="stylesheet" href="epic.css">
+  <link rel="stylesheet" href="ordina-mazzo.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="simone-brand" href="index.html" aria-label="Torna al sito di Simone Genini">
+      <img class="simone-mark" src="assets/logo.png" alt="">
+      <span>
+        <img class="simone-name" src="simonegenini - nome.svg" alt="Simone Genini">
+        <span class="simone-role">COACH · TRAINER · MENTORE</span>
+      </span>
+    </a>
+    <nav class="site-nav" aria-label="Navigazione EPiC">
+      <a href="/epic">EPiC</a>
+      <a href="/epic#strumenti">STRUMENTI</a>
+    </nav>
+    <a class="epic-corner-link" href="/epic" aria-label="Torna a EPiC">
+      <img src="assets/logo epic.png" alt="">
+    </a>
+  </header>
+
+  <main class="deck-order-page">
+    <section class="deck-order-hero" aria-labelledby="deck-order-title">
+      <div class="map-grid" aria-hidden="true"></div>
+      <div class="deck-order-copy">
+        <p class="section-index">EPiC / MAZZO</p>
+        <h1 id="deck-order-title">Porta EPiC sul tavolo</h1>
+        <p>Il mazzo EPiC serve per leggere il Pattern, confrontare le leve e sostenere la scelta durante il lavoro in presenza.</p>
+        <p class="manual-note">Non è un ecommerce automatico: lasci una richiesta, poi confermiamo disponibilità, pagamento e spedizione.</p>
+      </div>
+      <figure class="deck-order-image">
+        <img src="mazzo.png" alt="Mazzo di carte EPiC su un tavolo">
+      </figure>
+    </section>
+
+    <section class="deck-order-section" aria-labelledby="request-title">
+      <div class="request-intro">
+        <p class="section-index">RICHIESTA</p>
+        <h2 id="request-title">Richiedi il mazzo</h2>
+        <p>Compila pochi dati essenziali. Ti ricontatteremo per definire disponibilità, pagamento e consegna.</p>
+      </div>
+
+      <form class="deck-order-form" id="deckOrderForm" novalidate>
+        <label>
+          Nome
+          <input type="text" name="name" autocomplete="name" required maxlength="120">
+        </label>
+
+        <label>
+          Email
+          <input type="email" name="email" autocomplete="email" required maxlength="180">
+        </label>
+
+        <label>
+          Paese, città o cantone
+          <input type="text" name="location" autocomplete="address-level2" required maxlength="180" placeholder="Es. Svizzera, Ticino">
+        </label>
+
+        <label>
+          Quantità
+          <input type="number" name="quantity" min="1" max="20" value="1" required>
+        </label>
+
+        <label class="full-row">
+          Nota opzionale
+          <textarea name="note" rows="4" maxlength="1200" placeholder="Per esempio: consegna in Svizzera, più mazzi per un team, corso EPiC..."></textarea>
+        </label>
+
+        <label class="project-reference" aria-hidden="true">
+          Sito aziendale
+          <input type="text" name="company_website" tabindex="-1" autocomplete="off">
+        </label>
+
+        <label class="check-row full-row">
+          <input type="checkbox" name="privacy_accepted" required>
+          <span>Ho letto l’<a href="legale.html#privacy" target="_blank" rel="noopener">informativa privacy</a>.</span>
+        </label>
+
+        <label class="check-row full-row">
+          <input type="checkbox" name="terms_accepted" required>
+          <span>Accetto le <a href="legale.html#condizioni" target="_blank" rel="noopener">condizioni generali</a>, incluso il fatto che la richiesta non è un acquisto automatico.</span>
+        </label>
+
+        <button class="primary-button submit-order" type="submit">Invia richiesta <span aria-hidden="true">→</span></button>
+        <div class="form-status full-row" id="deckOrderStatus" role="status" aria-live="polite"></div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="simone-brand footer-brand" href="index.html">
+      <img class="simone-mark" src="assets/logo.png" alt="">
+      <span>
+        <img class="simone-name" src="simonegenini - nome.svg" alt="Simone Genini">
+        <span class="simone-role">COACH · TRAINER · MENTORE</span>
+      </span>
+    </a>
+    <p>EPiC · MAZZO</p>
+  </footer>
+
+  <script src="js/deck-order.js"></script>
+</body>
+</html>
