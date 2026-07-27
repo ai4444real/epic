@@ -473,6 +473,17 @@ h1 {
   text-decoration: none;
 }
 
+.socials .social-epic {
+  display: inline-flex;
+  align-items: center;
+}
+
+.socials .social-epic img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+}
+
 @media (min-width: 760px) {
   .nav {
     display: flex;
