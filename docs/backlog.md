@@ -70,3 +70,38 @@ Pagamento:
 - IBAN eventualmente come alternativa secondaria, valutando esposizione pubblica e gestione amministrativa
 
 Il contenuto commerciale definitivo, prezzo, modalita di consegna e testi privacy verranno forniti dal Product Owner al momento opportuno.
+
+## Pagina Privacy e Condizioni Generali
+
+Creare le pagine legali minime necessarie prima di attivare la pagina "Ordina il Mazzo".
+
+Pagine previste:
+
+- Privacy
+- Condizioni generali
+
+Motivo:
+
+- la pagina "Ordina il Mazzo" raccogliera dati personali
+- nome, email, citta/cantone/paese, quantita e note possono essere dati sensibili dal punto di vista gestionale
+- serve chiarire come vengono usati i dati e con quale finalita
+- serve chiarire il flusso commerciale, soprattutto perche non sara un ecommerce automatico
+
+La pagina Privacy dovra spiegare almeno:
+
+- quali dati vengono raccolti
+- perche vengono raccolti
+- come vengono conservati
+- per quanto tempo indicativamente
+- come chiedere cancellazione o correzione
+- che i dati vengono usati solo per gestire richiesta, contatto, ordine e spedizione
+
+Le Condizioni generali dovranno spiegare almeno:
+
+- che la richiesta del mazzo non e un acquisto automatico
+- che disponibilita, pagamento e spedizione vengono confermati manualmente
+- modalita indicative di pagamento
+- eventuali limiti geografici di spedizione
+- annullamento o mancata conferma dell'ordine
+
+Il testo legale definitivo verra fornito o validato dal Product Owner al momento opportuno.
