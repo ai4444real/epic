@@ -81,6 +81,10 @@ Il contenuto commerciale definitivo, prezzo, modalita di consegna e testi privac
 
 ## Pagina Privacy e Condizioni Generali
 
+Stato: completata in forma minima.
+
+Pagina: `legale.html`.
+
 Creare le pagine legali minime necessarie prima di attivare la pagina "Ordina il Mazzo".
 
 Pagine previste:
