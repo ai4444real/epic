@@ -17,10 +17,10 @@
       /* Type colors - Interventi */
       --type-cog: #3b82f6;      /* blu - Cognitivi */
       --type-comp: #10b981;     /* verde - Comportamentali */
-      --type-emo: #fb923c;      /* arancio - Emotivi */
+      --type-emo: #fb923c;      /* arancio - interventi Emo */
 
-      /* Type colors - Emozioni */
-      --type-e: #facc15;        /* giallo - Emozioni */
+      /* Type colors - Energie */
+      --type-e: #facc15;        /* giallo - Energie */
 
       /* Type colors - Pattern */
       --type-p: #38bdf8;        /* azzurro - Pattern */
@@ -124,7 +124,7 @@
       border-left-color: var(--type-emo);
     }
 
-    /* Emozioni */
+    /* Energie */
     .E .face{
       background: rgba(250, 204, 21, 0.04);
     }
@@ -172,7 +172,7 @@
     .Comp .type-pill{ background: rgba(16,185,129,0.1); color: var(--type-comp); }
     .Emo .type-pill{ background: rgba(251,146,60,0.1); color: var(--type-emo); }
 
-    /* Emozioni pill */
+    /* Energie pill */
     .E .type-pill{ background: rgba(250,204,21,0.1); color: var(--type-e); }
 
     /* Pattern pill */

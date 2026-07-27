@@ -291,7 +291,7 @@ html, body{
   height: auto;
   display: block;
 }
-/* desktop: immagini emozioni piu piccole in vista compact */
+/* desktop: immagini energie piu piccole in vista compact */
 @media (min-width: 640px){
   .e-grid.compact .e-btn.e-with-bg .e-img{ height: 92px; }
 }

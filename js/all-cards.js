@@ -88,7 +88,7 @@ const state = {
 
       document.getElementById('stats').innerHTML = `
         Totale: <span>${state.allCards.length} carte</span>
-        | Emozioni: <span>${eCount}</span>
+        | Energie: <span>${eCount}</span>
         | Pattern: <span>${pCount}</span>
         | Interventi: <span>${iCount}</span>
       `;
@@ -149,7 +149,7 @@ const state = {
       if (card.cardType === 'I') return renderInterventionCard(card);
     }
 
-    // Render Emotion card (E)
+    // Render Energy card (E)
     function renderEmotionCard(e) {
       const aliases = e.fronte?.aliases?.items || [];
       const aliasesStr = aliases.length > 0
@@ -167,7 +167,7 @@ const state = {
               <div>
                 <header class="card-head">
                   <div class="card-id">${escapeHTML(e.id)}</div>
-                  <div class="type-pill">Emozione</div>
+                  <div class="type-pill">Energia</div>
                 </header>
                 <div class="title">${escapeHTML(e.label)}</div>
                 ${aliasesStr}
@@ -187,14 +187,14 @@ const state = {
               </div>
               <footer class="footer">
                 <span class="hint">EPiC</span>
-                <span class="hint">Emozione</span>
+                <span class="hint">Energia</span>
               </footer>
             </div>
             <div class="face back">
               <header class="back-header">
                 <div class="card-head">
                   <div class="card-id">${escapeHTML(e.id)}</div>
-                  <div class="type-pill">Emozione</div>
+                  <div class="type-pill">Energia</div>
                 </div>
               </header>
               <div class="back-content small">
@@ -204,7 +204,7 @@ const state = {
                 ${e.retro?.porta_I ? `<div class="block"><div class="label">Link diretto</div><div><span class="card-link">${escapeHTML(e.retro.porta_I)}</span></div></div>` : ''}
               </div>
               <footer class="back-footer">
-                <div class="hint">EPiC · Emozione</div>
+                <div class="hint">EPiC · Energia</div>
               </footer>
             </div>
           </div>
@@ -374,7 +374,7 @@ const state = {
       return `<div class="block"><div class="label">${label}</div><div>${content}</div></div>`;
     }
 
-    // Parse and linkify pattern and emotion references (P1, E6, etc.)
+    // Parse and linkify pattern and energy references (P1, E6, etc.)
     function parsePatternLinks(text) {
       // Match P followed by 1-2 digits (P1 to P99)
       let result = text.replace(/\b(P\d{1,2})\b/g, '<span class="card-link">$1</span>');
@@ -444,7 +444,7 @@ const state = {
         targetId = targetId.replace(/^I-/, '');
       }
 
-      // Comportamento speciale per Emozioni (E): SOLO scroll+flash (NO filtro)
+      // Comportamento speciale per Energie (E): SOLO scroll+flash (NO filtro)
       // Le E sono sempre visibili, non serve filtrarle
       if (targetId.match(/^E\d$/)) {
         const card = document.getElementById(targetId);

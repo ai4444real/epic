@@ -560,12 +560,12 @@
 
       const e1Label = eMap[chosenE1] ? eMap[chosenE1].label : chosenE1;
       const s1E = getScore(currentScenario.answer_key, 'E', chosenE1);
-      let eHtml = renderResultRow('Emozione', chosenE1 + ' \u2014 ' + e1Label, s1E);
+      let eHtml = renderResultRow('Energia', chosenE1 + ' \u2014 ' + e1Label, s1E);
       if (chosenE2) {
         const e2Label = eMap[chosenE2] ? eMap[chosenE2].label : chosenE2;
         const s2raw = getScore(currentScenario.answer_key, 'E', chosenE2);
         const s2 = s2raw > 0 ? s2raw : -1;
-        eHtml += renderResultRow('Emozione 2\u00aa', chosenE2 + ' \u2014 ' + e2Label, s2);
+        eHtml += renderResultRow('Energia 2\u00aa', chosenE2 + ' \u2014 ' + e2Label, s2);
       }
       const pLabel = pMap[chosenP] ? pMap[chosenP].label : chosenP;
       const i1Obj = iMap[chosenI1];
@@ -673,7 +673,7 @@
 
       // E section
       const chosenEs = [chosenE1, chosenE2].filter(Boolean);
-      html += renderSolSection('Emozione', 'E', chosenEs, id => eMap[id] ? eMap[id].label : id);
+      html += renderSolSection('Energia', 'E', chosenEs, id => eMap[id] ? eMap[id].label : id);
 
       // P section
       html += renderSolSection('Pattern', 'P', [chosenP].filter(Boolean), id => pMap[id] ? pMap[id].label : id);
