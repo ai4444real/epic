@@ -85,11 +85,13 @@ PROTECTED_ALIASES = {
 ADMIN_PAGES = {
     "/admin-users.html",
     "/admin-logs.html",
+    "/admin-orders.html",
 }
 
 ADMIN_ALIASES = {
     "/admin/users": APP_ROOT / "admin-users.html",
     "/admin/logs": APP_ROOT / "admin-logs.html",
+    "/admin/orders": APP_ROOT / "admin-orders.html",
 }
 
 ASSET_EXTENSIONS = {
@@ -333,6 +335,43 @@ def create_app() -> FastAPI:
         if not can_access_admin(user):
             return JSONResponse({"error": "admin_required"}, status_code=403)
         return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status))
+
+    @app.get("/api/admin/deck-orders")
+    async def api_admin_deck_orders(
+        request: Request,
+        limit: int = 200,
+        status: str = "",
+        email: str = "",
+    ) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        try:
+            report = list_deck_orders(limit=limit, status=status, email=email)
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        return JSONResponse(report)
+
+    @app.put("/api/admin/deck-orders/{public_id}")
+    async def api_admin_update_deck_order(public_id: str, request: Request) -> JSONResponse:
+        user = get_current_user(request)
+        if not user:
+            return JSONResponse({"error": "login_required"}, status_code=401)
+        if not can_access_admin(user):
+            return JSONResponse({"error": "admin_required"}, status_code=403)
+        try:
+            payload = await request.json()
+            updated = update_deck_order_status(
+                public_id=public_id,
+                status=payload.get("status") if isinstance(payload, dict) else "",
+            )
+        except ValueError as error:
+            return JSONResponse({"error": str(error)}, status_code=400)
+        if not updated:
+            return JSONResponse({"error": "not_found"}, status_code=404)
+        return JSONResponse(updated)
 
     @app.post("/api/deck-orders")
     async def api_deck_orders(request: Request) -> JSONResponse:
@@ -770,6 +809,105 @@ def create_deck_order(payload: dict, request: Request) -> dict:
         "order_id": order_id,
         "message": "Richiesta ricevuta. Ti ricontatteremo per disponibilità, pagamento e spedizione.",
     }
+
+
+DECK_ORDER_STATUSES = {"nuovo", "contattato", "pagato", "spedito", "annullato"}
+
+
+def normalize_deck_order_status(status: str) -> str:
+    value = (status or "").strip().lower()
+    if value not in DECK_ORDER_STATUSES:
+        raise ValueError("Stato ordine non valido")
+    return value
+
+
+def list_deck_orders(limit: int = 200, status: str = "", email: str = "") -> dict:
+    safe_limit = min(max(limit or 200, 1), 1000)
+    clauses = []
+    params: list = []
+    status_filter = (status or "").strip().lower()
+    if status_filter:
+        if status_filter not in DECK_ORDER_STATUSES:
+            raise ValueError("Stato ordine non valido")
+        clauses.append("status = ?")
+        params.append(status_filter)
+    email_filter = normalize_email(email)
+    if email_filter:
+        clauses.append("email LIKE ? ESCAPE '\\'")
+        params.append("%" + escape_like(email_filter) + "%")
+    where_sql = "WHERE " + " AND ".join(clauses) if clauses else ""
+
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            f"""
+            SELECT public_id, name, email, location, quantity, note, status,
+                   client_ip, user_agent, created_at, updated_at
+            FROM deck_orders
+            {where_sql}
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (*params, safe_limit),
+        ).fetchall()
+        summary = conn.execute(
+            f"""
+            SELECT COUNT(*) AS total,
+                   SUM(CASE WHEN status = 'nuovo' THEN 1 ELSE 0 END) AS nuovi,
+                   SUM(CASE WHEN status = 'contattato' THEN 1 ELSE 0 END) AS contattati,
+                   SUM(CASE WHEN status = 'pagato' THEN 1 ELSE 0 END) AS pagati,
+                   SUM(CASE WHEN status = 'spedito' THEN 1 ELSE 0 END) AS spediti,
+                   SUM(CASE WHEN status = 'annullato' THEN 1 ELSE 0 END) AS annullati,
+                   MIN(created_at) AS first_seen,
+                   MAX(created_at) AS last_seen
+            FROM deck_orders
+            {where_sql}
+            """,
+            params,
+        ).fetchone()
+    return {
+        "filters": {
+            "limit": safe_limit,
+            "status": status_filter,
+            "email": email_filter,
+        },
+        "summary": dict(summary) if summary else {},
+        "orders": [dict(row) for row in rows],
+    }
+
+
+def update_deck_order_status(public_id: str, status: str) -> dict | None:
+    order_id = (public_id or "").strip()
+    if not order_id:
+        return None
+    normalized_status = normalize_deck_order_status(status)
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        cur = conn.execute(
+            """
+            UPDATE deck_orders
+            SET status = ?, updated_at = strftime('%Y-%m-%dT%H:%M:%fZ', 'now')
+            WHERE public_id = ?
+            """,
+            (normalized_status, order_id),
+        )
+    if cur.rowcount < 1:
+        return None
+    orders = list_deck_orders(limit=1)
+    for order in orders["orders"]:
+        if order["public_id"] == order_id:
+            return order
+    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        row = conn.execute(
+            """
+            SELECT public_id, name, email, location, quantity, note, status,
+                   client_ip, user_agent, created_at, updated_at
+            FROM deck_orders
+            WHERE public_id = ?
+            """,
+            (order_id,),
+        ).fetchone()
+    return dict(row) if row else None
 
 
 def normalize_text(value: object, max_length: int) -> str:

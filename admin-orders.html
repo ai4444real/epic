@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EPiC Admin - Ordini</title>
+  <link rel="stylesheet" href="css/shared.css" />
+  <link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+  <div class="toolbar">
+    <h1>EPiC <span class="sub">Admin ordini</span></h1>
+    <div class="toolbar-actions">
+      <a class="btn" href="/admin/users">Utenti</a>
+      <a class="btn" href="/admin/logs">Log</a>
+      <a class="btn" href="/epic">EPiC</a>
+      <a class="btn" href="/logout">Esci</a>
+    </div>
+  </div>
+
+  <main class="admin-shell">
+    <section class="admin-panel">
+      <div class="panel-head">
+        <div>
+          <h2>Ordini mazzo</h2>
+          <p>Richieste arrivate dalla pagina “Ordina il mazzo”.</p>
+        </div>
+        <button class="btn" id="refreshOrdersBtn">Aggiorna</button>
+      </div>
+
+      <form class="orders-filter-form" id="ordersFilterForm">
+        <input class="input" id="emailFilter" placeholder="filtra email" />
+        <select class="input" id="statusFilter">
+          <option value="">tutti gli stati</option>
+          <option value="nuovo">nuovo</option>
+          <option value="contattato">contattato</option>
+          <option value="pagato">pagato</option>
+          <option value="spedito">spedito</option>
+          <option value="annullato">annullato</option>
+        </select>
+        <select class="input" id="limitFilter">
+          <option value="100">100 righe</option>
+          <option value="200" selected>200 righe</option>
+          <option value="500">500 righe</option>
+          <option value="1000">1000 righe</option>
+        </select>
+        <button class="btn primary" type="submit">Filtra</button>
+      </form>
+
+      <div class="admin-status" id="adminStatus"></div>
+
+      <div class="metric-grid orders-metrics" id="metricGrid"></div>
+
+      <div class="users-table-wrap">
+        <table class="users-table orders-table">
+          <thead>
+            <tr>
+              <th>Quando</th>
+              <th>Contatto</th>
+              <th>Località</th>
+              <th>Qtà</th>
+              <th>Nota</th>
+              <th>Stato</th>
+            </tr>
+          </thead>
+          <tbody id="ordersBody">
+            <tr><td colspan="6">Caricamento...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="js/admin-orders.js"></script>
+</body>
+</html>

@@ -187,6 +187,20 @@ mostra i log di accesso salvati in `EPIC_ACCESS_DB`: riepilogo, top pagine, sess
 
 Il log accessi registra solo navigazioni/pagine (`/epic`, `/admin/users`, `.html`, ecc.). Le API (`/api/...`) sono escluse per non riempire il DB con polling tecnico, in particolare Live Table.
 
+La pagina:
+
+```text
+/admin/orders
+```
+
+mostra le richieste arrivate da `/epic/mazzo`, salvate in `EPIC_CONTENT_DB` nella tabella `deck_orders`.
+
+Permette di:
+
+- filtrare per email e stato
+- vedere nome, email, localita, quantita e nota
+- aggiornare lo stato: `nuovo`, `contattato`, `pagato`, `spedito`, `annullato`
+
 ## Verifica rapida
 
 Da server:
