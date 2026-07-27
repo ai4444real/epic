@@ -88,6 +88,22 @@ p {
   display: none;
 }
 
+.epic-corner-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  margin-left: auto;
+  text-decoration: none;
+}
+
+.epic-corner-link img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
 .epic-hero {
   position: relative;
   min-height: 690px;
