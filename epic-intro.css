@@ -4,8 +4,8 @@
 
 .intro-hero {
   position: relative;
-  min-height: calc(100vh - 70px);
-  padding: 58px 24px 48px;
+  min-height: auto;
+  padding: 56px 24px 50px;
   display: grid;
   gap: 34px;
   align-items: center;
@@ -20,22 +20,22 @@
 }
 
 .intro-hero-copy {
-  max-width: 700px;
+  max-width: 620px;
 }
 
 .intro-hero h1 {
   margin-top: 16px;
-  font-size: clamp(42px, 12vw, 86px);
-  line-height: .98;
-  font-weight: 650;
-  letter-spacing: -2.6px;
+  font-size: clamp(40px, 7.4vw, 66px);
+  line-height: 1.02;
+  font-weight: 640;
+  letter-spacing: -1.8px;
 }
 
 .intro-lead {
   max-width: 620px;
-  margin-top: 22px;
-  font-size: clamp(25px, 6vw, 40px);
-  line-height: 1.12;
+  margin-top: 20px;
+  font-size: clamp(23px, 4vw, 34px);
+  line-height: 1.18;
   font-weight: 520;
 }
 
@@ -45,6 +45,13 @@
   color: var(--muted);
   font-size: 18px;
   line-height: 1.52;
+}
+
+.intro-hero-copy .intro-definition {
+  color: var(--ink) !important;
+  font-size: clamp(21px, 3vw, 28px) !important;
+  line-height: 1.24 !important;
+  font-weight: 650;
 }
 
 .intro-hero-copy .intro-audience {
@@ -58,7 +65,7 @@
 
 .intro-comic {
   margin: 0;
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid var(--line);
   background: #fff;
   box-shadow: 0 18px 42px rgba(34, 38, 41, .08);
@@ -66,9 +73,8 @@
 
 .intro-comic img {
   width: 100%;
-  height: 100%;
-  min-height: 280px;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 
 .what {
@@ -111,8 +117,8 @@
 
 .what-copy .intro-count {
   color: var(--ink);
-  font-size: clamp(30px, 8vw, 48px);
-  line-height: 1.04;
+  font-size: clamp(28px, 5vw, 42px);
+  line-height: 1.08;
   font-weight: 650;
   letter-spacing: -1px;
 }
@@ -134,34 +140,8 @@
   font-size: 19px;
 }
 
-.tool-preview-row {
-  display: grid;
-  gap: 14px;
-  margin-top: 28px;
-}
-
-.tool-preview-row article {
-  overflow: hidden;
-  border: 1px solid var(--line);
-  background: var(--epic-white);
-}
-
-.tool-preview-row img {
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  object-fit: cover;
-  object-position: top center;
-}
-
-.tool-preview-row h3 {
-  padding: 14px 16px 16px;
-  font-size: 19px;
-  line-height: 1.15;
-  font-weight: 650;
-}
-
 .promise {
-  min-height: 520px;
+  min-height: 440px;
   display: grid;
   place-items: center;
   background: var(--epic-white);
@@ -175,10 +155,10 @@
 
 .promise h2 {
   margin-top: 16px;
-  font-size: clamp(43px, 11vw, 94px);
-  line-height: .96;
+  font-size: clamp(36px, 7vw, 70px);
+  line-height: 1.02;
   font-weight: 650;
-  letter-spacing: -2.8px;
+  letter-spacing: -1.8px;
 }
 
 .promise p:not(.section-index) {
@@ -198,10 +178,10 @@
 
 .intro-close h2 {
   max-width: 900px;
-  font-size: clamp(38px, 10vw, 76px);
-  line-height: 1;
+  font-size: clamp(34px, 6vw, 62px);
+  line-height: 1.04;
   font-weight: 650;
-  letter-spacing: -2px;
+  letter-spacing: -1.5px;
 }
 
 .intro-close p {
@@ -219,13 +199,9 @@
 @media (min-width: 760px) {
   .intro-hero {
     min-height: calc(100vh - 80px);
-    padding: 78px 7vw 68px;
-    grid-template-columns: minmax(0, 1.02fr) minmax(330px, .98fr);
-    gap: 5vw;
-  }
-
-  .intro-comic img {
-    min-height: 500px;
+    padding: 70px 7vw 64px;
+    grid-template-columns: minmax(0, .9fr) minmax(420px, 1.1fr);
+    gap: 6vw;
   }
 
   .what-grid {
@@ -234,9 +210,6 @@
     gap: 5vw;
   }
 
-  .tool-preview-row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
 }
 
 @media (min-width: 1180px) {
@@ -254,7 +227,7 @@
   .intro-hero h1,
   .promise h2,
   .intro-close h2 {
-    letter-spacing: -1.4px;
+    letter-spacing: -1px;
   }
 
   .intro-comic {
