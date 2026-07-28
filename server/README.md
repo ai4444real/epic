@@ -7,7 +7,8 @@ It serves the existing static pages in `app/`, exposes clean public routes, and 
 ## Routes
 
 - `/` -> `index.html`
-- `/epic` -> `epic.html`
+- `/epic` -> `epic-intro.html`
+- `/voglio-saperne-di-piu` -> `epic.html`
 - `/epic/simulator` -> `epic-simulator-free.html`
 - `/epic/explorer` -> `epic-explorer-free.html`
 - `/epic/cards` -> `epic-all-cards-free.html`
