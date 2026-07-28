@@ -247,15 +247,20 @@
   }
 
   .intro-lead {
-    font-size: clamp(20px, 2.2vw, 26px);
+    font-size: 18px;
+    line-height: 1.32;
+    font-weight: 500;
   }
 
   .intro-step-copy > p:not(.intro-lead) {
-    font-size: 17px;
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.32;
   }
 
   .intro-step-copy .intro-definition {
-    font-size: clamp(20px, 2.1vw, 25px) !important;
+    font-size: 18px !important;
+    line-height: 1.32 !important;
   }
 
   .what-grid {
