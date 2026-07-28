@@ -234,21 +234,6 @@ p {
   mix-blend-mode: multiply;
 }
 
-.orbit {
-  position: absolute;
-  border: 1px solid rgba(40, 89, 184, .22);
-  border-radius: 50%;
-}
-
-.orbit-one {
-  inset: 5%;
-}
-
-.orbit-two {
-  inset: 18%;
-  border-style: dashed;
-}
-
 .section-shell {
   padding: 68px 24px;
   border-bottom: 1px solid var(--line);
