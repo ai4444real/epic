@@ -1,0 +1,263 @@
+.intro-page {
+  background: #fff;
+}
+
+.intro-hero {
+  position: relative;
+  min-height: calc(100vh - 70px);
+  padding: 58px 24px 48px;
+  display: grid;
+  gap: 34px;
+  align-items: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background: var(--epic-white);
+}
+
+.intro-hero > *:not(.map-grid) {
+  position: relative;
+  z-index: 1;
+}
+
+.intro-hero-copy {
+  max-width: 700px;
+}
+
+.intro-hero h1 {
+  margin-top: 16px;
+  font-size: clamp(42px, 12vw, 86px);
+  line-height: .98;
+  font-weight: 650;
+  letter-spacing: -2.6px;
+}
+
+.intro-lead {
+  max-width: 620px;
+  margin-top: 22px;
+  font-size: clamp(25px, 6vw, 40px);
+  line-height: 1.12;
+  font-weight: 520;
+}
+
+.intro-hero-copy > p:not(.eyebrow):not(.intro-lead) {
+  max-width: 610px;
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.52;
+}
+
+.intro-hero-copy .intro-audience {
+  color: var(--ink) !important;
+}
+
+.intro-hero .primary-button {
+  width: 232px;
+  margin-top: 28px;
+}
+
+.intro-comic {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #fff;
+  box-shadow: 0 18px 42px rgba(34, 38, 41, .08);
+}
+
+.intro-comic img {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+}
+
+.what {
+  background: #fff;
+}
+
+.what-grid {
+  display: grid;
+  gap: 26px;
+  margin-top: 38px;
+}
+
+.deck-visual {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--epic-panel);
+}
+
+.deck-visual img {
+  width: 100%;
+  min-height: 260px;
+  object-fit: cover;
+}
+
+.what-copy {
+  align-self: center;
+}
+
+.what-copy p {
+  max-width: 620px;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1.45;
+}
+
+.what-copy p + p {
+  margin-top: 16px;
+}
+
+.what-copy .intro-count {
+  color: var(--ink);
+  font-size: clamp(30px, 8vw, 48px);
+  line-height: 1.04;
+  font-weight: 650;
+  letter-spacing: -1px;
+}
+
+.inline-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 24px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--ink);
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.inline-link span {
+  color: var(--green);
+  font-size: 19px;
+}
+
+.tool-preview-row {
+  display: grid;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.tool-preview-row article {
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--epic-white);
+}
+
+.tool-preview-row img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.tool-preview-row h3 {
+  padding: 14px 16px 16px;
+  font-size: 19px;
+  line-height: 1.15;
+  font-weight: 650;
+}
+
+.promise {
+  min-height: 520px;
+  display: grid;
+  place-items: center;
+  background: var(--epic-white);
+}
+
+.promise-inner {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.promise h2 {
+  margin-top: 16px;
+  font-size: clamp(43px, 11vw, 94px);
+  line-height: .96;
+  font-weight: 650;
+  letter-spacing: -2.8px;
+}
+
+.promise p:not(.section-index) {
+  max-width: 720px;
+  margin: 26px auto 0;
+  color: var(--muted);
+  font-size: 21px;
+  line-height: 1.48;
+}
+
+.intro-close {
+  display: grid;
+  gap: 20px;
+  justify-items: start;
+  background: #fff;
+}
+
+.intro-close h2 {
+  max-width: 900px;
+  font-size: clamp(38px, 10vw, 76px);
+  line-height: 1;
+  font-weight: 650;
+  letter-spacing: -2px;
+}
+
+.intro-close p {
+  max-width: 680px;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.intro-close .primary-button {
+  width: 232px;
+  margin-top: 8px;
+}
+
+@media (min-width: 760px) {
+  .intro-hero {
+    min-height: calc(100vh - 80px);
+    padding: 78px 7vw 68px;
+    grid-template-columns: minmax(0, 1.02fr) minmax(330px, .98fr);
+    gap: 5vw;
+  }
+
+  .intro-comic img {
+    min-height: 500px;
+  }
+
+  .what-grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(300px, .85fr);
+    align-items: center;
+    gap: 5vw;
+  }
+
+  .tool-preview-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1180px) {
+  .intro-hero {
+    padding-left: max(calc((100vw - 1180px) / 2), 40px);
+    padding-right: max(calc((100vw - 1180px) / 2), 40px);
+  }
+}
+
+@media (max-width: 560px) {
+  .intro-hero {
+    padding-top: 44px;
+  }
+
+  .intro-hero h1,
+  .promise h2,
+  .intro-close h2 {
+    letter-spacing: -1.4px;
+  }
+
+  .intro-comic {
+    margin-top: 2px;
+  }
+}

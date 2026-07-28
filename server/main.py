@@ -44,6 +44,7 @@ BOOTSTRAP_ADMIN_EMAILS = {
 PAGE_ALIASES = {
     "/": APP_ROOT / "index.html",
     "/epic": APP_ROOT / "epic.html",
+    "/epic-intro": APP_ROOT / "epic-intro.html",
     "/epic/mazzo": APP_ROOT / "ordina-mazzo.html",
 }
 
