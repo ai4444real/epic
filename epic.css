@@ -1117,6 +1117,7 @@ a.process-item:focus-visible strong::after {
   .site-nav {
     display: flex;
     gap: 28px;
+    margin-left: auto;
   }
 
   .site-nav a {
