@@ -213,28 +213,49 @@
   .intro-hero {
     padding: 70px 7vw 72px;
     align-items: start;
-    gap: 42px;
+    gap: 38px;
   }
 
   .intro-hero-head {
-    max-width: 720px;
+    max-width: 660px;
   }
 
   .intro-sequence {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 28px;
+    align-items: start;
   }
 
   .intro-step {
-    grid-template-columns: minmax(0, .92fr) minmax(340px, .82fr);
-    gap: 5vw;
+    gap: 16px;
+  }
+
+  .intro-step-copy {
+    max-width: none;
   }
 
   .intro-step:nth-child(even) .intro-step-copy {
-    order: 2;
+    order: initial;
   }
 
   .intro-step:nth-child(even) .intro-comic {
-    order: 1;
+    order: initial;
+  }
+
+  .intro-comic {
+    order: -1;
+  }
+
+  .intro-lead {
+    font-size: clamp(20px, 2.2vw, 26px);
+  }
+
+  .intro-step-copy > p:not(.intro-lead) {
+    font-size: 17px;
+  }
+
+  .intro-step-copy .intro-definition {
+    font-size: clamp(20px, 2.1vw, 25px) !important;
   }
 
   .what-grid {
