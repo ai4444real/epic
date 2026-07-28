@@ -4,8 +4,8 @@
 
 .elements-hero {
   position: relative;
-  min-height: 430px;
-  padding: 72px 24px 58px;
+  min-height: 380px;
+  padding: 58px 24px 52px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,10 +21,10 @@
 .elements-hero h1 {
   max-width: 950px;
   margin-top: 18px;
-  font-size: clamp(54px, 15vw, 106px);
-  line-height: .94;
+  font-size: clamp(40px, 7.4vw, 66px);
+  line-height: 1.02;
   font-weight: 550;
-  letter-spacing: -4px;
+  letter-spacing: -1.8px;
 }
 
 .elements-hero > p:not(.section-index) {
@@ -131,10 +131,10 @@
 .element-copy h2 {
   margin-top: 14px;
   color: var(--ink);
-  font-size: clamp(38px, 10vw, 74px);
-  line-height: .96;
+  font-size: clamp(29px, 6.4vw, 46px);
+  line-height: 1.06;
   font-weight: 560;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
 }
 
 .element-copy > p:not(.section-index) {

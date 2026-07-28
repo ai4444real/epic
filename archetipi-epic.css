@@ -4,8 +4,8 @@
 
 .archetypes-hero {
   position: relative;
-  min-height: 560px;
-  padding: 72px 24px 58px;
+  min-height: 430px;
+  padding: 58px 24px 52px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -21,19 +21,19 @@
 .archetypes-hero h1 {
   max-width: 980px;
   margin-top: 18px;
-  font-size: clamp(52px, 14vw, 108px);
-  line-height: .94;
+  font-size: clamp(40px, 7.4vw, 66px);
+  line-height: 1.02;
   font-weight: 550;
-  letter-spacing: -4px;
+  letter-spacing: -1.8px;
 }
 
 .archetypes-lead {
   max-width: 760px;
-  margin-top: 28px;
+  margin-top: 22px;
   color: var(--ink);
-  font-size: clamp(24px, 6vw, 40px);
-  line-height: 1.08;
-  letter-spacing: -1px;
+  font-size: clamp(21px, 4vw, 32px);
+  line-height: 1.18;
+  letter-spacing: -.7px;
 }
 
 .archetypes-hero > p:not(.section-index):not(.archetypes-lead) {
@@ -59,10 +59,10 @@
   max-width: 900px;
   margin-top: 15px;
   color: var(--ink);
-  font-size: clamp(38px, 10vw, 76px);
-  line-height: .98;
+  font-size: clamp(29px, 6.4vw, 46px);
+  line-height: 1.06;
   font-weight: 560;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
 }
 
 .split-copy {
@@ -90,9 +90,9 @@
   padding: 17px 0;
   border-top: 1px solid #cbd4d8;
   color: var(--ink);
-  font-size: clamp(26px, 7vw, 46px);
-  line-height: 1.05;
-  letter-spacing: -1px;
+  font-size: clamp(22px, 4.6vw, 34px);
+  line-height: 1.16;
+  letter-spacing: -.7px;
 }
 
 .why blockquote p:last-child {

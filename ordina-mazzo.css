@@ -4,8 +4,8 @@
 
 .deck-order-hero {
   position: relative;
-  min-height: 520px;
-  padding: 72px 24px 58px;
+  min-height: 430px;
+  padding: 58px 24px 52px;
   display: grid;
   gap: 34px;
   overflow: hidden;
@@ -20,10 +20,10 @@
 .deck-order-copy h1 {
   max-width: 860px;
   margin-top: 18px;
-  font-size: clamp(50px, 14vw, 104px);
-  line-height: .94;
+  font-size: clamp(40px, 7.4vw, 66px);
+  line-height: 1.02;
   font-weight: 550;
-  letter-spacing: -4px;
+  letter-spacing: -1.8px;
 }
 
 .deck-order-copy > p:not(.section-index) {
@@ -64,10 +64,10 @@
 .request-intro h2 {
   max-width: 760px;
   margin-top: 15px;
-  font-size: clamp(38px, 10vw, 74px);
-  line-height: .98;
+  font-size: clamp(29px, 6.4vw, 46px);
+  line-height: 1.06;
   font-weight: 560;
-  letter-spacing: -2px;
+  letter-spacing: -1px;
 }
 
 .request-intro p:not(.section-index) {

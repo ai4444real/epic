@@ -9,8 +9,8 @@
 
 .comparison-hero {
   position: relative;
-  min-height: 440px;
-  padding: 72px 24px 58px;
+  min-height: 380px;
+  padding: 58px 24px 52px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -26,10 +26,10 @@
 .comparison-hero h1 {
   max-width: 950px;
   margin-top: 18px;
-  font-size: clamp(52px, 15vw, 105px);
-  line-height: .94;
+  font-size: clamp(40px, 7.4vw, 66px);
+  line-height: 1.02;
   font-weight: 550;
-  letter-spacing: -4px;
+  letter-spacing: -1.8px;
 }
 
 .comparison-hero > p:not(.section-index) {
@@ -110,10 +110,10 @@
 .common-error h2,
 .epic-entry h2 {
   margin-top: 15px;
-  font-size: clamp(34px, 9vw, 58px);
-  line-height: 1.04;
+  font-size: clamp(29px, 6.4vw, 46px);
+  line-height: 1.06;
   font-weight: 500;
-  letter-spacing: -1.5px;
+  letter-spacing: -1px;
 }
 
 .visible-symptoms ul {
@@ -155,7 +155,7 @@
 .common-error h2 {
   color: #fff;
   margin-top: 18px;
-  font-size: clamp(40px, 10vw, 68px);
+  font-size: clamp(30px, 6.4vw, 46px);
 }
 
 .common-error > p:not(.section-index) {
@@ -220,9 +220,9 @@
 
 .epic-entry-statement {
   margin-top: 42px;
-  font-size: clamp(25px, 6vw, 40px);
-  line-height: 1.12;
-  letter-spacing: -1px;
+  font-size: clamp(21px, 4vw, 32px);
+  line-height: 1.22;
+  letter-spacing: -.7px;
 }
 
 .epic-entry-statement strong {
@@ -263,9 +263,9 @@
 }
 
 .archetype-cta > p {
-  font-size: clamp(29px, 8vw, 50px);
-  line-height: 1.08;
-  letter-spacing: -1.5px;
+  font-size: clamp(24px, 5vw, 38px);
+  line-height: 1.14;
+  letter-spacing: -.8px;
 }
 
 .archetype-cta a {
@@ -304,8 +304,8 @@
   }
 
   .comparison-hero {
-    min-height: 520px;
-    padding: 82px 7vw 70px;
+    min-height: 430px;
+    padding: 72px 7vw 62px;
   }
 
   .people {
