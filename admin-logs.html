@@ -29,6 +29,7 @@
       </div>
 
       <form class="log-filter-form" id="logFilterForm">
+        <input class="input" id="dateFilter" type="date" aria-label="Filtra per giorno" />
         <input class="input" id="pathFilter" placeholder="filtra path, es. /epic" />
         <input class="input" id="sessionFilter" placeholder="session id anche parziale" />
         <select class="input" id="statusFilter">
@@ -50,6 +51,8 @@
       </form>
 
       <div class="admin-status" id="adminStatus"></div>
+
+      <div class="day-card-grid" id="dayCardGrid"></div>
 
       <div class="metric-grid" id="metricGrid"></div>
 

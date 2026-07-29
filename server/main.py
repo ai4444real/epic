@@ -6,6 +6,7 @@ import secrets
 import sqlite3
 import time
 import uuid
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from pathlib import Path
 from typing import Callable
@@ -330,13 +331,14 @@ def create_app() -> FastAPI:
         path: str = "",
         session_id: str = "",
         status: int | None = None,
+        date: str = "",
     ) -> JSONResponse:
         user = get_current_user(request)
         if not user:
             return JSONResponse({"error": "login_required"}, status_code=401)
         if not can_access_admin(user):
             return JSONResponse({"error": "admin_required"}, status_code=403)
-        return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status))
+        return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status, date=date))
 
     @app.get("/api/admin/deck-orders")
     async def api_admin_deck_orders(
@@ -1101,9 +1103,9 @@ def ensure_not_last_admin(email_to_change: str) -> None:
         raise ValueError("Cannot remove the last admin")
 
 
-def get_access_log_report(limit: int = 200, path: str = "", session_id: str = "", status: int | None = None) -> dict:
+def get_access_log_report(limit: int = 200, path: str = "", session_id: str = "", status: int | None = None, date: str = "") -> dict:
     safe_limit = min(max(limit or 200, 1), 1000)
-    where_sql, params = build_access_log_filters(path=path, session_id=session_id, status=status)
+    where_sql, params = build_access_log_filters(path=path, session_id=session_id, status=status, date=date)
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
@@ -1152,23 +1154,72 @@ def get_access_log_report(limit: int = 200, path: str = "", session_id: str = ""
             """,
             params,
         ).fetchall()
+        recent_days_start = (datetime.now(timezone.utc).date() - timedelta(days=2)).isoformat()
+        daily_rows = conn.execute(
+            """
+            SELECT substr(created_at, 1, 10) AS day,
+                   COUNT(*) AS hits,
+                   COUNT(DISTINCT session_id) AS sessions,
+                   SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
+            FROM access_log
+            WHERE created_at >= ?
+            GROUP BY day
+            ORDER BY day DESC
+            """,
+            (recent_days_start,),
+        ).fetchall()
+        recent_days_summary = conn.execute(
+            """
+            SELECT COUNT(*) AS hits,
+                   COUNT(DISTINCT session_id) AS sessions,
+                   SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
+            FROM access_log
+            WHERE created_at >= ?
+            """,
+            (recent_days_start,),
+        ).fetchone()
+    daily_by_day = {row["day"]: dict(row) for row in daily_rows}
+    recent_days = []
+    today = datetime.now(timezone.utc).date()
+    for offset in range(3):
+        day = (today - timedelta(days=offset)).isoformat()
+        data = daily_by_day.get(day, {})
+        recent_days.append({
+            "day": day,
+            "hits": data.get("hits", 0),
+            "sessions": data.get("sessions", 0),
+            "errors": data.get("errors", 0),
+        })
     return {
         "filters": {
             "limit": safe_limit,
             "path": path or "",
             "session_id": session_id or "",
             "status": status,
+            "date": date or "",
         },
         "summary": dict(summary) if summary else {},
+        "recent_days": recent_days,
+        "recent_days_summary": dict(recent_days_summary) if recent_days_summary else {},
         "top_paths": [dict(row) for row in top_paths],
         "recent_sessions": [dict(row) for row in recent_sessions],
         "logs": [dict(row) for row in rows],
     }
 
 
-def build_access_log_filters(path: str = "", session_id: str = "", status: int | None = None) -> tuple[str, tuple]:
+def build_access_log_filters(path: str = "", session_id: str = "", status: int | None = None, date: str = "") -> tuple[str, tuple]:
     clauses = []
     params: list = []
+    date_filter = (date or "").strip()
+    if len(date_filter) == 10 and date_filter[4] == "-" and date_filter[7] == "-":
+        try:
+            day = datetime.fromisoformat(date_filter).date()
+        except ValueError:
+            day = None
+        if day:
+            clauses.append("created_at >= ? AND created_at < ?")
+            params.append(day.isoformat())
+            params.append((day + timedelta(days=1)).isoformat())
     path_filter = (path or "").strip()
     if path_filter:
         clauses.append("path LIKE ? ESCAPE '\\'")

@@ -3,11 +3,13 @@
     status: document.getElementById('adminStatus'),
     form: document.getElementById('logFilterForm'),
     refresh: document.getElementById('refreshLogsBtn'),
+    date: document.getElementById('dateFilter'),
     path: document.getElementById('pathFilter'),
     session: document.getElementById('sessionFilter'),
     statusFilter: document.getElementById('statusFilter'),
     limit: document.getElementById('limitFilter'),
     metrics: document.getElementById('metricGrid'),
+    days: document.getElementById('dayCardGrid'),
     topPaths: document.getElementById('topPaths'),
     recentSessions: document.getElementById('recentSessions'),
     body: document.getElementById('logsBody')
@@ -48,6 +50,13 @@
     return date.toLocaleString('it-IT', { dateStyle: 'short', timeStyle: 'medium' });
   }
 
+  function formatDay(value) {
+    if (!value) return '-';
+    const date = new Date(value + 'T12:00:00Z');
+    if (Number.isNaN(date.getTime())) return value;
+    return date.toLocaleDateString('it-IT', { weekday: 'short', day: '2-digit', month: '2-digit' });
+  }
+
   function short(value, size) {
     const text = String(value || '');
     if (text.length <= size) return text;
@@ -57,10 +66,47 @@
   function buildUrl() {
     const params = new URLSearchParams();
     params.set('limit', els.limit?.value || '200');
+    if (els.date?.value) params.set('date', els.date.value);
     if (els.path?.value.trim()) params.set('path', els.path.value.trim());
     if (els.session?.value.trim()) params.set('session_id', els.session.value.trim());
     if (els.statusFilter?.value) params.set('status', els.statusFilter.value);
     return '/api/admin/logs?' + params.toString();
+  }
+
+  function renderDays(rows, activeDay, summary) {
+    if (!els.days) return;
+    if (!rows.length) {
+      els.days.innerHTML = '';
+      return;
+    }
+    const totalSessions = summary?.sessions || 0;
+    const totalHits = summary?.hits || 0;
+    const totalErrors = summary?.errors || 0;
+    els.days.innerHTML = rows.map(row => {
+      const activeClass = row.day === activeDay ? ' active' : '';
+      return '<button class="day-card' + activeClass + '" data-day="' + esc(row.day) + '">' +
+        '<span class="day-label">' + esc(formatDay(row.day)) + '</span>' +
+        '<strong>' + esc(row.sessions || 0) + '</strong>' +
+        '<span>sessioni</span>' +
+        '<small>' + esc(row.hits || 0) + ' hit' + (row.errors ? ' · ' + esc(row.errors) + ' errori' : '') + '</small>' +
+      '</button>';
+    }).join('') +
+      '<button class="day-card day-card-total" data-clear-day="1">' +
+        '<span class="day-label">3 giorni</span>' +
+        '<strong>' + esc(totalSessions) + '</strong>' +
+        '<span>sessioni totali</span>' +
+        '<small>' + esc(totalHits) + ' hit' + (totalErrors ? ' · ' + esc(totalErrors) + ' errori' : '') + '</small>' +
+      '</button>';
+    els.days.querySelectorAll('[data-day]').forEach(button => {
+      button.addEventListener('click', () => {
+        els.date.value = button.dataset.day;
+        loadLogs();
+      });
+    });
+    els.days.querySelector('[data-clear-day]')?.addEventListener('click', () => {
+      els.date.value = '';
+      loadLogs();
+    });
   }
 
   function renderMetrics(summary) {
@@ -138,6 +184,7 @@
     setStatus('Caricamento log...');
     try {
       const report = await adminFetch(buildUrl());
+      renderDays(report.recent_days || [], report.filters?.date || '', report.recent_days_summary || {});
       renderMetrics(report.summary || {});
       renderTopPaths(report.top_paths || []);
       renderRecentSessions(report.recent_sessions || []);
