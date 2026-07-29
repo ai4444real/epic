@@ -32,6 +32,16 @@
         <input class="input" id="dateFilter" type="date" aria-label="Filtra per giorno" />
         <input class="input" id="pathFilter" placeholder="filtra path, es. /epic" />
         <input class="input" id="sessionFilter" placeholder="session id anche parziale" />
+        <select class="input" id="trafficFilter">
+          <option value="clean" selected>senza scansioni</option>
+          <option value="scans">solo scansioni</option>
+          <option value="all">tutto il traffico</option>
+        </select>
+        <select class="input" id="outcomeFilter">
+          <option value="">successi + errori</option>
+          <option value="success">solo successi</option>
+          <option value="errors">solo errori</option>
+        </select>
         <select class="input" id="statusFilter">
           <option value="">tutti gli status</option>
           <option value="200">200</option>

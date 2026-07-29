@@ -332,13 +332,23 @@ def create_app() -> FastAPI:
         session_id: str = "",
         status: int | None = None,
         date: str = "",
+        traffic: str = "clean",
+        outcome: str = "",
     ) -> JSONResponse:
         user = get_current_user(request)
         if not user:
             return JSONResponse({"error": "login_required"}, status_code=401)
         if not can_access_admin(user):
             return JSONResponse({"error": "admin_required"}, status_code=403)
-        return JSONResponse(get_access_log_report(limit=limit, path=path, session_id=session_id, status=status, date=date))
+        return JSONResponse(get_access_log_report(
+            limit=limit,
+            path=path,
+            session_id=session_id,
+            status=status,
+            date=date,
+            traffic=traffic,
+            outcome=outcome,
+        ))
 
     @app.get("/api/admin/deck-orders")
     async def api_admin_deck_orders(
@@ -1103,9 +1113,31 @@ def ensure_not_last_admin(email_to_change: str) -> None:
         raise ValueError("Cannot remove the last admin")
 
 
-def get_access_log_report(limit: int = 200, path: str = "", session_id: str = "", status: int | None = None, date: str = "") -> dict:
+def get_access_log_report(
+    limit: int = 200,
+    path: str = "",
+    session_id: str = "",
+    status: int | None = None,
+    date: str = "",
+    traffic: str = "clean",
+    outcome: str = "",
+) -> dict:
     safe_limit = min(max(limit or 200, 1), 1000)
-    where_sql, params = build_access_log_filters(path=path, session_id=session_id, status=status, date=date)
+    where_sql, params = build_access_log_filters(
+        path=path,
+        session_id=session_id,
+        status=status,
+        date=date,
+        traffic=traffic,
+        outcome=outcome,
+    )
+    recent_days_where_sql, recent_days_params = build_access_log_filters(
+        path=path,
+        session_id=session_id,
+        status=status,
+        traffic=traffic,
+        outcome=outcome,
+    )
     with sqlite3.connect(DB_PATH) as conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
@@ -1155,28 +1187,29 @@ def get_access_log_report(limit: int = 200, path: str = "", session_id: str = ""
             params,
         ).fetchall()
         recent_days_start = (datetime.now(timezone.utc).date() - timedelta(days=2)).isoformat()
+        recent_days_prefix = "WHERE" if not recent_days_where_sql else recent_days_where_sql + " AND"
         daily_rows = conn.execute(
-            """
+            f"""
             SELECT substr(created_at, 1, 10) AS day,
                    COUNT(*) AS hits,
                    COUNT(DISTINCT session_id) AS sessions,
                    SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
             FROM access_log
-            WHERE created_at >= ?
+            {recent_days_prefix} created_at >= ?
             GROUP BY day
             ORDER BY day DESC
             """,
-            (recent_days_start,),
+            (*recent_days_params, recent_days_start),
         ).fetchall()
         recent_days_summary = conn.execute(
-            """
+            f"""
             SELECT COUNT(*) AS hits,
                    COUNT(DISTINCT session_id) AS sessions,
                    SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
             FROM access_log
-            WHERE created_at >= ?
+            {recent_days_prefix} created_at >= ?
             """,
-            (recent_days_start,),
+            (*recent_days_params, recent_days_start),
         ).fetchone()
     daily_by_day = {row["day"]: dict(row) for row in daily_rows}
     recent_days = []
@@ -1197,6 +1230,8 @@ def get_access_log_report(limit: int = 200, path: str = "", session_id: str = ""
             "session_id": session_id or "",
             "status": status,
             "date": date or "",
+            "traffic": normalize_traffic_filter(traffic),
+            "outcome": normalize_outcome_filter(outcome),
         },
         "summary": dict(summary) if summary else {},
         "recent_days": recent_days,
@@ -1207,9 +1242,27 @@ def get_access_log_report(limit: int = 200, path: str = "", session_id: str = ""
     }
 
 
-def build_access_log_filters(path: str = "", session_id: str = "", status: int | None = None, date: str = "") -> tuple[str, tuple]:
+def build_access_log_filters(
+    path: str = "",
+    session_id: str = "",
+    status: int | None = None,
+    date: str = "",
+    traffic: str = "clean",
+    outcome: str = "",
+) -> tuple[str, tuple]:
     clauses = []
     params: list = []
+    traffic_filter = normalize_traffic_filter(traffic)
+    scan_sql = access_log_scan_sql()
+    if traffic_filter == "scans":
+        clauses.append(scan_sql)
+    elif traffic_filter == "clean":
+        clauses.append(f"NOT ({scan_sql})")
+    outcome_filter = normalize_outcome_filter(outcome)
+    if outcome_filter == "success":
+        clauses.append("status_code < 400")
+    elif outcome_filter == "errors":
+        clauses.append("status_code >= 400")
     date_filter = (date or "").strip()
     if len(date_filter) == 10 and date_filter[4] == "-" and date_filter[7] == "-":
         try:
@@ -1234,6 +1287,43 @@ def build_access_log_filters(path: str = "", session_id: str = "", status: int |
     if not clauses:
         return "", tuple()
     return "WHERE " + " AND ".join(clauses), tuple(params)
+
+
+def normalize_traffic_filter(value: str) -> str:
+    value = (value or "").strip().lower()
+    if value in {"all", "scans"}:
+        return value
+    return "clean"
+
+
+def normalize_outcome_filter(value: str) -> str:
+    value = (value or "").strip().lower()
+    if value in {"success", "errors"}:
+        return value
+    return ""
+
+
+def access_log_scan_sql() -> str:
+    patterns = [
+        "/wp-%",
+        "/wp/%",
+        "/wp-json%",
+        "%/.env%",
+        "%.env%",
+        "/webhook%",
+        "/workspaces/%",
+        "/website/%",
+        "/web/%",
+        "/waku%",
+        "/vendor/%",
+        "/config%",
+        "/actuator%",
+        "/server-status%",
+        "%.php%",
+        "%phpmyadmin%",
+    ]
+    path_clauses = " OR ".join(f"path LIKE '{pattern}'" for pattern in patterns)
+    return f"(status_code = 404 AND ({path_clauses}))"
 
 
 def escape_like(value: str) -> str:

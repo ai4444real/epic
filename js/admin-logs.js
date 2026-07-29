@@ -6,6 +6,8 @@
     date: document.getElementById('dateFilter'),
     path: document.getElementById('pathFilter'),
     session: document.getElementById('sessionFilter'),
+    traffic: document.getElementById('trafficFilter'),
+    outcome: document.getElementById('outcomeFilter'),
     statusFilter: document.getElementById('statusFilter'),
     limit: document.getElementById('limitFilter'),
     metrics: document.getElementById('metricGrid'),
@@ -69,6 +71,8 @@
     if (els.date?.value) params.set('date', els.date.value);
     if (els.path?.value.trim()) params.set('path', els.path.value.trim());
     if (els.session?.value.trim()) params.set('session_id', els.session.value.trim());
+    if (els.traffic?.value) params.set('traffic', els.traffic.value);
+    if (els.outcome?.value) params.set('outcome', els.outcome.value);
     if (els.statusFilter?.value) params.set('status', els.statusFilter.value);
     return '/api/admin/logs?' + params.toString();
   }
