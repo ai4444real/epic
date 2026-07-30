@@ -46,7 +46,7 @@
 
 .archetypes-hero-visual {
   width: min(100%, 360px);
-  height: 300px;
+  aspect-ratio: 3 / 1;
   margin: 28px auto 0;
   overflow: hidden;
   border: 1px solid var(--line);
@@ -56,8 +56,7 @@
 .archetypes-hero-visual img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: 52% 36%;
+  object-fit: contain;
 }
 
 .archetypes-hero .primary-button,
@@ -310,7 +309,6 @@
   .archetypes-hero-visual {
     width: 100%;
     max-width: 340px;
-    height: 360px;
     margin: 0;
     grid-column: 2;
     grid-row: 1 / -1;
