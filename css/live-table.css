@@ -372,6 +372,8 @@
 
     .mini-btn:hover{ background: var(--border-light); }
     .mini-btn.danger{ color: #b91c1c; border-color: #fecaca; }
+    .btn.danger{ color: #b91c1c; border-color: #fecaca; }
+    .btn.danger:hover{ background: #fff1f2; }
 
     .live-cross{
       grid-column: 1 / -1;
@@ -405,6 +407,101 @@
 
     .live-table.zoom-fit .live-cross .epic-v1-cross-pattern .epic-v1-card{ --epic-v1-density: 0.74; }
     .live-table.zoom-large .live-cross .epic-v1-cross-pattern .epic-v1-card{ --epic-v1-density: 0.9; }
+
+    .live-note-shell{
+      position: relative;
+      width: 100%;
+      min-height: var(--epic-v1-card-h);
+    }
+
+    .live-note-front,
+    .live-note-back{
+      width: 100%;
+      min-height: var(--epic-v1-card-h);
+    }
+
+    .live-note-front .epic-v1-card{
+      width: 100%;
+    }
+
+    .live-note-back{
+      display: none;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background:
+        linear-gradient(rgba(255,255,255,0.93), rgba(255,255,255,0.93)),
+        radial-gradient(circle at 16% 12%, rgba(56,189,248,0.16), transparent 38%),
+        radial-gradient(circle at 84% 80%, rgba(251,146,60,0.13), transparent 34%);
+      padding: calc(22px * var(--epic-v1-density));
+      box-shadow: 0 1px 10px rgba(15,23,42,0.08);
+    }
+
+    .live-note-shell.show-note .live-note-front{
+      display: none;
+    }
+
+    .live-note-shell.show-note .live-note-back{
+      display: flex;
+      flex-direction: column;
+    }
+
+    .live-note-badge,
+    .live-note-edit{
+      position: absolute;
+      z-index: 4;
+      border: 1px solid rgba(15,23,42,0.14);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.94);
+      box-shadow: 0 2px 8px rgba(15,23,42,0.12);
+      font: inherit;
+      font-size: calc(10px * var(--epic-v1-density));
+      font-weight: 800;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .live-note-badge{
+      top: calc(9px * var(--epic-v1-density));
+      left: calc(9px * var(--epic-v1-density));
+      color: var(--fg);
+      padding: calc(6px * var(--epic-v1-density)) calc(8px * var(--epic-v1-density));
+      text-transform: uppercase;
+    }
+
+    .live-note-edit{
+      right: calc(9px * var(--epic-v1-density));
+      bottom: calc(9px * var(--epic-v1-density));
+      color: var(--muted);
+      padding: calc(6px * var(--epic-v1-density)) calc(9px * var(--epic-v1-density));
+    }
+
+    .live-note-shell.has-note .live-note-edit{
+      color: var(--fg);
+    }
+
+    .live-note-kicker{
+      color: var(--muted);
+      font-size: calc(11px * var(--epic-v1-density));
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .live-note-title{
+      margin-top: calc(5px * var(--epic-v1-density));
+      font-size: calc(22px * var(--epic-v1-density));
+      font-weight: 850;
+      line-height: 1.1;
+    }
+
+    .live-note-body{
+      margin-top: calc(18px * var(--epic-v1-density));
+      color: var(--fg);
+      font-size: calc(17px * var(--epic-v1-density));
+      line-height: 1.32;
+      white-space: normal;
+      overflow: auto;
+    }
 
     .live-cross .epic-v1-cross{
       --epic-v1-cross-card-w: min(calc(315px * var(--live-card-scale)), calc((100vw - 420px) / 3));
@@ -664,6 +761,71 @@
       flex-direction: column;
       gap: 7px;
       width: calc(315px * var(--live-card-scale));
+    }
+
+    .note-dialog{
+      width: min(560px, calc(100vw - 32px));
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 0;
+      box-shadow: 0 24px 70px rgba(15,23,42,0.22);
+    }
+
+    .note-dialog::backdrop{
+      background: rgba(15,23,42,0.28);
+    }
+
+    .note-dialog-head{
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 18px 10px;
+    }
+
+    .note-dialog-kicker{
+      color: var(--muted);
+      font-size: var(--fs-xxs);
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .note-dialog h2{
+      margin: 3px 0 0;
+      font-size: var(--fs-xl);
+      line-height: 1.1;
+    }
+
+    .note-close{
+      width: 32px;
+      height: 32px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 22px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .note-textarea{
+      display: block;
+      width: calc(100% - 36px);
+      margin: 0 18px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      font: inherit;
+      font-size: var(--fs-sm);
+      line-height: 1.4;
+      resize: vertical;
+    }
+
+    .note-dialog-actions{
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 14px 18px 18px;
     }
 
     @media (max-width: 920px){

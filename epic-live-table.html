@@ -78,6 +78,21 @@
     </section>
   </main>
 
+  <dialog class="note-dialog" id="noteDialog">
+    <div class="note-dialog-head">
+      <div>
+        <div class="note-dialog-kicker">Intervento</div>
+        <h2 id="noteDialogTitle">Nota</h2>
+      </div>
+      <button class="note-close" id="noteCancelBtn" type="button" aria-label="Chiudi">×</button>
+    </div>
+    <textarea class="note-textarea" id="noteText" rows="9" placeholder="Scrivi qui la nota operativa per questo tavolo."></textarea>
+    <div class="note-dialog-actions">
+      <button class="btn danger" id="noteClearBtn" type="button">Svuota nota</button>
+      <button class="btn primary" id="noteSaveBtn" type="button">Salva nota</button>
+    </div>
+  </dialog>
+
     <script src="data/EPIC_data.js"></script>
     <script src="cards/web-v1/epic-cards-v1.js"></script>
     <script src="js/shared.js"></script>

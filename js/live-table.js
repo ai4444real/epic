@@ -15,7 +15,10 @@
       liveTable: document.getElementById('liveTable'),
       librarySearch: document.getElementById('librarySearch'),
       libraryTabs: document.getElementById('libraryTabs'),
-      libraryList: document.getElementById('libraryList')
+      libraryList: document.getElementById('libraryList'),
+      noteDialog: document.getElementById('noteDialog'),
+      noteDialogTitle: document.getElementById('noteDialogTitle'),
+      noteText: document.getElementById('noteText')
     };
 
     const liveEmotionOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
@@ -33,6 +36,7 @@
     let pollTimer = null;
     let savedRooms = [];
     let tableState = createEmptyState(roomId || createRoomId());
+    let editingNote = null;
 
     function createEmptyState(id) {
       return {
@@ -40,6 +44,7 @@
         title: 'Lezione EPiC',
         zoom: 'medium',
         items: [],
+        notes: {},
         updated_at: new Date().toISOString()
       };
     }
@@ -78,6 +83,19 @@
 
     function interventionForPattern(pid, type) {
       return iMap['I-' + pid + '-' + type] || null;
+    }
+
+    function noteKey(patternId, type) {
+      return patternId + ':' + type;
+    }
+
+    function interventionNote(patternId, type) {
+      const value = tableState.notes?.[noteKey(patternId, type)];
+      return typeof value === 'string' ? value : '';
+    }
+
+    function formatNote(value) {
+      return esc(value || '').replace(/\r?\n/g, '<br>');
     }
 
     function uid() {
@@ -245,6 +263,7 @@
       next.room_id = next.room_id || roomId;
       next.zoom = ['fit', 'medium', 'large'].includes(next.zoom) ? next.zoom : 'medium';
       next.items = Array.isArray(next.items) ? next.items.filter(item => item && item.id && item.kind) : [];
+      next.notes = next.notes && typeof next.notes === 'object' && !Array.isArray(next.notes) ? next.notes : {};
       return next;
     }
 
@@ -415,6 +434,12 @@
         return;
       }
       liveEls.liveTable.innerHTML = '<div class="table-grid">' + tableState.items.map(renderTableItem).join('') + '</div>';
+      liveEls.liveTable.querySelectorAll('[data-note-toggle]').forEach(btn => {
+        btn.addEventListener('click', event => {
+          event.stopPropagation();
+          btn.closest('.live-note-shell')?.classList.toggle('show-note');
+        });
+      });
       if (!IS_PRESENTER) return;
       liveEls.liveTable.querySelectorAll('[data-action]').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -424,6 +449,7 @@
           if (action === 'up') moveItem(id, -1);
           if (action === 'down') moveItem(id, 1);
           if (action === 'cross') toggleCross(id);
+          if (action === 'edit-note') openNoteEditor(btn.dataset.pattern, btn.dataset.intervention);
         });
       });
     }
@@ -443,10 +469,38 @@
     }
 
     function renderCrossItem(item, p) {
+      if (!window.EPICCardsV1) return '';
+      const cog = window.EPICCardsV1.interventionForPattern(p.id, 'Cog');
+      const emo = window.EPICCardsV1.interventionForPattern(p.id, 'Emo');
+      const comp = window.EPICCardsV1.interventionForPattern(p.id, 'Comp');
       return '<article class="live-cross">' +
-        window.EPICCardsV1.renderCrossFront(p) +
+        '<div class="epic-v1-cross">' +
+          '<div class="epic-v1-cross-cog">' + renderCrossIntervention(p.id, 'Cog', cog) + '</div>' +
+          '<div class="epic-v1-cross-emo">' + renderCrossIntervention(p.id, 'Emo', emo) + '</div>' +
+          '<div class="epic-v1-cross-pattern">' + window.EPICCardsV1.renderPatternFront(p, { cog, emo, comp }) + '</div>' +
+          '<div class="epic-v1-cross-comp">' + renderCrossIntervention(p.id, 'Comp', comp) + '</div>' +
+        '</div>' +
         renderItemActions(item) +
       '</article>';
+    }
+
+    function renderCrossIntervention(patternId, type, intervention) {
+      const note = interventionNote(patternId, type);
+      const hasNote = note.trim().length > 0;
+      return '<div class="live-note-shell' + (hasNote ? ' has-note' : '') + '">' +
+        '<div class="live-note-front">' + window.EPICCardsV1.renderInterventionFront(intervention) + '</div>' +
+        (hasNote
+          ? '<button class="live-note-badge" data-note-toggle="1" type="button" title="Mostra nota">Nota</button>' +
+            '<div class="live-note-back">' +
+              '<div class="live-note-kicker">Nota del tavolo</div>' +
+              '<div class="live-note-title">' + esc(patternId) + ' · ' + esc(type) + '</div>' +
+              '<div class="live-note-body">' + formatNote(note) + '</div>' +
+            '</div>'
+          : '') +
+        (IS_PRESENTER
+          ? '<button class="live-note-edit" data-action="edit-note" data-pattern="' + escAttr(patternId) + '" data-intervention="' + escAttr(type) + '" type="button">' + (hasNote ? 'Modifica nota' : '+ Nota') + '</button>'
+          : '') +
+      '</div>';
     }
 
     function renderLiveV1Card(kind, card) {
@@ -481,6 +535,48 @@
         }
         setStatus('Copia manuale dal campo link');
       });
+    }
+
+    function openNoteEditor(patternId, type) {
+      if (!IS_PRESENTER || !patternId || !type) return;
+      editingNote = { patternId, type };
+      if (liveEls.noteDialogTitle) liveEls.noteDialogTitle.textContent = 'Nota ' + patternId + ' · ' + type;
+      if (liveEls.noteText) liveEls.noteText.value = interventionNote(patternId, type);
+      if (liveEls.noteDialog?.showModal) {
+        liveEls.noteDialog.showModal();
+      } else {
+        liveEls.noteDialog?.classList.add('active');
+      }
+      liveEls.noteText?.focus();
+    }
+
+    function closeNoteEditor() {
+      editingNote = null;
+      if (liveEls.noteDialog?.close) {
+        liveEls.noteDialog.close();
+      } else {
+        liveEls.noteDialog?.classList.remove('active');
+      }
+    }
+
+    async function saveNoteEditor() {
+      if (!editingNote) return;
+      const key = noteKey(editingNote.patternId, editingNote.type);
+      const value = (liveEls.noteText?.value || '').trim();
+      tableState.notes = tableState.notes && typeof tableState.notes === 'object' ? tableState.notes : {};
+      if (value) {
+        tableState.notes[key] = value;
+      } else {
+        delete tableState.notes[key];
+      }
+      closeNoteEditor();
+      await saveRoom();
+    }
+
+    async function clearNoteEditor() {
+      if (!editingNote) return;
+      liveEls.noteText.value = '';
+      await saveNoteEditor();
     }
 
     async function initLiveTable() {
@@ -526,6 +622,9 @@
       document.getElementById('saveTitleBtn')?.addEventListener('click', saveTitle);
       document.getElementById('openRoomBtn')?.addEventListener('click', () => openRoom(liveEls.openRoomInput?.value || ''));
       document.getElementById('refreshRoomsBtn')?.addEventListener('click', loadSavedRooms);
+      document.getElementById('noteCancelBtn')?.addEventListener('click', closeNoteEditor);
+      document.getElementById('noteSaveBtn')?.addEventListener('click', saveNoteEditor);
+      document.getElementById('noteClearBtn')?.addEventListener('click', clearNoteEditor);
       liveEls.openRoomInput?.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') openRoom(liveEls.openRoomInput.value);
       });
