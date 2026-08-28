@@ -1,9 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
-const root = __dirname;
-const templatePath = path.join(root, 'epic-energy-print-allfront.template.html');
-const dataPath = path.join(root, 'EPIC_data.js');
+const root = path.resolve(__dirname, '..');
+const templatePath = path.join(root, 'templates', 'epic-energy-print-allfront.template.html');
+const dataPath = path.join(root, 'data', 'EPIC_data.js');
 const builds = [
   {
     side: 'front',
@@ -49,7 +49,7 @@ for (const build of builds) {
     .replaceAll('__PRINT_SIDE__', build.side)
     .replaceAll('__PRINT_SIDE_LABEL__', build.label);
 
-  const outputPath = path.join(root, build.output);
+  const outputPath = path.join(root, 'built', build.output);
   fs.writeFileSync(outputPath, built, 'utf8');
   console.log(`Built ${path.basename(outputPath)} from ${path.basename(templatePath)}`);
 }

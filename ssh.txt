@@ -1,0 +1,1 @@
+ssh -i "C:\Users\simone\Dropbox\kh-libreria\EPiC model\workspace\private\keys\simonegenini-infomaniak" ubuntu@179.237.107.160

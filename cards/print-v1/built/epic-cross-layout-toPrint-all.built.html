@@ -15,6 +15,7 @@
       /* Compact (75%): 2 crosses per A4 */
       --card-w: 47mm;
       --card-h: 66mm;
+      --card-content-scale: 0.95;
       --gap: 1mm;
       --crosses-per-page: 2;
       --radius: 5px;
@@ -140,6 +141,8 @@
       background: transparent;
       overflow: hidden;
       position: relative;
+      transform: scale(var(--card-content-scale));
+      transform-origin: center center;
     }
 
     /* Type colors */
