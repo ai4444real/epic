@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Richiedi il mazzo EPiC. La disponibilità, il pagamento e la spedizione vengono confermati manualmente.">
-  <title>Ordina il mazzo EPiC</title>
+  <title>Partecipa al test</title>
   <link rel="stylesheet" href="epic.css">
   <link rel="stylesheet" href="ordina-mazzo.css">
 </head>
@@ -32,7 +32,6 @@
         <p class="section-index">EPiC / MAZZO</p>
         <h1 id="deck-order-title">Porta EPiC sul tavolo</h1>
         <p>Il mazzo EPiC serve per leggere il Pattern, confrontare le leve e sostenere la scelta durante il lavoro in presenza.</p>
-        <p class="manual-note">Non è un ecommerce automatico: lasci una richiesta, poi confermiamo disponibilità, pagamento e spedizione.</p>
       </div>
       <figure class="deck-order-image">
         <img src="mazzo.png" alt="Mazzo di carte EPiC su un tavolo">
@@ -42,8 +41,8 @@
     <section class="deck-order-section" aria-labelledby="request-title">
       <div class="request-intro">
         <p class="section-index">RICHIESTA</p>
-        <h2 id="request-title">Richiedi il mazzo</h2>
-        <p>Compila pochi dati essenziali. Ti ricontatteremo per definire disponibilità, pagamento e consegna.</p>
+        <h2 id="request-title">Partecipa al test</h2>
+        <p>Compila pochi dati essenziali. Ci sentiamo per la consegna/invio.</p>
       </div>
 
       <form class="deck-order-form" id="deckOrderForm" novalidate>
@@ -60,11 +59,6 @@
         <label>
           Paese, città o cantone
           <input type="text" name="location" autocomplete="address-level2" required maxlength="180" placeholder="Es. Svizzera, Ticino">
-        </label>
-
-        <label>
-          Quantità
-          <input type="number" name="quantity" min="1" max="20" value="1" required>
         </label>
 
         <label class="full-row">
