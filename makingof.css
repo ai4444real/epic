@@ -43,12 +43,24 @@ body {
   color: var(--making-green);
 }
 
-.making-hero > p:last-child {
-  max-width: 570px;
-  margin: 0;
+.making-lead {
+  max-width: 720px;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: clamp(18px, 3vw, 25px);
-  line-height: 1.38;
+  font-size: clamp(17px, 2.2vw, 21px);
+  line-height: 1.5;
+}
+
+.making-lead p {
+  margin: 0;
+}
+
+.making-lead p + p {
+  margin-top: 22px;
+}
+
+.making-lead strong {
+  color: var(--making-green);
+  font-weight: 650;
 }
 
 .story-row {
@@ -92,13 +104,54 @@ body {
   letter-spacing: -1.5px;
 }
 
-.story-copy > p:last-child {
+.story-copy > p:last-child,
+.story-text {
   max-width: 540px;
   margin: 0;
   color: rgba(14, 28, 35, .78);
   font-family: Arial, Helvetica, sans-serif;
   font-size: 17px;
   line-height: 1.55;
+}
+
+.story-text p {
+  margin: 0;
+}
+
+.story-text p + p {
+  margin-top: 18px;
+}
+
+.story-text a {
+  color: var(--making-green);
+  font-weight: 700;
+  text-underline-offset: 4px;
+}
+
+.story-quote {
+  max-width: 540px;
+  margin: 30px 0 0;
+  padding: 22px 24px;
+  border-left: 4px solid var(--making-green);
+  background: rgba(255, 255, 255, .48);
+}
+
+.story-quote p {
+  margin: 0;
+  color: var(--making-ink);
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.story-quote cite {
+  display: block;
+  margin-top: 12px;
+  color: rgba(14, 28, 35, .62);
+  font-family: "Courier New", monospace;
+  font-size: 12px;
+  font-style: normal;
+  letter-spacing: .3px;
 }
 
 .story-chapter {
