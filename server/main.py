@@ -1335,6 +1335,16 @@ def access_log_scan_sql() -> str:
         "OR flagged.path IN ('/login', '/logout') "
         "OR TRIM(flagged.user_agent) = '' "
         f"OR {agent_clauses}"
+        " UNION "
+        "SELECT fast.session_id FROM access_log AS fast "
+        "WHERE fast.status_code = 200 "
+        "AND fast.path NOT LIKE '/admin%' "
+        "AND fast.path NOT LIKE '/auth/%' "
+        "AND fast.path NOT LIKE '/api/%' "
+        "AND fast.path NOT IN ('/login', '/logout', '/health') "
+        "GROUP BY fast.session_id "
+        "HAVING COUNT(DISTINCT fast.path) >= 2 "
+        "AND (julianday(MAX(fast.created_at)) - julianday(MIN(fast.created_at))) * 86400.0 <= 2.0"
         ")"
     )
 

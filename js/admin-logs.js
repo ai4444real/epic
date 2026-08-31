@@ -167,7 +167,7 @@
 
   function renderLogs(rows) {
     if (!rows.length) {
-      els.body.innerHTML = '<tr><td colspan="7">Nessun log.</td></tr>';
+      els.body.innerHTML = '<tr><td colspan="8">Nessun log.</td></tr>';
       return;
     }
     els.body.innerHTML = rows.map(row => {
@@ -179,6 +179,7 @@
         '<td>' + esc(row.duration_ms) + '</td>' +
         '<td title="' + esc(row.session_id) + '">' + esc(short(row.session_id, 14)) + '</td>' +
         '<td title="' + esc(row.forwarded_for || row.client_ip) + '">' + esc(short(row.client_ip || row.forwarded_for, 18)) + '</td>' +
+        '<td title="' + esc(row.user_agent) + '">' + esc(short(row.user_agent || '-', 34)) + '</td>' +
         '<td title="' + esc(row.referer) + '">' + esc(short(row.referer || '-', 34)) + '</td>' +
       '</tr>';
     }).join('');
@@ -196,7 +197,7 @@
       setStatus('Log aggiornati.', 'ok');
     } catch (error) {
       setStatus('Errore: ' + error.message, 'error');
-      if (els.body) els.body.innerHTML = '<tr><td colspan="7">Impossibile caricare i log.</td></tr>';
+      if (els.body) els.body.innerHTML = '<tr><td colspan="8">Impossibile caricare i log.</td></tr>';
     }
   }
 

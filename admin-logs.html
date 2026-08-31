@@ -62,7 +62,7 @@
         </select>
         <button class="btn primary" type="submit">Filtra</button>
       </form>
-      <p class="traffic-note">Regola: un visitatore con almeno un 404, un accesso admin o uno user-agent automatico viene classificato come rumore. Le pagine sono conteggiate una sola volta per visitatore.</p>
+      <p class="traffic-note">Regola: un visitatore con almeno un 404, un accesso admin, uno user-agent automatico o almeno due pagine distinte aperte entro 2 secondi viene classificato come rumore. Le pagine sono conteggiate una sola volta per visitatore.</p>
 
       <div class="admin-status" id="adminStatus"></div>
 
@@ -91,11 +91,12 @@
               <th>ms</th>
               <th>Sessione</th>
               <th>IP</th>
+              <th>User-agent</th>
               <th>Referer</th>
             </tr>
           </thead>
           <tbody id="logsBody">
-            <tr><td colspan="7">Caricamento...</td></tr>
+            <tr><td colspan="8">Caricamento...</td></tr>
           </tbody>
         </table>
       </div>
