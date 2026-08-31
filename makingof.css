@@ -21,8 +21,8 @@ body {
 }
 
 .making-hero {
-  min-height: 430px;
-  padding: 82px 24px 72px;
+  min-height: 360px;
+  padding: 64px 24px 58px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -33,10 +33,10 @@ body {
   margin: 14px 0 24px;
   color: var(--making-ink);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(62px, 17vw, 108px);
-  font-weight: 650;
-  line-height: .82;
-  letter-spacing: -4px;
+  font-size: clamp(40px, 7.4vw, 66px);
+  font-weight: 640;
+  line-height: 1.02;
+  letter-spacing: -2px;
 }
 
 .making-hero h1 span {
@@ -62,6 +62,10 @@ body {
   align-items: center;
 }
 
+.story-first .story-photo {
+  width: 80%;
+}
+
 .story-photo {
   position: relative;
   margin: 0;
@@ -77,27 +81,12 @@ body {
   object-fit: cover;
 }
 
-.story-number {
-  position: absolute;
-  z-index: 1;
-  top: 14px;
-  left: 14px;
-  min-width: 48px;
-  padding: 8px 9px 7px;
-  color: var(--making-paper);
-  background: var(--making-green);
-  font-family: "Courier New", monospace;
-  font-size: 17px;
-  font-weight: 700;
-  text-align: center;
-}
-
 .story-copy h2,
 .making-close h2 {
   margin: 10px 0 18px;
   color: var(--making-ink);
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: clamp(34px, 7vw, 54px);
+  font-size: clamp(30px, 6.4vw, 46px);
   font-weight: 650;
   line-height: 1;
   letter-spacing: -1.5px;
@@ -129,8 +118,13 @@ body {
   aspect-ratio: 4 / 5;
 }
 
-.pair-staggered .story-photo:last-child {
-  margin-top: 44px;
+.pair-staggered {
+  width: 80%;
+}
+
+.pair-staggered .story-photo img,
+.pair-final .story-photo img {
+  aspect-ratio: 4 / 5;
 }
 
 .pair-wide .story-photo img {
@@ -146,10 +140,6 @@ body {
   margin-inline: auto;
 }
 
-.pair-final .story-photo:first-child {
-  margin-top: 38px;
-}
-
 .making-close {
   padding: 84px 24px 96px;
   text-align: center;
@@ -162,8 +152,8 @@ body {
 
 @media (min-width: 760px) {
   .making-hero {
-    min-height: 520px;
-    padding: 110px 7vw 90px;
+    min-height: 430px;
+    padding: 82px 7vw 72px;
   }
 
   .story-row {
@@ -202,10 +192,6 @@ body {
 
   .photo-pair .story-photo img {
     min-height: 420px;
-  }
-
-  .pair-staggered {
-    grid-template-columns: .82fr 1.18fr;
   }
 
   .pair-wide .story-photo img {

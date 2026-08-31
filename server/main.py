@@ -48,7 +48,6 @@ PAGE_ALIASES = {
     "/epic-intro": APP_ROOT / "epic-intro.html",
     "/voglio-saperne-di-piu": APP_ROOT / "epic.html",
     "/epic/mazzo": APP_ROOT / "ordina-mazzo.html",
-    "/makingof": APP_ROOT / "makingof.html",
     "/epic/makingof": APP_ROOT / "makingof.html",
 }
 

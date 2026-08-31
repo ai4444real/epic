@@ -1045,6 +1045,17 @@ a.process-item:focus-visible strong::after {
   color: var(--green);
 }
 
+.origin-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 34px;
+  margin-top: 28px;
+}
+
+.origin-links a {
+  margin-top: 0;
+}
+
 .origin-photo {
   min-height: 340px;
   overflow: hidden;
