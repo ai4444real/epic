@@ -10,6 +10,10 @@
     outcome: document.getElementById('outcomeFilter'),
     statusFilter: document.getElementById('statusFilter'),
     limit: document.getElementById('limitFilter'),
+    resetFilters: document.getElementById('resetLogsFiltersBtn'),
+    drilldownBar: document.getElementById('drilldownBar'),
+    clearDrilldown: document.getElementById('clearDrilldownBtn'),
+    filterChips: document.getElementById('activeFilterChips'),
     metrics: document.getElementById('metricGrid'),
     days: document.getElementById('dayCardGrid'),
     topPaths: document.getElementById('topPaths'),
@@ -75,6 +79,41 @@
     if (els.outcome?.value) params.set('outcome', els.outcome.value);
     if (els.statusFilter?.value) params.set('status', els.statusFilter.value);
     return '/api/admin/logs?' + params.toString();
+  }
+
+  function clearDrilldownFilter(kind) {
+    if (kind === 'path' || kind === 'all') els.path.value = '';
+    if (kind === 'session' || kind === 'all') els.session.value = '';
+    renderDrilldownBar();
+    loadLogs();
+  }
+
+  function renderDrilldownBar() {
+    const filters = [];
+    if (els.path?.value.trim()) filters.push({ kind: 'path', label: 'Pagina: ' + els.path.value.trim() });
+    if (els.session?.value.trim()) filters.push({ kind: 'session', label: 'Sessione: ' + short(els.session.value.trim(), 22) });
+    if (!els.drilldownBar || !els.filterChips) return;
+    els.drilldownBar.hidden = filters.length === 0;
+    els.filterChips.innerHTML = filters.map(filter =>
+      '<button class="filter-chip" type="button" data-clear-filter="' + esc(filter.kind) + '" title="Rimuovi filtro">' +
+        esc(filter.label) + ' ×' +
+      '</button>'
+    ).join('');
+    els.filterChips.querySelectorAll('[data-clear-filter]').forEach(button => {
+      button.addEventListener('click', () => clearDrilldownFilter(button.dataset.clearFilter));
+    });
+  }
+
+  function resetFilters() {
+    els.date.value = '';
+    els.path.value = '';
+    els.session.value = '';
+    els.traffic.value = 'probable';
+    els.outcome.value = '';
+    els.statusFilter.value = '';
+    els.limit.value = '200';
+    renderDrilldownBar();
+    loadLogs();
   }
 
   function renderDays(rows, activeDay, summary) {
@@ -145,6 +184,7 @@
     els.topPaths.querySelectorAll('[data-path]').forEach(button => {
       button.addEventListener('click', () => {
         els.path.value = button.dataset.path;
+        renderDrilldownBar();
         loadLogs();
       });
     });
@@ -160,6 +200,7 @@
     els.recentSessions.querySelectorAll('[data-session]').forEach(button => {
       button.addEventListener('click', () => {
         els.session.value = button.dataset.session;
+        renderDrilldownBar();
         loadLogs();
       });
     });
@@ -186,6 +227,7 @@
   }
 
   async function loadLogs() {
+    renderDrilldownBar();
     setStatus('Caricamento log...');
     try {
       const report = await adminFetch(buildUrl());
@@ -207,6 +249,13 @@
       loadLogs();
     });
     els.refresh?.addEventListener('click', loadLogs);
+    els.clearDrilldown?.addEventListener('click', () => clearDrilldownFilter('all'));
+    els.resetFilters?.addEventListener('click', resetFilters);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && (els.path?.value.trim() || els.session?.value.trim())) {
+        clearDrilldownFilter('all');
+      }
+    });
     loadLogs();
   });
 })();

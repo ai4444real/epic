@@ -53,6 +53,53 @@
   line-height: 1.45;
 }
 
+.drilldown-bar{
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background: #eff6ff;
+}
+
+.drilldown-bar[hidden]{
+  display: none;
+}
+
+.drilldown-back{
+  padding: 0;
+  border: 0;
+  color: #1d4ed8;
+  background: transparent;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.filter-chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.filter-chip{
+  border: 1px solid #93c5fd;
+  border-radius: 999px;
+  padding: 5px 9px;
+  color: #1e3a8a;
+  background: #fff;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.filter-chip:hover{
+  background: #dbeafe;
+}
+
 .orders-filter-form{
   display: grid;
   grid-template-columns: minmax(220px, 1fr) 160px 140px auto;

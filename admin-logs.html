@@ -61,8 +61,14 @@
           <option value="1000">1000 righe</option>
         </select>
         <button class="btn primary" type="submit">Filtra</button>
+        <button class="btn" id="resetLogsFiltersBtn" type="button">Azzera filtri</button>
       </form>
       <p class="traffic-note">Regola: un visitatore con almeno un 404, un accesso admin, uno user-agent automatico o almeno due pagine distinte aperte entro 2 secondi viene classificato come rumore. Le pagine sono conteggiate una sola volta per visitatore.</p>
+
+      <div class="drilldown-bar" id="drilldownBar" hidden>
+        <button class="drilldown-back" id="clearDrilldownBtn" type="button">← Torna all’elenco</button>
+        <div class="filter-chips" id="activeFilterChips" aria-label="Filtri di dettaglio attivi"></div>
+      </div>
 
       <div class="admin-status" id="adminStatus"></div>
 
