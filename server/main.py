@@ -544,6 +544,7 @@ def init_access_db() -> None:
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_created_at ON access_log(created_at)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_path ON access_log(path)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_session_id ON access_log(session_id)")
 
 
 def init_auth_db() -> None:
@@ -1255,8 +1256,18 @@ def build_access_log_filters(
     params: list = []
     traffic_filter = normalize_traffic_filter(traffic)
     scan_sql = access_log_scan_sql()
+    useful_pages_sql = access_log_useful_page_count_sql()
     if traffic_filter == "scans":
         clauses.append(scan_sql)
+    elif traffic_filter == "possible":
+        clauses.append(f"NOT ({scan_sql})")
+        clauses.append(f"({useful_pages_sql}) = 1")
+    elif traffic_filter == "probable":
+        clauses.append(f"NOT ({scan_sql})")
+        clauses.append(f"({useful_pages_sql}) >= 2")
+    elif traffic_filter == "very_likely":
+        clauses.append(f"NOT ({scan_sql})")
+        clauses.append(f"({useful_pages_sql}) >= 3")
     elif traffic_filter == "clean":
         clauses.append(f"NOT ({scan_sql})")
     outcome_filter = normalize_outcome_filter(outcome)
@@ -1292,7 +1303,7 @@ def build_access_log_filters(
 
 def normalize_traffic_filter(value: str) -> str:
     value = (value or "").strip().lower()
-    if value in {"all", "scans"}:
+    if value in {"all", "scans", "possible", "probable", "very_likely"}:
         return value
     return "clean"
 
@@ -1305,26 +1316,37 @@ def normalize_outcome_filter(value: str) -> str:
 
 
 def access_log_scan_sql() -> str:
-    patterns = [
-        "/wp-%",
-        "/wp/%",
-        "/wp-json%",
-        "%/.env%",
-        "%.env%",
-        "/webhook%",
-        "/workspaces/%",
-        "/website/%",
-        "/web/%",
-        "/waku%",
-        "/vendor/%",
-        "/config%",
-        "/actuator%",
-        "/server-status%",
-        "%.php%",
-        "%phpmyadmin%",
-    ]
-    path_clauses = " OR ".join(f"path LIKE '{pattern}'" for pattern in patterns)
-    return f"(status_code = 404 AND ({path_clauses}))"
+    automated_agents = (
+        "bot", "crawler", "spider", "slurp", "preview", "facebookexternalhit",
+        "linkedinbot", "whatsapp", "telegrambot", "discordbot", "curl/", "wget/",
+        "python-requests", "go-http-client", "uptime", "monitor",
+    )
+    agent_clauses = " OR ".join(
+        f"LOWER(flagged.user_agent) LIKE '%{agent}%'" for agent in automated_agents
+    )
+    return (
+        "access_log.session_id IN ("
+        "SELECT flagged.session_id FROM access_log AS flagged "
+        "WHERE flagged.status_code = 404 "
+        "OR flagged.path LIKE '/admin%' "
+        "OR flagged.path LIKE '/auth/%' "
+        "OR flagged.path IN ('/login', '/logout') "
+        "OR TRIM(flagged.user_agent) = '' "
+        f"OR {agent_clauses}"
+        ")"
+    )
+
+
+def access_log_useful_page_count_sql() -> str:
+    return (
+        "SELECT COUNT(DISTINCT useful.path) FROM access_log AS useful "
+        "WHERE useful.session_id = access_log.session_id "
+        "AND useful.status_code = 200 "
+        "AND useful.path NOT LIKE '/admin%' "
+        "AND useful.path NOT LIKE '/auth/%' "
+        "AND useful.path NOT LIKE '/api/%' "
+        "AND useful.path NOT IN ('/login', '/logout', '/health')"
+    )
 
 
 def escape_like(value: str) -> str:

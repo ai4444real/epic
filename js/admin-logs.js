@@ -91,14 +91,14 @@
       return '<button class="day-card' + activeClass + '" data-day="' + esc(row.day) + '">' +
         '<span class="day-label">' + esc(formatDay(row.day)) + '</span>' +
         '<strong>' + esc(row.sessions || 0) + '</strong>' +
-        '<span>sessioni</span>' +
+        '<span>visitatori</span>' +
         '<small>' + esc(row.hits || 0) + ' hit' + (row.errors ? ' · ' + esc(row.errors) + ' errori' : '') + '</small>' +
       '</button>';
     }).join('') +
       '<button class="day-card day-card-total" data-clear-day="1">' +
         '<span class="day-label">3 giorni</span>' +
         '<strong>' + esc(totalSessions) + '</strong>' +
-        '<span>sessioni totali</span>' +
+        '<span>visitatori totali</span>' +
         '<small>' + esc(totalHits) + ' hit' + (totalErrors ? ' · ' + esc(totalErrors) + ' errori' : '') + '</small>' +
       '</button>';
     els.days.querySelectorAll('[data-day]').forEach(button => {
@@ -116,7 +116,7 @@
   function renderMetrics(summary) {
     const metrics = [
       ['Hit', summary.total || 0],
-      ['Sessioni', summary.sessions || 0],
+      ['Visitatori', summary.sessions || 0],
       ['Errori', summary.errors || 0],
       ['Media ms', summary.avg_duration_ms || 0],
       ['Primo', formatDate(summary.first_seen)],
