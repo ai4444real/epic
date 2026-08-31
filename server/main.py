@@ -1328,6 +1328,8 @@ def access_log_scan_sql() -> str:
         "access_log.session_id IN ("
         "SELECT flagged.session_id FROM access_log AS flagged "
         "WHERE flagged.status_code = 404 "
+        "OR flagged.path LIKE '/.%' "
+        "OR flagged.path LIKE '%/.%' "
         "OR flagged.path LIKE '/admin%' "
         "OR flagged.path LIKE '/auth/%' "
         "OR flagged.path IN ('/login', '/logout') "
@@ -1451,6 +1453,9 @@ def static_file_response(request_path: str) -> Response | None:
     if not normalized:
         return None
     normalized_lower = normalized.replace("\\", "/").lower()
+    path_segments = normalized_lower.split("/")
+    if any(segment.startswith(".") for segment in path_segments):
+        return None
     if normalized_lower.startswith("server/"):
         return None
     if normalized_lower == "data/scenarios.js":
