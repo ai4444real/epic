@@ -26,6 +26,10 @@
   function mountUser(user) {
     if (!authEnabled || !user || document.getElementById('epicLogoutBtn')) return;
 
+    document.querySelectorAll('.epic-login-link').forEach(link => {
+      link.remove();
+    });
+
     const target =
       document.querySelector('.toolbar-actions') ||
       document.querySelector('.controls') ||
