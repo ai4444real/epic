@@ -186,7 +186,9 @@ La pagina:
 
 mostra i log di accesso salvati in `EPIC_ACCESS_DB`: riepilogo, top pagine, sessioni recenti e ultime righe filtrabili.
 
-Per le nuove righe, il log salva anche l'email quando la richiesta appartiene a una sessione autenticata. Le visite pubbliche restano anonime. Il database auth conserva inoltre una cronologia `auth_events` dei login Google completati e dei logout; `/admin/logs` mostra gli eventi recenti e permette di filtrare le visite per email. I log precedenti a questa introduzione non vengono attribuiti retroattivamente.
+Per le nuove righe, il log salva anche l'email quando la richiesta appartiene a una sessione autenticata. Le visite pubbliche restano anonime. Il database auth conserva inoltre una cronologia `auth_events` dei login Google completati e dei logout; `/admin/logs` mostra gli eventi recenti e permette di filtrare le visite per email esatta. I log precedenti a questa introduzione non vengono attribuiti retroattivamente.
+
+La navigazione principale di `/epic` mostra il collegamento `ORDINI` solo quando `/me` conferma che l'utente corrente ha ruolo `admin`. La route `/admin/orders` continua comunque a verificare il ruolo lato server.
 
 Il log accessi registra solo navigazioni/pagine (`/epic`, `/admin/users`, `.html`, ecc.). Le API (`/api/...`) sono escluse per non riempire il DB con polling tecnico, in particolare Live Table.
 

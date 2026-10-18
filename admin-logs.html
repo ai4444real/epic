@@ -32,7 +32,7 @@
         <input class="input" id="dateFilter" type="date" aria-label="Filtra per giorno" />
         <input class="input" id="pathFilter" placeholder="filtra path, es. /epic" />
         <input class="input" id="sessionFilter" placeholder="session id anche parziale" />
-        <input class="input" id="emailFilter" type="email" placeholder="utente autenticato (email)" />
+        <input class="input" id="emailFilter" type="email" placeholder="email esatta utente autenticato" autocomplete="off" />
         <select class="input" id="trafficFilter">
           <option value="probable" selected>probabili: almeno 2 pagine</option>
           <option value="very_likely">molto probabili: almeno 3 pagine</option>
@@ -116,6 +116,6 @@
     </section>
   </main>
 
-  <script src="js/admin-logs.js"></script>
+  <script src="js/admin-logs.js?v=20261018-2"></script>
 </body>
 </html>

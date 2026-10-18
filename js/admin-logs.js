@@ -263,7 +263,12 @@
       renderRecentSessions(report.recent_sessions || []);
       renderAuthEvents(report.auth_events || []);
       renderLogs(report.logs || []);
-      setStatus('Log aggiornati.', 'ok');
+      const email = report.filters?.email || '';
+      const count = report.summary?.total || 0;
+      setStatus(
+        email ? count + ' log per ' + email + '.' : 'Log aggiornati.',
+        'ok'
+      );
     } catch (error) {
       setStatus('Errore: ' + error.message, 'error');
       if (els.body) els.body.innerHTML = '<tr><td colspan="9">Impossibile caricare i log.</td></tr>';

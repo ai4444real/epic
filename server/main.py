@@ -1344,8 +1344,8 @@ def build_access_log_filters(
         params.append("%" + escape_like(session_filter) + "%")
     email_filter = normalize_email(email)
     if email_filter:
-        clauses.append("authenticated_email LIKE ? ESCAPE '\\'")
-        params.append("%" + escape_like(email_filter) + "%")
+        clauses.append("authenticated_email = ?")
+        params.append(email_filter)
     if status:
         clauses.append("status_code = ?")
         params.append(status)
@@ -1490,8 +1490,8 @@ def list_auth_events(email: str = "", date: str = "", limit: int = 30) -> list[d
     params: list = []
     normalized_email = normalize_email(email)
     if normalized_email:
-        clauses.append("email LIKE ? ESCAPE '\\'")
-        params.append("%" + escape_like(normalized_email) + "%")
+        clauses.append("email = ?")
+        params.append(normalized_email)
     date_filter = (date or "").strip()
     if len(date_filter) == 10:
         try:
