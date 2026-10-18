@@ -1,0 +1,54 @@
+{
+  "it": {
+    "E1": {
+      "hint": "attivazione alta + futuro → guarda P7",
+      "porta_I": "I-P6-Emo"
+    },
+    "E2": {
+      "hint": "evitamento specifico → guarda P7",
+      "porta_I": "I-P5-Emo"
+    },
+    "E3": {
+      "hint": "'non va / non è giusto' → guarda interpretazione vs richiesta",
+      "porta_I": "I-P3-Comp"
+    },
+    "E4": {
+      "hint": "troppo + poco chiaro → guarda sovraccarico",
+      "porta_I": "I-P4-Emo"
+    },
+    "E5": {
+      "hint": "energia alta verso fuori → guarda confine / bisogno",
+      "porta_I": "I-P4-Comp"
+    },
+    "E6": {
+      "hint": "energia bassa → guarda evitamento + senso",
+      "porta_I": "I-P8-Emo"
+    }
+  },
+  "en-us": {
+    "E1": {
+      "hint": "high activation + future focus → check P7",
+      "porta_I": "I-P6-Emo"
+    },
+    "E2": {
+      "hint": "specific avoidance → check P7",
+      "porta_I": "I-P5-Emo"
+    },
+    "E3": {
+      "hint": "\"not working / not fair\" → check interpretation vs. request",
+      "porta_I": "I-P3-Comp"
+    },
+    "E4": {
+      "hint": "too much + unclear → check overload",
+      "porta_I": "I-P4-Emo"
+    },
+    "E5": {
+      "hint": "high outward activation → check boundary / need",
+      "porta_I": "I-P4-Comp"
+    },
+    "E6": {
+      "hint": "low energy → check avoidance + purpose",
+      "porta_I": "I-P8-Emo"
+    }
+  }
+}

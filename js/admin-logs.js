@@ -6,6 +6,7 @@
     date: document.getElementById('dateFilter'),
     path: document.getElementById('pathFilter'),
     session: document.getElementById('sessionFilter'),
+    email: document.getElementById('emailFilter'),
     traffic: document.getElementById('trafficFilter'),
     outcome: document.getElementById('outcomeFilter'),
     statusFilter: document.getElementById('statusFilter'),
@@ -18,6 +19,7 @@
     days: document.getElementById('dayCardGrid'),
     topPaths: document.getElementById('topPaths'),
     recentSessions: document.getElementById('recentSessions'),
+    authEvents: document.getElementById('authEvents'),
     body: document.getElementById('logsBody')
   };
 
@@ -75,6 +77,7 @@
     if (els.date?.value) params.set('date', els.date.value);
     if (els.path?.value.trim()) params.set('path', els.path.value.trim());
     if (els.session?.value.trim()) params.set('session_id', els.session.value.trim());
+    if (els.email?.value.trim()) params.set('email', els.email.value.trim());
     if (els.traffic?.value) params.set('traffic', els.traffic.value);
     if (els.outcome?.value) params.set('outcome', els.outcome.value);
     if (els.statusFilter?.value) params.set('status', els.statusFilter.value);
@@ -84,6 +87,7 @@
   function clearDrilldownFilter(kind) {
     if (kind === 'path' || kind === 'all') els.path.value = '';
     if (kind === 'session' || kind === 'all') els.session.value = '';
+    if (kind === 'email' || kind === 'all') els.email.value = '';
     renderDrilldownBar();
     loadLogs();
   }
@@ -92,6 +96,7 @@
     const filters = [];
     if (els.path?.value.trim()) filters.push({ kind: 'path', label: 'Pagina: ' + els.path.value.trim() });
     if (els.session?.value.trim()) filters.push({ kind: 'session', label: 'Sessione: ' + short(els.session.value.trim(), 22) });
+    if (els.email?.value.trim()) filters.push({ kind: 'email', label: 'Utente: ' + els.email.value.trim() });
     if (!els.drilldownBar || !els.filterChips) return;
     els.drilldownBar.hidden = filters.length === 0;
     els.filterChips.innerHTML = filters.map(filter =>
@@ -108,6 +113,7 @@
     els.date.value = '';
     els.path.value = '';
     els.session.value = '';
+    els.email.value = '';
     els.traffic.value = 'probable';
     els.outcome.value = '';
     els.statusFilter.value = '';
@@ -156,6 +162,8 @@
     const metrics = [
       ['Hit', summary.total || 0],
       ['Visitatori', summary.sessions || 0],
+      ['Utenti autenticati', summary.authenticated_users || 0],
+      ['Hit autenticati', summary.authenticated_hits || 0],
       ['Errori', summary.errors || 0],
       ['Media ms', summary.avg_duration_ms || 0],
       ['Primo', formatDate(summary.first_seen)],
@@ -193,7 +201,7 @@
   function renderRecentSessions(rows) {
     renderList(els.recentSessions, rows, row =>
       '<button class="compact-row" data-session="' + esc(row.session_id) + '">' +
-        '<span title="' + esc(row.session_id) + '">' + esc(short(row.session_id, 18)) + '</span>' +
+        '<span title="' + esc(row.session_id) + '">' + esc(row.authenticated_emails || short(row.session_id, 18)) + '</span>' +
         '<strong>' + esc(row.hits) + '</strong>' +
       '</button>'
     );
@@ -206,9 +214,26 @@
     });
   }
 
+  function renderAuthEvents(rows) {
+    renderList(els.authEvents, rows, row =>
+      '<button class="compact-row" data-email="' + esc(row.email) + '">' +
+        '<span title="' + esc(row.user_agent || '') + '">' + esc(row.email) + ' · ' +
+          esc(row.event_type === 'login_success' ? 'login' : 'logout') + '</span>' +
+        '<strong>' + esc(formatDate(row.created_at)) + '</strong>' +
+      '</button>'
+    );
+    els.authEvents.querySelectorAll('[data-email]').forEach(button => {
+      button.addEventListener('click', () => {
+        els.email.value = button.dataset.email;
+        renderDrilldownBar();
+        loadLogs();
+      });
+    });
+  }
+
   function renderLogs(rows) {
     if (!rows.length) {
-      els.body.innerHTML = '<tr><td colspan="8">Nessun log.</td></tr>';
+      els.body.innerHTML = '<tr><td colspan="9">Nessun log.</td></tr>';
       return;
     }
     els.body.innerHTML = rows.map(row => {
@@ -219,6 +244,7 @@
         '<td><span class="status-pill status-' + esc(row.status_code) + '">' + esc(row.status_code) + '</span></td>' +
         '<td>' + esc(row.duration_ms) + '</td>' +
         '<td title="' + esc(row.session_id) + '">' + esc(short(row.session_id, 14)) + '</td>' +
+        '<td title="' + esc(row.authenticated_email) + '">' + esc(row.authenticated_email || 'anonimo') + '</td>' +
         '<td title="' + esc(row.forwarded_for || row.client_ip) + '">' + esc(short(row.client_ip || row.forwarded_for, 18)) + '</td>' +
         '<td title="' + esc(row.user_agent) + '">' + esc(short(row.user_agent || '-', 34)) + '</td>' +
         '<td title="' + esc(row.referer) + '">' + esc(short(row.referer || '-', 34)) + '</td>' +
@@ -235,11 +261,12 @@
       renderMetrics(report.summary || {});
       renderTopPaths(report.top_paths || []);
       renderRecentSessions(report.recent_sessions || []);
+      renderAuthEvents(report.auth_events || []);
       renderLogs(report.logs || []);
       setStatus('Log aggiornati.', 'ok');
     } catch (error) {
       setStatus('Errore: ' + error.message, 'error');
-      if (els.body) els.body.innerHTML = '<tr><td colspan="8">Impossibile caricare i log.</td></tr>';
+      if (els.body) els.body.innerHTML = '<tr><td colspan="9">Impossibile caricare i log.</td></tr>';
     }
   }
 
@@ -252,7 +279,7 @@
     els.clearDrilldown?.addEventListener('click', () => clearDrilldownFilter('all'));
     els.resetFilters?.addEventListener('click', resetFilters);
     document.addEventListener('keydown', event => {
-      if (event.key === 'Escape' && (els.path?.value.trim() || els.session?.value.trim())) {
+      if (event.key === 'Escape' && (els.path?.value.trim() || els.session?.value.trim() || els.email?.value.trim())) {
         clearDrilldownFilter('all');
       }
     });

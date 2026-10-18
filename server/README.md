@@ -53,6 +53,8 @@ Production database path is configured in `server/infra/epic.service.example`:
 
 Logged fields include timestamp, path, status code, duration, IP from `X-Forwarded-For`, user agent, referer, and an anonymous `epic_session` cookie.
 
+When a page request is authenticated, the access row also stores the authenticated email. Public requests remain anonymous. Successful Google logins and explicit logouts are recorded separately in the auth database `auth_events` table.
+
 `server/var/` is ignored by Git.
 
 ## Production shape

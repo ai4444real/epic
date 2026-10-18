@@ -8,6 +8,12 @@
 
   let data = global.EPIC_DATA || { E: [], P: [], I: [] };
   let assetBase = '';
+  let labels = Object.assign({
+    patternEnergies: 'Energie del pattern',
+    whenSeen: 'Quando la vedi',
+    notThisEnergy: 'Non è questa se',
+    showPatternId: true
+  }, global.EPIC_CARD_I18N || {});
 
   function setData(nextData) {
     data = nextData || { E: [], P: [], I: [] };
@@ -18,6 +24,7 @@
     options = options || {};
     if (options.data) setData(options.data);
     if (options.assetBase != null) assetBase = String(options.assetBase).replace(/\/+$/, '');
+    if (options.labels) labels = Object.assign({}, labels, options.labels);
     return api;
   }
 
@@ -111,7 +118,7 @@
         '<img src="' + esc(asset('images/' + eid + 'b.png')) + '" alt="' + esc(eid) + '">' +
       '</span>';
     }).join('');
-    return '<div class="epic-v1-energy-strip" aria-label="Energie del pattern">' + icons + '</div>';
+    return '<div class="epic-v1-energy-strip" aria-label="' + esc(labels.patternEnergies) + '">' + icons + '</div>';
   }
 
   function renderPatternNote(position, intervention) {
@@ -141,7 +148,7 @@
         '<div class="epic-v1-pattern-art"><img src="' + esc(asset('images/' + pattern.id + '.png')) + '" alt="' + esc(pattern.id) + '"></div>' +
         '<div class="epic-v1-text-area">' +
           '<img class="epic-v1-pattern-watermark" src="' + esc(asset('images/pattern.png')) + '" alt="">' +
-          '<div class="epic-v1-pattern-title">' + esc(pattern.id) + ': ' + esc(pattern.label) + '</div>' +
+          '<div class="epic-v1-pattern-title">' + (labels.showPatternId ? esc(pattern.id) + ': ' : '') + esc(pattern.label) + '</div>' +
           (signals ? '<div class="epic-v1-pattern-signals">' + signals + '</div>' : '') +
           (shorts ? '<div class="epic-v1-pattern-copy">' + shorts + '</div>' : '') +
           (why ? '<div class="epic-v1-pattern-copy">' + why + '</div>' : '') +
@@ -207,8 +214,8 @@
       '<div class="epic-v1-energy-text">' +
         '<img class="epic-v1-energy-watermark" src="' + esc(asset('images/logo/epic_logo.png')) + '" alt="">' +
         (aliases ? '<div class="epic-v1-energy-aliases">' + aliases + '</div>' : '') +
-        renderEnergyList('Quando la vedi', seen) +
-        renderEnergyList('Non è questa se', notThis) +
+        renderEnergyList(labels.whenSeen, seen) +
+        renderEnergyList(labels.notThisEnergy, notThis) +
       '</div>' +
     '</article>';
   }

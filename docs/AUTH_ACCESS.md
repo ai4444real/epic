@@ -174,6 +174,7 @@ Permette di:
 - eliminare utenti
 
 Gli utenti pending vengono agganciati al primo login Google tramite la stessa email.
+Finche' sono pending, la pagina utenti mostra `-` come ultimo accesso: la data viene esposta solo dopo il primo login Google completato.
 
 `EPIC_ADMIN_EMAILS` contiene gli admin bootstrap, separati da virgola. Questi utenti vengono creati o promossi automaticamente ad `admin` all'avvio del server.
 
@@ -185,7 +186,11 @@ La pagina:
 
 mostra i log di accesso salvati in `EPIC_ACCESS_DB`: riepilogo, top pagine, sessioni recenti e ultime righe filtrabili.
 
+Per le nuove righe, il log salva anche l'email quando la richiesta appartiene a una sessione autenticata. Le visite pubbliche restano anonime. Il database auth conserva inoltre una cronologia `auth_events` dei login Google completati e dei logout; `/admin/logs` mostra gli eventi recenti e permette di filtrare le visite per email. I log precedenti a questa introduzione non vengono attribuiti retroattivamente.
+
 Il log accessi registra solo navigazioni/pagine (`/epic`, `/admin/users`, `.html`, ecc.). Le API (`/api/...`) sono escluse per non riempire il DB con polling tecnico, in particolare Live Table.
+
+La classificazione del rumore considera 404, user-agent automatici o navigazioni incompatibilmente rapide. Il passaggio da `/login`, `/auth/*`, `/logout` o `/admin/*` non classifica piu' l'intera sessione come rumore.
 
 La pagina:
 

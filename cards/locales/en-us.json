@@ -1,0 +1,59 @@
+{
+  "dataLabels": {
+    "aliases": "Aliases",
+    "subtypes": "Subtypes",
+    "whenSeen": "When you see it",
+    "notThisEnergy": "It is not this if",
+    "patternsToExplore": "Patterns to explore",
+    "redFlags": "Red flags",
+    "back": "Back",
+    "notThisPattern": "It is not this if",
+    "short": "Short",
+    "signals": "Signals"
+  },
+  "web": {
+    "patternEnergies": "Pattern energies",
+    "whenSeen": "When you see it",
+    "notThisEnergy": "It is not this if",
+    "showPatternId": false
+  },
+  "debug": {
+    "title": "Card audit",
+    "signals": "signals",
+    "shorts": "shorts",
+    "why": "why",
+    "principle": "principle",
+    "interventionWhy": "why",
+    "exampleC": "example_C",
+    "exampleQ": "example_q",
+    "fallback": "fallback",
+    "high": "priority energy",
+    "medium": "other energy",
+    "off": "not associated",
+    "missing": "Missing intervention"
+  },
+  "print": {
+    "front": "Front",
+    "back": "Back",
+    "replacements": {
+      "Quando la vedi": "When you see it",
+      "Non è questa se": "Not this if",
+      " · Energia": " · Energy",
+      "<span>ENERGIA</span>": "<span>ENERGY</span>",
+      "<div class=\"type-label\">ENERGIA</div>": "<div class=\"type-label\">ENERGY</div>",
+      "-&gt; INTERVENTO": "-&gt; INTERVENTION",
+      "-&gt; COMPORTAMENTO": "-&gt; BEHAVIOR",
+      "alt=\"Energie\"": "alt=\"Energies\"",
+      "Riconosci l’Energia prevalente": "Recognize the prevailing Energy",
+      "Questa è la forza che<br>alimenta il pattern": "This is the force that<br>fuels the pattern",
+      "Individua i Pattern in gioco": "Identify the Patterns at play",
+      "Questa è la struttura che<br>mantiene il blocco": "This is the structure that<br>maintains the block",
+      "Scegli la leva più utile": "Choose the most useful lever",
+      "Emo regola, Cog orienta,<br>Comp muove": "Emo regulates, Cog guides,<br>Comp moves",
+      "1 - (E)NERGIA": "1 - (E)NERGY",
+      "3 - (I)NTERVENTO": "3 - (I)NTERVENTION",
+      "'<div class=\"title\">' + escapeHTML(p.id) + ': ' + escapeHTML(p.label) + '</div>'": "'<div class=\"title\">' + escapeHTML(p.label) + '</div>'",
+      "const pageLabel = printSide === 'back' ? 'Retro' : 'Fronte';": "const pageLabel = printSide === 'back' ? 'Back' : 'Front';"
+    }
+  }
+}

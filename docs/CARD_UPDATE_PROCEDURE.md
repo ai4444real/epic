@@ -1,6 +1,8 @@
 # Card Update Procedure
 
-Quando modifichi le carte nel Google Sheets e vuoi aggiornare il viewer HTML.
+Quando modifichi le carte nel Google Sheets e vuoi aggiornare i dati web e i
+file stampabili, usa la pipeline localizzata descritta in
+`cards/BUILD.md`.
 
 ## Passi
 
@@ -10,9 +12,9 @@ Quando modifichi le carte nel Google Sheets e vuoi aggiornare il viewer HTML.
 
 3. **Incolla in `EPIC_full.json`** nella cartella `EPiC model/` (sovrascrivilo)
 
-4. **Apri un terminale** nella cartella `EPiC model/` e lancia:
+4. **Apri un terminale** nella cartella dell'app e lancia:
    ```
-   build.bat
+   node scripts/build-cards.js it
    ```
 
 5. **Apri `epic-all-cards.html`** nel browser e verifica
@@ -20,26 +22,28 @@ Quando modifichi le carte nel Google Sheets e vuoi aggiornare il viewer HTML.
 ## Cosa fa il build
 
 ```
-EPIC_full.json  →  build-transform.js  →  EPIC_data.js  →  epic-all-cards.html
-  (da Excel)        (piatto→fronte/retro)   (formato carte)   (viewer finale)
+EPIC_full.json  →  scripts/build-cards.js  →  EPIC_data.js + carte stampabili
+  (da Excel)          (piatto→fronte/retro)     (output rigenerabili)
 ```
 
-- **Step 1**: `build-transform.js` trasforma il JSON piatto in formato fronte/retro per le carte
-- **Step 2**: inietta il risultato nel template (`epic-all-cards.template.html`) → produce `epic-all-cards.html`
+- Il build trasforma il JSON piatto nel formato fronte/retro.
+- I dati delle Energie non presenti nell'export vengono letti da
+  `data/energy-retro.json`.
+- I template di `cards/print-v1` vengono usati come base senza modificare lo snapshot.
 
 ## File importanti
 
 | File | Cosa è | Modificare? |
 |------|--------|-------------|
 | `EPIC_full.json` | Export da Google Sheets | SI (sovrascrivere con l'export) |
-| `build.bat` | Script di build | NO |
-| `build-transform.js` | Trasformazione piatto→fronte/retro | NO (solo se cambiano i campi) |
-| `epic-all-cards.template.html` | Template HTML/CSS/JS del viewer | NO (solo per modifiche al layout) |
+| `scripts/build-cards.js` | Trasformazione e build localizzata | NO (salvo modifiche alla pipeline) |
+| `data/energy-retro.json` | `hint` e `porta_I` delle Energie, per lingua | SI |
 | `EPIC_data.js` | Generato dal build | NO (viene sovrascritto) |
 | `epic-all-cards.html` | Generato dal build | NO (viene sovrascritto) |
-| `oldies/EPIC_data.js` | Dati vecchi (hint/porta_I per le E) | NO (riferimento storico) |
+| `cards/locales/it.json` | Etichette tecniche della lingua | SI, se cambiano le etichette |
 
 ## Note
 
-- I campi `hint` e `porta_I` sulle Emozioni (E) non sono nel Google Sheets. Vengono recuperati dal file `oldies/EPIC_data.js`. Se aggiungi nuove E o vuoi cambiare questi campi, devi aggiornare quel file.
+- I campi `hint` e `porta_I` sulle Emozioni (E) non presenti nel Google Sheets
+  sono conservati esplicitamente in `data/energy-retro.json`.
 - Il template HTML non va mai modificato a mano per aggiornare i dati. Usa sempre il build.

@@ -1892,3 +1892,9 @@ var EPIC_DATA = {
     }
   ]
 };
+var EPIC_CARD_I18N = {
+  "patternEnergies": "Energie del pattern",
+  "whenSeen": "Quando la vedi",
+  "notThisEnergy": "Non è questa se",
+  "showPatternId": true
+};

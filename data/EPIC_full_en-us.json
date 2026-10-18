@@ -1,0 +1,1430 @@
+{
+  "E": [
+    {
+      "id": "E1",
+      "label": "Anticipatory tension",
+      "original_label": "Ansia",
+      "clinical_flag": "Mediated from 'Anxiety' to avoid psychiatric diagnosis connotations (DSM-5 Anxiety Disorder).",
+      "subtypes": [
+        "Performance-related",
+        "Relational",
+        "Anticipatory Focus"
+      ],
+      "patterns_high": [
+        "P1",
+        "P6",
+        "P9",
+        "P10"
+      ],
+      "patterns_medium": [
+        "P2",
+        "P4",
+        "P7"
+      ],
+      "aliases": [
+        "agitation",
+        "tension",
+        "apprehension",
+        "pit in the stomach"
+      ],
+      "funzione": "system agitation",
+      "red_flags": [
+        "absence of activation",
+        "marked apathy",
+        "indifference",
+        "lack of future focus"
+      ],
+      "non_e_questa_se": [
+        "low energy → see E6",
+        "no anticipatory focus → see E2/P7"
+      ],
+      "quando_la_vedi": [
+        "high activation",
+        "future focus → imagining negative outcomes",
+        "strong urge to prepare extensively"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    },
+    {
+      "id": "E2",
+      "label": "Threat signal / alarm",
+      "original_label": "Paura",
+      "clinical_flag": "Framed as 'Threat Signal / Alarm State' to steer clear of clinical phobias/panic disorders.",
+      "subtypes": [
+        "Exposure Alarm",
+        "Uncertainty Alarm",
+        "Consequence Alarm"
+      ],
+      "patterns_high": [
+        "P2",
+        "P5",
+        "P7",
+        "P10"
+      ],
+      "patterns_medium": [
+        "P4",
+        "P9",
+        "P11"
+      ],
+      "aliases": [
+        "avoidance",
+        "difficulty acting",
+        "internal alarm",
+        "stepping back"
+      ],
+      "funzione": "alarm signal",
+      "red_flags": [
+        "absence of threat",
+        "widespread confusion",
+        "deep apathy",
+        "total withdrawal"
+      ],
+      "non_e_questa_se": [
+        "no perceived threat → see E1",
+        "self-criticism focused on self-worth → see P9"
+      ],
+      "quando_la_vedi": [
+        "threat orientation",
+        "strong avoidance"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    },
+    {
+      "id": "E3",
+      "label": "Frustration / friction",
+      "original_label": "Frustrazione",
+      "clinical_flag": "Standard coaching vector for system friction.",
+      "subtypes": [
+        "Goal Block",
+        "Perceived Injustice",
+        "Prolonged Delay"
+      ],
+      "patterns_high": [
+        "P3",
+        "P11"
+      ],
+      "patterns_medium": [
+        "P4",
+        "P12"
+      ],
+      "aliases": [
+        "powerlessness",
+        "irritation",
+        "stagnation",
+        "lack of forward movement"
+      ],
+      "funzione": "friction",
+      "red_flags": [
+        "absence of tension",
+        "absence of objective",
+        "marked fatigue"
+      ],
+      "non_e_questa_se": [
+        "high outward energy → see E5",
+        "very low energy → see E6"
+      ],
+      "quando_la_vedi": [
+        "repeated attempts without progress",
+        "'it's not fair' feeling"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    },
+    {
+      "id": "E4",
+      "label": "Operational pressure / overload",
+      "original_label": "Stress / Pressione",
+      "clinical_flag": "Mediated to 'Operational Pressure / Overload' to prevent association with clinical burnout or chronic stress syndrome.",
+      "subtypes": [
+        "System Overload",
+        "Insufficient Recovery",
+        "Lack of Clarity"
+      ],
+      "patterns_high": [
+        "P4",
+        "P1"
+      ],
+      "patterns_medium": [
+        "P6",
+        "P2",
+        "P7",
+        "P10"
+      ],
+      "aliases": [
+        "overload",
+        "exhaustion",
+        "pressure",
+        "too much to hold together"
+      ],
+      "funzione": "pressure",
+      "red_flags": [
+        "absence of overload",
+        "high angry energy",
+        "trance state",
+        "unmotivated immobility"
+      ],
+      "non_e_questa_se": [
+        "significant physical/functional impairment → healthcare referral",
+        "outward-oriented energy → see E5"
+      ],
+      "quando_la_vedi": [
+        "too many demands → none clear",
+        "fatigue + difficulty choosing"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    },
+    {
+      "id": "E5",
+      "label": "Anger / boundary friction",
+      "original_label": "Rabbia / Irritazione",
+      "clinical_flag": "Framed as 'Boundary Friction / Assertion' rather than clinical intermittent explosive tendencies.",
+      "subtypes": [
+        "Opposition/Resistance",
+        "Interpersonal Friction",
+        "Unexpected Obstacle"
+      ],
+      "patterns_high": [
+        "P3",
+        "P12"
+      ],
+      "patterns_medium": [
+      ],
+      "aliases": [
+        "annoyance",
+        "resentment",
+        "internal surge",
+        "rising tension"
+      ],
+      "funzione": "outward push",
+      "red_flags": [
+        "low energy",
+        "predominant sadness",
+        "passive avoidance",
+        "non-existent action"
+      ],
+      "non_e_questa_se": [
+        "very low energy → E6",
+        "directed inward → see P9"
+      ],
+      "quando_la_vedi": [
+        "high energy",
+        "outward drive"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    },
+    {
+      "id": "E6",
+      "label": "Energy depletion / low state",
+      "original_label": "Apatia / Tristezza",
+      "clinical_flag": "CRITICAL MEDIATION: Translated as 'Energy Depletion / Low State' to explicitly avoid 'Depression' or clinical affective disorders.",
+      "subtypes": [
+        "Motivation Drop",
+        "Withdrawal",
+        "Loss of confidence"
+      ],
+      "patterns_high": [
+        "P5",
+        "P8",
+        "P11"
+      ],
+      "patterns_medium": [
+        "P2",
+        "P10"
+      ],
+      "aliases": [
+        "emptiness",
+        "disconnection",
+        "shutdown",
+        "drained of energy"
+      ],
+      "funzione": "emptiness / state drop",
+      "red_flags": [
+        "high energy",
+        "agitation",
+        "struggling",
+        "repeated attempts without withdrawal"
+      ],
+      "non_e_questa_se": ["high activation → E3/E5"],
+      "quando_la_vedi": [
+        "low energy",
+        "loss of drive → 'it doesn't matter anyway'"
+      ],
+      "hint": "",
+      "porta_I": "",
+      "note": ""
+    }
+  ],
+  "P": [
+    {
+      "id": "P1",
+      "label": "Perfectionism",
+      "original_label": "Perfezione",
+      "aliases": [
+        "impossible standards",
+        "need for control",
+        "never-enough"
+      ],
+      "shorts": [
+        "It's never good enough",
+        "It's not ready yet",
+        "I'm missing something"
+      ],
+      "why": "Stalls action because nothing meets the required high threshold.",
+      "segnali": [
+        "unrealistic standards",
+        "constant self-criticism",
+        "fear of mistakes",
+        "over-preparation"
+      ],
+      "hint": "define 'good enough'",
+      "non_e_questo_se": "0/100 binary thinking → see P11",
+      "porta_I": "I-P1-Cog",
+      "hint_leva": "E1:Emo,E4:Comp"
+    },
+    {
+      "id": "P2",
+      "label": "Self-doubt",
+      "original_label": "Sfiducia",
+      "aliases": [
+        "low self-efficacy",
+        "self-devaluation",
+        "sense of inadequacy"
+      ],
+      "shorts": [
+        "I feel incapable",
+        "Not me",
+        "I don't think I can do this."
+      ],
+      "why": "Reduces initiative by weakening confidence in one's ability to act.",
+      "segnali": [
+        "distrust in own resources",
+        "doubting one's ability to perform",
+        "self-deprecating filter",
+        "guidance dependency"
+      ],
+      "hint": "show evidence of existing capability",
+      "non_e_questo_se": "fear of loss → see P7",
+      "porta_I": "I-P2-Cog",
+      "hint_leva": "E2:Emo"
+    },
+    {
+      "id": "P3",
+      "label": "Assumed intentions",
+      "original_label": "Attribuzione",
+      "aliases": [
+        "relational bias",
+        "intent projection",
+        "hostile attribution"
+      ],
+      "shorts": [
+        "It's personal",
+        "They think I...",
+        "Done on purpose",
+        "I know what they think"
+      ],
+      "why": "Creates avoidable relational friction.",
+      "segnali": [
+        "attributing intentions",
+        "fixed interpretation",
+        "mind reading",
+        "snap judgment"
+      ],
+      "hint": "find underlying need → reduce intent attribution",
+      "non_e_questo_se": "adapting to avoid disapproval → see P4",
+      "porta_I": "I-P3-Comp",
+      "hint_leva": "E5:Emo,E3:Cog"
+    },
+    {
+      "id": "P4",
+      "label": "Boundary management",
+      "original_label": "Confini",
+      "aliases": [
+        "people-pleasing",
+        "over-accommodation",
+        "relational merging"
+      ],
+      "shorts": [
+        "I can't say no",
+        "I just adapt",
+        "I'll do it myself"
+      ],
+      "why": "Leads to overload, resentment and losing sight of one's own needs.",
+      "segnali": [
+        "difficulty saying no",
+        "systemic overload",
+        "fear of disapproval",
+        "blurred personal boundaries"
+      ],
+      "hint": "identify the boundary → state it clearly",
+      "non_e_questo_se": "perceiving bad intention → see P3",
+      "porta_I": "I-P4-Comp",
+      "hint_leva": "E4:Comp,E3:Cog"
+    },
+    {
+      "id": "P5",
+      "label": "Avoidance / inertia",
+      "original_label": "Evitamento",
+      "aliases": [
+        "procrastination",
+        "difficulty deciding"
+      ],
+      "shorts": [
+        "Not right now",
+        "I'll deal with it later",
+        "We'll see"
+      ],
+      "why": "Protects against perceived risk but keeps action stuck.",
+      "segnali": [
+        "procrastination",
+        "difficulty acting",
+        "repeated postponement"
+      ],
+      "hint": "micro-step → operational hook",
+      "non_e_questo_se": "inaction due to fear of loss → see P7",
+      "porta_I": "I-P5-Comp",
+      "hint_leva": "E2:Emo,E6:Comp"
+    },
+    {
+      "id": "P6",
+      "label": "Cognitive loop / overthinking",
+      "original_label": "Rimuginazione",
+      "clinical_flag": "Translated as 'Cognitive Loop / Overthinking' rather than 'Clinical Rumination' to maintain a coaching framing.",
+      "aliases": [
+        "mental loop",
+        "overthinking",
+        "hyper-analysis"
+      ],
+      "shorts": [
+        "I need to think about it more",
+        "I must understand it fully",
+        "I'm not sure"
+      ],
+      "why": "Drains mental energy and blocks decisions.",
+      "segnali": [
+        "analytical loops",
+        "hyper-analysis",
+        "decision block"
+      ],
+      "hint": "separate: thought → mental event",
+      "non_e_questo_se": "the focus is on merit or feeling exposed → see P9",
+      "porta_I": "I-P6-Emo",
+      "hint_leva": "E1:Emo"
+    },
+    {
+      "id": "P7",
+      "label": "Loss aversion",
+      "original_label": "Perdita",
+      "aliases": [
+        "loss aversion",
+        "overprotection",
+        "excessive caution"
+      ],
+      "shorts": [
+        "What if it goes wrong?",
+        "I don't want to risk it",
+        "Better not to lose what I already have."
+      ],
+      "why": "Protects what is already secured, but can block worthwhile opportunities.",
+      "segnali": [
+        "excessive caution",
+        "focus on potential loss",
+        "status quo protection"
+      ],
+      "hint": "reversible micro-test",
+      "non_e_questo_se": "feeling incapable → see P2",
+      "porta_I": "I-P7-Comp",
+      "hint_leva": "E2:Emo"
+    },
+    {
+      "id": "P8",
+      "label": "Short-sightedness / present bias",
+      "original_label": "Miopia",
+      "aliases": [
+        "future self discounting",
+        "present bias",
+        "short-term focus"
+      ],
+      "shorts": [
+        "I'll think about it later",
+        "Live for today",
+        "You only live once"
+      ],
+      "why": "Limits long-term growth and breaks good habits.",
+      "segnali": [
+        "narrow perspective",
+        "difficulty investing in the future"
+      ],
+      "hint": "align with the future self",
+      "non_e_questo_se": "identity/external benchmark theme → see P10",
+      "porta_I": "I-P8-Cog",
+      "hint_leva": "E6:Comp"
+    },
+    {
+      "id": "P9",
+      "label": "Imposter pattern",
+      "original_label": "Impostura",
+      "clinical_flag": "CRITICAL MEDIATION: Uses 'Imposter Pattern' instead of 'Imposter Syndrome' ('Syndrome' sounds medical).",
+      "aliases": [
+        "fraud perception",
+        "competence devaluation",
+        "self-worth discount"
+      ],
+      "shorts": [
+        "I don't deserve this",
+        "It was just luck",
+        "Sooner or later they'll find out"
+      ],
+      "why": "Erodes confidence and visibility of personal value.",
+      "segnali": [
+        "attribution to luck",
+        "fear of exposure",
+        "self-sabotage"
+      ],
+      "hint": "acknowledge contribution → normalize",
+      "non_e_questo_se": "looping thought pattern → see P6",
+      "porta_I": "I-P9-Cog",
+      "hint_leva": "E2:Emo"
+    },
+    {
+      "id": "P10",
+      "label": "External validation",
+      "original_label": "Conformità",
+      "aliases": [
+        "approval seeking",
+        "external benchmarking",
+        "judgment dependency"
+      ],
+      "shorts": [
+        "What will they think?",
+        "Need to check first",
+        "Need approval"
+      ],
+      "why": "Driven by approval, not personal values.",
+      "segnali": [
+        "approval seeking",
+        "hypersensitivity to judgment",
+        "insecurity",
+        "relational conformism",
+        "fear of success"
+      ],
+      "hint": "shift to internal metric",
+      "non_e_questo_se": "avoiding friction → see P4",
+      "porta_I": "I-P10-Cog",
+      "hint_leva": "E6:Emo"
+    },
+    {
+      "id": "P11",
+      "label": "Rigid polarization",
+      "original_label": "Rigidità",
+      "aliases": [
+        "all-or-nothing thinking",
+        "binary logic",
+        "extreme framing"
+      ],
+      "shorts": [
+        "Either this way or not at all",
+        "If I don't have this, I won't even start"
+      ],
+      "why": "Blocks gradual progress and flexible choices.",
+      "segnali": [
+        "binary rigidity",
+        "catastrophizing",
+        "polarization"
+      ],
+      "hint": "find the gray zone",
+      "non_e_questo_se": "extremely high standard → see P1",
+      "porta_I": "I-P11-Cog",
+      "hint_leva": "E6:Comp"
+    },
+    {
+      "id": "P12",
+      "label": "Confirmation bias",
+      "original_label": "Conferma",
+      "aliases": [
+        "confirmation bias",
+        "selective filtering",
+        "narrative lock-in"
+      ],
+      "shorts": [
+        "I already get it",
+        "I already know that"
+      ],
+      "why": "Limits learning and closes off new possibilities.",
+      "segnali": [
+        "resistance to disconfirmation",
+        "partial perspective",
+        "information filtering"
+      ],
+      "hint": "introduce a second hypothesis",
+      "non_e_questo_se": "avoidance or postponement is primary → see P5/P7",
+      "porta_I": "I-P12-Cog",
+      "hint_leva": "E5:Emo"
+    }
+  ],
+  "I": [
+    {
+      "id": "I-P1-Cog",
+      "pattern": "P1",
+      "type": "cognitive",
+      "label": "Choosing 'good enough'",
+      "aka": [
+        "sustainable standards",
+        "sufficient quality"
+      ],
+      "principle": "Explore the minimum acceptable and sustainable threshold.",
+      "why": "Helps reduce rigidity and internal pressure.",
+      "serve_a": "define a practical minimum standard",
+      "verbo_mentale": "ADJUST STANDARD",
+      "how_to": "define viable baseline requirement → choose the option that fulfills it",
+      "example_q": "What does a 'good enough' outcome look like for you here?",
+      "example_C": "Select a 'good enough' standard and apply it to a real task.",
+      "fallback": "Reframing: perfection → 'good enough'",
+      "tags": [
+        "perfectionism",
+        "standard",
+        "threshold"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P1-Comp",
+      "pattern": "P1",
+      "type": "behavioral",
+      "label": "Reduce the cost of perfection",
+      "aka": [
+        "simplify",
+        "streamline"
+      ],
+      "principle": "Lower the standard to initiate action.",
+      "why": "Allows progress using realistic resources.",
+      "serve_a": "reduce wasted energy pursuing perfection",
+      "verbo_mentale": "LIGHTEN",
+      "how_to": "list what is needed to make it 'perfect' → keep only what creates actual value and act",
+      "example_q": "Where is aiming for 100% slowing you down unnecessarily?",
+      "example_C": "Remove a single non-essential requirement.",
+      "fallback": "What can you do imperfectly right now?",
+      "tags": [
+        "micro_action",
+        "minimum_standard"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P1-Emo",
+      "pattern": "P1",
+      "type": "emotional",
+      "label": "Uncouple choice from tension",
+      "aka": [
+        "tension ≠ criterion",
+        "valid choice",
+        "internal_pressure"
+      ],
+      "principle": "Read tension as an active internal standard, not a stop signal.",
+      "why": "Enables decision-making without waiting for tension to vanish.",
+      "serve_a": "reduce internal pressure enough to enable choice",
+      "verbo_mentale": "UNCOUPLE",
+      "how_to": "acknowledge the tension linked to the 'ideal standard' and allow yourself not to solve it now",
+      "example_q": "If the tension remains, which choice is still valid for you?",
+      "example_C": "Notice the feeling of 'it's not enough' and take the planned minimum step anyway.",
+      "fallback": "Take a slow breath and choose a micro-step anyway.",
+      "tags": [
+        "perfectionism",
+        "pressure",
+        "choice"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P2-Cog",
+      "pattern": "P2",
+      "type": "cognitive",
+      "label": "Recognize demonstrated competencies",
+      "aka": [
+        "recognize capability",
+        "focus resources"
+      ],
+      "principle": "Rediscover skills previously used with success.",
+      "why": "Highlights existing capabilities, facilitating choice.",
+      "serve_a": "recognize existing resources and capabilities",
+      "verbo_mentale": "RECOGNIZE CAPABILITY",
+      "how_to": "identify a past result → connect it to the upcoming action as proof",
+      "example_q": "When have you successfully managed something similar?",
+      "example_C": "Recognize a capability used in similar situations and decide how to reactivate it.",
+      "fallback": "Which element can you reuse right away?",
+      "tags": [
+        "self_efficacy",
+        "resources"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P2-Comp",
+      "pattern": "P2",
+      "type": "behavioral",
+      "label": "Act immediately with a simple step",
+      "aka": [
+        "first moves",
+        "quick tests"
+      ],
+      "principle": "Choose a low-risk, high-utility action.",
+      "why": "Builds self-efficacy through quick trials.",
+      "serve_a": "rebuild self-efficacy with rapid proof",
+      "verbo_mentale": "DEMONSTRATE",
+      "how_to": "choose a micro-step you can do now → execute it immediately to generate evidence",
+      "example_q": "What is a minimal, demonstrative action you could test right now?",
+      "example_C": "Try a scaled-down version of the action you had in mind.",
+      "fallback": "How can you take an even smaller step right now?",
+      "tags": [
+        "self_efficacy",
+        "action"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P2-Emo",
+      "pattern": "P2",
+      "type": "emotional",
+      "label": "Recall moments of mastery",
+      "aka": [
+        "familiarity",
+        "traces of success"
+      ],
+      "principle": "Reconnect with the felt sense of having managed before.",
+      "why": "Recalls successful experiences, reducing uncertainty and easing initiation.",
+      "serve_a": "reduce self-doubt by recalling successful experiences",
+      "verbo_mentale": "REACTIVATE",
+      "how_to": "recall a moment when you managed something similar → notice the sense of capability",
+      "example_q": "When did you feel capable in something similar?",
+      "example_C": "Notice what shifts when you remember handling something similar well.",
+      "fallback": "Reframing: incapable → capable-enough",
+      "tags": [
+        "past_success",
+        "self_efficacy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P3-Cog",
+      "pattern": "P3",
+      "type": "cognitive",
+      "label": "See the other perspective",
+      "aka": [
+        "meta-position",
+        "second reading",
+        "other_perspective"
+      ],
+      "principle": "Generate alternative hypotheses about others' intentions.",
+      "why": "Reduces automatic negative intent attributions.",
+      "serve_a": "see alternative intentions and perspectives",
+      "verbo_mentale": "CONSIDER ALTERNATIVES",
+      "how_to": "formulate at least one alternative interpretation of the other person's intent",
+      "example_q": "What other intent could you hypothesize here?",
+      "example_C": "Formulate and note a plausible alternative interpretation.",
+      "fallback": "Reframing: certainty → hypothesis",
+      "tags": [
+        "relationship",
+        "perspective"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P3-Comp",
+      "pattern": "P3",
+      "type": "behavioral",
+      "label": "Clarify the other's point of view",
+      "aka": [
+        "clarifying questions",
+        "strategic empathy"
+      ],
+      "principle": "Strategically understand the other's position.",
+      "why": "Clarifies the other person's perspective, enabling useful steps even in disagreement.",
+      "serve_a": "act while better understanding the other's viewpoint",
+      "verbo_mentale": "ENGAGE",
+      "how_to": "formulate a question that explores the meaning or intent behind their action",
+      "example_q": "What do you need to better understand about their perspective?",
+      "example_C": "Ask a genuine question to clarify their intent.",
+      "fallback": "How can you ask a question to clarify their intention?",
+      "tags": [
+        "relationship",
+        "empathy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P3-Emo",
+      "pattern": "P3",
+      "type": "emotional",
+      "label": "Identify the underlying need",
+      "aka": [
+        "core need",
+        "legitimize"
+      ],
+      "principle": "Recognize the core need behind protective activation.",
+      "why": "Shifts focus from 'their fault' to 'what I need'.",
+      "serve_a": "recognize emotional need to reduce reactivity",
+      "verbo_mentale": "RECOGNIZE NEED",
+      "how_to": "notice the emotion → identify the need underneath",
+      "example_q": "Which important need of yours feels touched here?",
+      "example_C": "Recognize and state your legitimate need.",
+      "fallback": "Reframing: their fault → my need",
+      "tags": [
+        "need",
+        "legitimization"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P4-Cog",
+      "pattern": "P4",
+      "type": "cognitive",
+      "label": "Protect core values",
+      "aka": [
+        "guiding values",
+        "internal priorities"
+      ],
+      "principle": "Recognizing hidden costs protects what is important.",
+      "why": "Makes priorities and values explicit, enabling autonomous choices.",
+      "serve_a": "clarify values and costs of saying 'yes'",
+      "verbo_mentale": "SELECT",
+      "how_to": "identify what you would say 'no' to in order to defend a key value",
+      "example_q": "What are you sacrificing when you say 'yes'?",
+      "example_C": "Identify a personal value at risk when saying 'yes'.",
+      "fallback": "Reframing: No → protection",
+      "tags": [
+        "boundaries",
+        "values"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P4-Comp",
+      "pattern": "P4",
+      "type": "behavioral",
+      "label": "Say 'no' assertively",
+      "aka": [
+        "assertiveness",
+        "boundary negotiation"
+      ],
+      "principle": "Saying 'no' protects values and priorities.",
+      "why": "Defines clear boundaries, protecting what matters without damaging the relationship.",
+      "serve_a": "construct effective 'no' communications",
+      "verbo_mentale": "DEFINE BOUNDARIES",
+      "how_to": "practice formulating a respectful 'no'",
+      "example_q": "How can you say 'no' while protecting yourself and the relationship?",
+      "example_C": "Prepare a respectful 'no' statement that honors both you and the other.",
+      "fallback": "What is the smallest 'no' you can state?",
+      "tags": [
+        "boundaries",
+        "assertiveness"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P4-Emo",
+      "pattern": "P4",
+      "type": "emotional",
+      "label": "Honor personal dignity",
+      "aka": [
+        "self-respect",
+        "internal limit"
+      ],
+      "principle": "Dignity precedes accommodation.",
+      "why": "Let the boundary emerge before justifying.",
+      "serve_a": "feel authorized to set a boundary",
+      "verbo_mentale": "HONOR",
+      "how_to": "notice what you are accepting and ask if it is really okay for you",
+      "example_q": "Is this, as it is, truly okay for you?",
+      "example_C": "Pause before adapting and check if you are respecting yourself.",
+      "fallback": "What is the minimum boundary you hold right now?",
+      "tags": [
+        "dignity",
+        "boundaries",
+        "self_respect"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P5-Cog",
+      "pattern": "P5",
+      "type": "cognitive",
+      "label": "Evaluate the cost of inaction",
+      "aka": [
+        "inaction cost",
+        "time projection"
+      ],
+      "principle": "Make future consequences visible.",
+      "why": "Brings the cost of 'later' closer, facilitating choice now.",
+      "serve_a": "make the cost of non-action evident",
+      "verbo_mentale": "EVALUATE CONSEQUENCES",
+      "how_to": "consider the future effects of not taking action",
+      "example_q": "What is it costing you to keep waiting?",
+      "example_C": "Consider the consequences of staying still regarding this issue.",
+      "fallback": "Reframing: inaction → cost",
+      "tags": [
+        "cost_of_delay",
+        "choice"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P5-Comp",
+      "pattern": "P5",
+      "type": "behavioral",
+      "label": "Break the block with a micro-action",
+      "aka": [
+        "micro-step",
+        "minimal action"
+      ],
+      "principle": "Define a sustainable micro-step.",
+      "why": "Reduces deadlock with ridiculously small steps.",
+      "serve_a": "remove blocks with tiny steps",
+      "verbo_mentale": "UNBLOCK",
+      "how_to": "choose a minimal action you can take right now and do it",
+      "example_q": "What is a simple first movement?",
+      "example_C": "Take the smallest useful first step now.",
+      "fallback": "Reframing: whole task → next move",
+      "tags": [
+        "avoidance",
+        "action"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P5-Emo",
+      "pattern": "P5",
+      "type": "emotional",
+      "label": "Allow initiation without momentum",
+      "aka": [
+        "start without motivation",
+        "internal permission"
+      ],
+      "principle": "Action can begin without initial motivation.",
+      "why": "Reduces waiting to 'feel ready'.",
+      "serve_a": "feel that initiation is possible without momentum",
+      "verbo_mentale": "ALLOW",
+      "how_to": "notice the urge to postpone and allow a minimal first step",
+      "example_q": "If you didn't need to feel ready, what step would you take now?",
+      "example_C": "Initiate a minimal action even while feeling resistance.",
+      "fallback": "Reframing: not ready → I can start",
+      "tags": [
+        "avoidance",
+        "initiation",
+        "permission"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P6-Cog",
+      "pattern": "P6",
+      "type": "cognitive",
+      "label": "Distinguish useful thoughts from noise",
+      "aka": [
+        "distinguish utility",
+        "disarm noise"
+      ],
+      "principle": "Evaluate the real utility of the thought.",
+      "why": "Reduces noise and loosens the grip of repetitive thoughts.",
+      "serve_a": "distinguish useful thinking from background noise",
+      "verbo_mentale": "EVALUATE UTILITY",
+      "how_to": "ask yourself if the thought is useful for the current choice",
+      "example_q": "Is this thought helping you make the current choice?",
+      "example_C": "Identify one recurring thought that is not helping the current decision.",
+      "fallback": "Reframing: thought → mental event",
+      "tags": [
+        "looping",
+        "cognitive_distance"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P6-Comp",
+      "pattern": "P6",
+      "type": "behavioral",
+      "label": "Interrupt the loop via the body",
+      "aka": [
+        "body pause",
+        "somatic_grounding"
+      ],
+      "principle": "Break the loop with a simple movement.",
+      "why": "Returns focus to the present, reducing mental noise and opening decision space.",
+      "serve_a": "interrupt cognitive loop and return to present",
+      "verbo_mentale": "INTERRUPT",
+      "how_to": "make a simple physical gesture (breath, movement) to break the loop",
+      "example_q": "What could help your body return to the present moment?",
+      "example_C": "Use a small movement or a breath to return your attention to the present.",
+      "fallback": "Shift: thinking → movement",
+      "tags": [
+        "looping",
+        "presence"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P6-Emo",
+      "pattern": "P6",
+      "type": "emotional",
+      "label": "Notice present awareness",
+      "aka": [
+        "being here",
+        "contact with now"
+      ],
+      "principle": "Present-moment awareness creates distance from the mental loop.",
+      "why": "Creates distance from mental loops, enabling choice.",
+      "serve_a": "create emotional distance from the thought",
+      "verbo_mentale": "NOTICE",
+      "how_to": "notice the mental loop and feel a physical point in the body",
+      "example_q": "Where are you right now, in this exact moment?",
+      "example_C": "Notice one physical sensation that brings you back to the present.",
+      "fallback": "Notice three things you see right now.",
+      "tags": [
+        "presence",
+        "distance_from_thought"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P7-Cog",
+      "pattern": "P7",
+      "type": "cognitive",
+      "label": "See the real trade-off",
+      "aka": [
+        "risk evaluation",
+        "trade-off analysis"
+      ],
+      "principle": "Realistically evaluate risks and benefits.",
+      "why": "Shifts perception from threat to manageable risk.",
+      "serve_a": "realistically evaluate risks and benefits",
+      "verbo_mentale": "WEIGH RISKS AND BENEFITS",
+      "how_to": "compare what you truly risk against what you could gain",
+      "example_q": "What is the actual, tangible risk?",
+      "example_C": "Write down one real risk and one concrete potential benefit.",
+      "fallback": "Reframing: loss → opportunity",
+      "tags": [
+        "loss_aversion",
+        "risk_evaluation"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P7-Emo",
+      "pattern": "P7",
+      "type": "emotional",
+      "label": "Connect with what truly matters",
+      "aka": [
+        "core value",
+        "choice alignment",
+        "protection"
+      ],
+      "principle": "Reconnect with what matters before evaluating the risk.",
+      "why": "Connects the emotion to a personal value.",
+      "serve_a": "remember what truly matters",
+      "verbo_mentale": "RECONNECT",
+      "how_to": "connect the emotion to what you could achieve or grow",
+      "example_q": "What makes this worth trying for you?",
+      "example_C": "Name the value that makes this choice meaningful.",
+      "fallback": "Reframing: loss → value",
+      "tags": [
+        "value",
+        "priorities"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P7-Comp",
+      "pattern": "P7",
+      "type": "behavioral",
+      "label": "Reversible micro-test",
+      "aka": [
+        "minimal trial",
+        "quick experiment"
+      ],
+      "principle": "Stimulate a reversible micro-action.",
+      "why": "Reduces uncertainty through low-cost, real-world feedback.",
+      "serve_a": "test possibilities while minimizing risk",
+      "verbo_mentale": "PROBE",
+      "how_to": "define a small, reversible trial to gather initial feedback",
+      "example_q": "What is a small, reversible test you can run?",
+      "example_C": "Run a scaled-down trial and observe what you learn.",
+      "fallback": "What makes this trial easy to stop if needed?",
+      "tags": [
+        "micro_trial",
+        "controlled_risk"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P8-Cog",
+      "pattern": "P8",
+      "type": "cognitive",
+      "label": "Bring future consequences closer",
+      "aka": [
+        "future self",
+        "retro-projection"
+      ],
+      "principle": "Reduce distance between today’s choice and tomorrow’s outcome.",
+      "why": "Broadens temporal perspective.",
+      "serve_a": "make future consequences concrete in the current choice",
+      "verbo_mentale": "MAKE THE FUTURE CONCRETE",
+      "how_to": "identify one likely later consequence of choosing or not choosing now",
+      "example_q": "What becomes different later if you choose this now?",
+      "example_C": "Write down one concrete later consequence of today's choice.",
+      "fallback": "What changes later if you do nothing now?",
+      "tags": [
+        "future_self",
+        "perspective"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P8-Comp",
+      "pattern": "P8",
+      "type": "behavioral",
+      "label": "Taking a step for the future",
+      "aka": [
+        "daily action",
+        "alignment"
+      ],
+      "principle": "Act in coherence with the future self.",
+      "why": "Makes the future relevant in the present moment.",
+      "serve_a": "act as your future self would",
+      "verbo_mentale": "TAKE ACTION FOR THE FUTURE",
+      "how_to": "select a small step aligned with your future direction",
+      "example_q": "What is the smallest step you can take now for your future?",
+      "example_C": "Choose an action that moves you closer to your future self.",
+      "fallback": "What can you do today that your future self will notice?",
+      "tags": [
+        "future_self",
+        "alignment"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P8-Emo",
+      "pattern": "P8",
+      "type": "emotional",
+      "label": "Connecting with your future self",
+      "aka": [
+        "personal continuity",
+        "temporal identity"
+      ],
+      "principle": "Feel continuity with the future self.",
+      "why": "Strengthens emotional bond with one's future.",
+      "serve_a": "make a distant choice emotionally relevant today",
+      "verbo_mentale": "SEE YOURSELF IN THE FUTURE",
+      "how_to": "call up your future self and check if this choice represents you",
+      "example_q": "Is this step something in which you truly recognize yourself?",
+      "example_C": "Bring to mind your future self and check if this choice resembles you.",
+      "fallback": "What choice today simplifies your future?",
+      "tags": [
+        "future",
+        "identity",
+        "continuity"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P9-Cog",
+      "pattern": "P9",
+      "type": "cognitive",
+      "label": "Recognize your contribution",
+      "aka": [
+        "internal attribution",
+        "recognition"
+      ],
+      "principle": "Claim ownership of personal contributions to results.",
+      "why": "Reduces doubt by restoring authorship to accomplishments.",
+      "serve_a": "claim ownership of personal contribution",
+      "verbo_mentale": "OWN YOUR VALUE",
+      "how_to": "identify specific choices/actions of yours that contributed to the outcome",
+      "example_q": "Which of your choices or actions contributed to this result?",
+      "example_C": "Identify at least one concrete action that produced the result.",
+      "fallback": "Reframing: luck → contribution",
+      "tags": [
+        "ownership",
+        "merit"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P9-Emo",
+      "pattern": "P9",
+      "type": "emotional",
+      "label": "Acknowledge state without judgment",
+      "aka": [
+        "accepting state",
+        "functional view"
+      ],
+      "principle": "Treat the feeling as a signal, not a verdict.",
+      "why": "Normalizes state activation, preserving access to choice.",
+      "serve_a": "reduce self-judgment by normalizing the internal state",
+      "verbo_mentale": "NOTICE STATE",
+      "how_to": "acknowledge the feeling without judging it, then stay with it briefly",
+      "example_q": "Can this feeling be present without defining you?",
+      "example_C": "Name the state and allow it space for a moment.",
+      "fallback": "Reframing: feeling → information",
+      "tags": [
+        "self_worth",
+        "function",
+        "acceptance"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P9-Comp",
+      "pattern": "P9",
+      "type": "behavioral",
+      "label": "Step up with a concrete contribution",
+      "aka": [
+        "visibility",
+        "active presence"
+      ],
+      "principle": "Step up with a tangible contribution.",
+      "why": "Transforms hesitation into visible action.",
+      "serve_a": "reduce self-sabotage through active contribution",
+      "verbo_mentale": "STEP UP",
+      "how_to": "share a concrete contribution without pre-empting with excuses",
+      "example_q": "What could you bring right now without downplaying it?",
+      "example_C": "Make a concrete proposal without starting with an apology.",
+      "fallback": "Reframing: holding back → contributing",
+      "tags": [
+        "imposter_pattern",
+        "action",
+        "visibility"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P10-Cog",
+      "pattern": "P10",
+      "type": "cognitive",
+      "label": "Shift the source of value",
+      "aka": [
+        "internal compass",
+        "own criteria"
+      ],
+      "principle": "Shift validation from external expectations to internal criteria.",
+      "why": "Re-orients the criteria for success.",
+      "serve_a": "clarify internal source of evaluation",
+      "verbo_mentale": "SET INTERNAL CRITERIA",
+      "how_to": "separate what you think from what others think and notice the difference",
+      "example_q": "What is your own internal metric here?",
+      "example_C": "Define at least one 'internal criterion' to evaluate the outcome.",
+      "fallback": "Reframing: external → internal",
+      "tags": [
+        "internal_value",
+        "identity"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P10-Comp",
+      "pattern": "P10",
+      "type": "behavioral",
+      "label": "Authorize autonomous action",
+      "aka": [
+        "personal initiative",
+        "internal permission"
+      ],
+      "principle": "Acting without confirmation reinforces autonomy.",
+      "why": "Transforms reliance on external approval into active choice.",
+      "serve_a": "reduce dependency on external validation through autonomous action",
+      "verbo_mentale": "AUTHORIZE",
+      "how_to": "make a concrete choice without asking for confirmation",
+      "example_q": "If you didn't have to ask anyone, what would you do now?",
+      "example_C": "Make a small decision without consulting others.",
+      "fallback": "Reframing: approval → initiative",
+      "tags": [
+        "compliance",
+        "autonomy",
+        "action"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P10-Emo",
+      "pattern": "P10",
+      "type": "emotional",
+      "label": "Check what is truly yours",
+      "aka": [
+        "authenticity",
+        "self-trust"
+      ],
+      "principle": "Distinguish internal agreement from external approval.",
+      "why": "Helps distinguish personal agreement from external approval.",
+      "serve_a": "reconnect to internal compass guiding choices",
+      "verbo_mentale": "VERIFY CONGRUENCE",
+      "how_to": "notice whether the choice feels internally endorsed or externally borrowed",
+      "example_q": "Does this feel right for you, or just acceptable to others?",
+      "example_C": "Notice one sign that the choice feels genuinely yours.",
+      "fallback": "Reframing: approval → ownership",
+      "tags": [
+        "internal_trust",
+        "autonomy"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P11-Cog",
+      "pattern": "P11",
+      "type": "cognitive",
+      "label": "Recognize the gray zone",
+      "aka": [
+        "gradient",
+        "intermediate spectrum"
+      ],
+      "principle": "Recognize partial progress.",
+      "why": "Makes room to learn from small steps.",
+      "serve_a": "recognize intermediate progress",
+      "verbo_mentale": "SOFTEN / GRADUATE",
+      "how_to": "transform the objective from binary (0/100) to a continuum",
+      "example_q": "What intermediate outcomes exist between total failure and complete success?",
+      "example_C": "Define at least one intermediate milestone that signals progress.",
+      "fallback": "Reframing: right/wrong → useful/not useful",
+      "tags": [
+        "all_or_nothing",
+        "gray_zone"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P11-Comp",
+      "pattern": "P11",
+      "type": "behavioral",
+      "label": "Act in the gray zone",
+      "aka": [
+        "imperfect step",
+        "useful compromise"
+      ],
+      "principle": "Shift action from 'all or nothing' to 'one step'.",
+      "why": "Lowers threshold for action, allowing movement without perfection.",
+      "serve_a": "proceed through non-perfect actions",
+      "verbo_mentale": "PROCEED",
+      "how_to": "define a micro-action that creates partial progress",
+      "example_q": "What is a small step that is still better than zero?",
+      "example_C": "Execute a minimal action that creates real progress.",
+      "fallback": "Reframing: everything → something",
+      "tags": [
+        "binary",
+        "gray_zone",
+        "micro_action"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P11-Emo",
+      "pattern": "P11",
+      "type": "emotional",
+      "label": "Open an intermediate space",
+      "aka": [
+        "openness",
+        "middle ground"
+      ],
+      "principle": "Make room for a middle position without forcing certainty.",
+      "why": "Reduces rigidity in the face of uncertainty.",
+      "serve_a": "make a middle ground possible",
+      "verbo_mentale": "OPEN SPACE",
+      "how_to": "notice internal rigidity and seek a softer position",
+      "example_q": "Which middle ground would be acceptable right now?",
+      "example_C": "Choose a middle step, even if imperfect.",
+      "fallback": "Reframing: extreme → intermediate",
+      "tags": [
+        "rigidity",
+        "openness",
+        "middle_ground"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P12-Cog",
+      "pattern": "P12",
+      "type": "cognitive",
+      "label": "Gather counter-evidence",
+      "aka": [
+        "second hypothesis",
+        "contrary evidence"
+      ],
+      "principle": "Seek data that challenges your assumption.",
+      "why": "Frees up new perspectives.",
+      "serve_a": "test assumptions against reality",
+      "verbo_mentale": "FALSIFY",
+      "how_to": "formulate the opposite hypothesis and look for data supporting it",
+      "example_q": "Which elements suggest your idea might be incomplete or inaccurate?",
+      "example_C": "Note one piece of data that contradicts your initial assumption.",
+      "fallback": "Reframing: certainty → counter-evidence",
+      "tags": [
+        "confirmation_bias",
+        "counter_evidence"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P12-Comp",
+      "pattern": "P12",
+      "type": "behavioral",
+      "label": "Test reality with small experiments",
+      "aka": [
+        "mini-experiment",
+        "reality check"
+      ],
+      "principle": "Actively test the alternative hypothesis.",
+      "why": "Reduces cognitive lock-in through real action.",
+      "serve_a": "test alternative hypotheses in reality",
+      "verbo_mentale": "TEST",
+      "how_to": "run a test that could challenge your assumption → observe the outcome",
+      "example_q": "What small experiment could you run to test this?",
+      "example_C": "Design a mini-test that could disprove your hypothesis.",
+      "fallback": "Reframing: assumption → experiment",
+      "tags": [
+        "confirmation",
+        "experiment"
+      ],
+      "note": ""
+    },
+    {
+      "id": "I-P12-Emo",
+      "pattern": "P12",
+      "type": "emotional",
+      "label": "Allow room for doubt",
+      "aka": [
+        "tolerance for uncertainty",
+        "openness to disconfirmation"
+      ],
+      "principle": "Sustain doubt briefly to enable verification.",
+      "why": "Reduces defensive closure, opening space for verification.",
+      "serve_a": "allow entry of disconfirming information",
+      "verbo_mentale": "ADMIT DOUBT",
+      "how_to": "notice defensiveness and hold the doubt for a moment",
+      "example_q": "What doubt can you hold for just a moment?",
+      "example_C": "Leave an alternative hypothesis open for a moment.",
+      "fallback": "Hold the doubt briefly, then ask a question.",
+      "tags": [
+        "doubt",
+        "openness"
+      ],
+      "note": ""
+    }
+  ],
+  "meta": [
+    {
+      "key": "version",
+      "value": "0.3-EN-US-Reviewed"
+    },
+    {
+      "key": "last_update",
+      "value": "2026-10-01T14:36:00Z"
+    },
+    {
+      "key": "framework_note",
+      "value": "Contextual non-clinical translation adapted for professional coaching and organizational dialogic frameworks."
+    }
+  ]
+}

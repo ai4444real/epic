@@ -178,6 +178,7 @@ def create_app() -> FastAPI:
             picture=userinfo.get("picture") or "",
         )
         session_token = create_auth_session(email=email, google_sub=google_sub)
+        write_auth_event("login_success", email, request)
         next_path = sanitize_next(request.session.pop("post_login_next", "/"))
 
         response = RedirectResponse(next_path, status_code=303)
@@ -193,6 +194,9 @@ def create_app() -> FastAPI:
 
     @app.get("/logout")
     async def logout(request: Request) -> Response:
+        user = get_current_user(request)
+        if user:
+            write_auth_event("logout", user.get("email") or "", request)
         token = request.cookies.get(SESSION_COOKIE_NAME)
         if token:
             delete_auth_session(token)
@@ -331,6 +335,7 @@ def create_app() -> FastAPI:
         limit: int = 200,
         path: str = "",
         session_id: str = "",
+        email: str = "",
         status: int | None = None,
         date: str = "",
         traffic: str = "clean",
@@ -345,6 +350,7 @@ def create_app() -> FastAPI:
             limit=limit,
             path=path,
             session_id=session_id,
+            email=email,
             status=status,
             date=date,
             traffic=traffic,
@@ -485,17 +491,25 @@ def can_access_admin(user: dict) -> bool:
 class AccessLogMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next: Callable) -> Response:
         started_at = time.perf_counter()
+        should_log = should_log_access(request.url.path, request.method)
+        authenticated_user = get_current_user(request) if should_log else None
         response = await call_next(request)
         duration_ms = int((time.perf_counter() - started_at) * 1000)
 
-        if should_log_access(request.url.path, request.method):
+        if should_log:
             session_id = request.cookies.get("epic_session")
             set_cookie = False
             if not session_id:
                 session_id = uuid.uuid4().hex
                 set_cookie = True
 
-            write_access_log(request, response.status_code, duration_ms, session_id)
+            write_access_log(
+                request,
+                response.status_code,
+                duration_ms,
+                session_id,
+                (authenticated_user or {}).get("email") or "",
+            )
 
             if set_cookie:
                 response.set_cookie(
@@ -538,13 +552,20 @@ def init_access_db() -> None:
                 forwarded_for TEXT NOT NULL,
                 user_agent TEXT NOT NULL,
                 referer TEXT NOT NULL,
-                session_id TEXT NOT NULL
+                session_id TEXT NOT NULL,
+                authenticated_email TEXT NOT NULL DEFAULT ''
             )
             """
         )
+        columns = {row[1] for row in conn.execute("PRAGMA table_info(access_log)")}
+        if "authenticated_email" not in columns:
+            conn.execute(
+                "ALTER TABLE access_log ADD COLUMN authenticated_email TEXT NOT NULL DEFAULT ''"
+            )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_created_at ON access_log(created_at)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_path ON access_log(path)")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_session_id ON access_log(session_id)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_access_log_authenticated_email ON access_log(authenticated_email)")
 
 
 def init_auth_db() -> None:
@@ -577,6 +598,21 @@ def init_auth_db() -> None:
             """
         )
         conn.execute("CREATE INDEX IF NOT EXISTS idx_auth_sessions_expires_at ON auth_sessions(expires_at)")
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS auth_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                created_at TEXT NOT NULL DEFAULT (strftime('%Y-%m-%dT%H:%M:%fZ', 'now')),
+                event_type TEXT NOT NULL,
+                email TEXT NOT NULL,
+                session_id TEXT NOT NULL DEFAULT '',
+                client_ip TEXT NOT NULL DEFAULT '',
+                user_agent TEXT NOT NULL DEFAULT ''
+            )
+            """
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_auth_events_created_at ON auth_events(created_at)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_auth_events_email ON auth_events(email)")
     seed_bootstrap_admins()
 
 
@@ -985,12 +1021,13 @@ def list_users() -> list[dict]:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             """
-            SELECT email, name, picture, role, created_at, updated_at, last_login_at,
+            SELECT email, name, picture, role, created_at, updated_at,
+                   CASE WHEN google_sub LIKE 'pending:%' THEN NULL ELSE last_login_at END AS last_login_at,
                    CASE WHEN google_sub LIKE 'pending:%' THEN 1 ELSE 0 END AS pending
             FROM users
             ORDER BY
                 CASE role WHEN 'admin' THEN 0 WHEN 'unlocked' THEN 1 ELSE 2 END,
-                last_login_at DESC,
+                CASE WHEN google_sub LIKE 'pending:%' THEN '' ELSE last_login_at END DESC,
                 email ASC
             """
         ).fetchall()
@@ -1005,7 +1042,8 @@ def get_user_by_email(email: str) -> dict | None:
         conn.row_factory = sqlite3.Row
         row = conn.execute(
             """
-            SELECT email, name, picture, role, created_at, updated_at, last_login_at,
+            SELECT email, name, picture, role, created_at, updated_at,
+                   CASE WHEN google_sub LIKE 'pending:%' THEN NULL ELSE last_login_at END AS last_login_at,
                    CASE WHEN google_sub LIKE 'pending:%' THEN 1 ELSE 0 END AS pending
             FROM users
             WHERE email = ?
@@ -1119,6 +1157,7 @@ def get_access_log_report(
     limit: int = 200,
     path: str = "",
     session_id: str = "",
+    email: str = "",
     status: int | None = None,
     date: str = "",
     traffic: str = "clean",
@@ -1128,6 +1167,7 @@ def get_access_log_report(
     where_sql, params = build_access_log_filters(
         path=path,
         session_id=session_id,
+        email=email,
         status=status,
         date=date,
         traffic=traffic,
@@ -1136,6 +1176,7 @@ def get_access_log_report(
     recent_days_where_sql, recent_days_params = build_access_log_filters(
         path=path,
         session_id=session_id,
+        email=email,
         status=status,
         traffic=traffic,
         outcome=outcome,
@@ -1145,7 +1186,8 @@ def get_access_log_report(
         rows = conn.execute(
             f"""
             SELECT id, created_at, method, path, query_string, status_code, duration_ms,
-                   client_ip, forwarded_for, user_agent, referer, session_id
+                   client_ip, forwarded_for, user_agent, referer, session_id,
+                   authenticated_email
             FROM access_log
             {where_sql}
             ORDER BY id DESC
@@ -1160,7 +1202,9 @@ def get_access_log_report(
                    MIN(created_at) AS first_seen,
                    MAX(created_at) AS last_seen,
                    ROUND(AVG(duration_ms), 1) AS avg_duration_ms,
-                   SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors
+                   SUM(CASE WHEN status_code >= 400 THEN 1 ELSE 0 END) AS errors,
+                   SUM(CASE WHEN authenticated_email <> '' THEN 1 ELSE 0 END) AS authenticated_hits,
+                   COUNT(DISTINCT CASE WHEN authenticated_email <> '' THEN authenticated_email END) AS authenticated_users
             FROM access_log
             {where_sql}
             """,
@@ -1179,7 +1223,8 @@ def get_access_log_report(
         ).fetchall()
         recent_sessions = conn.execute(
             f"""
-            SELECT session_id, COUNT(*) AS hits, MAX(created_at) AS last_seen
+            SELECT session_id, COUNT(*) AS hits, MAX(created_at) AS last_seen,
+                   GROUP_CONCAT(DISTINCT NULLIF(authenticated_email, '')) AS authenticated_emails
             FROM access_log
             {where_sql}
             GROUP BY session_id
@@ -1213,6 +1258,7 @@ def get_access_log_report(
             """,
             (*recent_days_params, recent_days_start),
         ).fetchone()
+    auth_events = list_auth_events(email=email, date=date, limit=30)
     daily_by_day = {row["day"]: dict(row) for row in daily_rows}
     recent_days = []
     today = datetime.now(timezone.utc).date()
@@ -1230,6 +1276,7 @@ def get_access_log_report(
             "limit": safe_limit,
             "path": path or "",
             "session_id": session_id or "",
+            "email": normalize_email(email),
             "status": status,
             "date": date or "",
             "traffic": normalize_traffic_filter(traffic),
@@ -1240,6 +1287,7 @@ def get_access_log_report(
         "recent_days_summary": dict(recent_days_summary) if recent_days_summary else {},
         "top_paths": [dict(row) for row in top_paths],
         "recent_sessions": [dict(row) for row in recent_sessions],
+        "auth_events": auth_events,
         "logs": [dict(row) for row in rows],
     }
 
@@ -1247,6 +1295,7 @@ def get_access_log_report(
 def build_access_log_filters(
     path: str = "",
     session_id: str = "",
+    email: str = "",
     status: int | None = None,
     date: str = "",
     traffic: str = "clean",
@@ -1293,6 +1342,10 @@ def build_access_log_filters(
     if session_filter:
         clauses.append("session_id LIKE ? ESCAPE '\\'")
         params.append("%" + escape_like(session_filter) + "%")
+    email_filter = normalize_email(email)
+    if email_filter:
+        clauses.append("authenticated_email LIKE ? ESCAPE '\\'")
+        params.append("%" + escape_like(email_filter) + "%")
     if status:
         clauses.append("status_code = ?")
         params.append(status)
@@ -1330,9 +1383,6 @@ def access_log_scan_sql() -> str:
         "WHERE flagged.status_code = 404 "
         "OR flagged.path LIKE '/.%' "
         "OR flagged.path LIKE '%/.%' "
-        "OR flagged.path LIKE '/admin%' "
-        "OR flagged.path LIKE '/auth/%' "
-        "OR flagged.path IN ('/login', '/logout') "
         "OR TRIM(flagged.user_agent) = '' "
         f"OR {agent_clauses}"
         " UNION "
@@ -1415,7 +1465,65 @@ def hash_token(token: str) -> str:
     return sha256(token.encode("utf-8")).hexdigest()
 
 
-def write_access_log(request: Request, status_code: int, duration_ms: int, session_id: str) -> None:
+def write_auth_event(event_type: str, email: str, request: Request) -> None:
+    normalized_email = normalize_email(email)
+    if not normalized_email or event_type not in {"login_success", "logout"}:
+        return
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.execute(
+            """
+            INSERT INTO auth_events (event_type, email, session_id, client_ip, user_agent)
+            VALUES (?, ?, ?, ?, ?)
+            """,
+            (
+                event_type,
+                normalized_email,
+                request.cookies.get("epic_session", ""),
+                get_client_ip(request),
+                request.headers.get("user-agent", ""),
+            ),
+        )
+
+
+def list_auth_events(email: str = "", date: str = "", limit: int = 30) -> list[dict]:
+    clauses = []
+    params: list = []
+    normalized_email = normalize_email(email)
+    if normalized_email:
+        clauses.append("email LIKE ? ESCAPE '\\'")
+        params.append("%" + escape_like(normalized_email) + "%")
+    date_filter = (date or "").strip()
+    if len(date_filter) == 10:
+        try:
+            day = datetime.fromisoformat(date_filter).date()
+        except ValueError:
+            day = None
+        if day:
+            clauses.append("created_at >= ? AND created_at < ?")
+            params.extend((day.isoformat(), (day + timedelta(days=1)).isoformat()))
+    where_sql = "WHERE " + " AND ".join(clauses) if clauses else ""
+    with sqlite3.connect(AUTH_DB_PATH) as conn:
+        conn.row_factory = sqlite3.Row
+        rows = conn.execute(
+            f"""
+            SELECT created_at, event_type, email, session_id, client_ip, user_agent
+            FROM auth_events
+            {where_sql}
+            ORDER BY id DESC
+            LIMIT ?
+            """,
+            (*params, min(max(limit, 1), 100)),
+        ).fetchall()
+    return [dict(row) for row in rows]
+
+
+def write_access_log(
+    request: Request,
+    status_code: int,
+    duration_ms: int,
+    session_id: str,
+    authenticated_email: str = "",
+) -> None:
     forwarded_for = request.headers.get("x-forwarded-for", "")
     client_ip = forwarded_for.split(",", 1)[0].strip()
     if not client_ip and request.client:
@@ -1426,9 +1534,10 @@ def write_access_log(request: Request, status_code: int, duration_ms: int, sessi
             """
             INSERT INTO access_log (
                 method, path, query_string, status_code, duration_ms, client_ip,
-                forwarded_for, user_agent, referer, session_id
+                forwarded_for, user_agent, referer, session_id,
+                authenticated_email
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 request.method,
@@ -1441,6 +1550,7 @@ def write_access_log(request: Request, status_code: int, duration_ms: int, sessi
                 request.headers.get("user-agent", ""),
                 request.headers.get("referer", ""),
                 session_id,
+                normalize_email(authenticated_email),
             ),
         )
 

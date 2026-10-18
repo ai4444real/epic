@@ -1,0 +1,40 @@
+{
+  "dataLabels": {
+    "aliases": "Alias",
+    "subtypes": "Subtipi",
+    "whenSeen": "Quando la vedi",
+    "notThisEnergy": "Non è questa se",
+    "patternsToExplore": "Pattern da esplorare",
+    "redFlags": "Red flags",
+    "back": "Retro",
+    "notThisPattern": "Non è questo se",
+    "short": "Short",
+    "signals": "Segnali"
+  },
+  "web": {
+    "patternEnergies": "Energie del pattern",
+    "whenSeen": "Quando la vedi",
+    "notThisEnergy": "Non è questa se",
+    "showPatternId": true
+  },
+  "debug": {
+    "title": "Revisione carte",
+    "signals": "segnali",
+    "shorts": "shorts",
+    "why": "why",
+    "principle": "principle",
+    "interventionWhy": "why",
+    "exampleC": "example_C",
+    "exampleQ": "example_q",
+    "fallback": "fallback",
+    "high": "energia prioritaria",
+    "medium": "altra energia",
+    "off": "non associata",
+    "missing": "Intervento mancante"
+  },
+  "print": {
+    "front": "Fronte",
+    "back": "Retro",
+    "replacements": {}
+  }
+}

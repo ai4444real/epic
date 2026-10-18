@@ -32,6 +32,7 @@
         <input class="input" id="dateFilter" type="date" aria-label="Filtra per giorno" />
         <input class="input" id="pathFilter" placeholder="filtra path, es. /epic" />
         <input class="input" id="sessionFilter" placeholder="session id anche parziale" />
+        <input class="input" id="emailFilter" type="email" placeholder="utente autenticato (email)" />
         <select class="input" id="trafficFilter">
           <option value="probable" selected>probabili: almeno 2 pagine</option>
           <option value="very_likely">molto probabili: almeno 3 pagine</option>
@@ -63,7 +64,7 @@
         <button class="btn primary" type="submit">Filtra</button>
         <button class="btn" id="resetLogsFiltersBtn" type="button">Azzera filtri</button>
       </form>
-      <p class="traffic-note">Regola: un visitatore con almeno un 404, un accesso admin, uno user-agent automatico o almeno due pagine distinte aperte entro 2 secondi viene classificato come rumore. Le pagine sono conteggiate una sola volta per visitatore.</p>
+      <p class="traffic-note">Regola: un visitatore con almeno un 404, uno user-agent automatico o almeno due pagine distinte aperte entro 2 secondi viene classificato come rumore. Login e accessi admin non sono considerati rumore. Le pagine sono conteggiate una sola volta per visitatore.</p>
 
       <div class="drilldown-bar" id="drilldownBar" hidden>
         <button class="drilldown-back" id="clearDrilldownBtn" type="button">← Torna all’elenco</button>
@@ -87,6 +88,11 @@
         </section>
       </div>
 
+      <section class="mini-panel">
+        <h3>Accessi autenticati recenti</h3>
+        <div id="authEvents"></div>
+      </section>
+
       <div class="users-table-wrap">
         <table class="users-table logs-table">
           <thead>
@@ -96,13 +102,14 @@
               <th>Status</th>
               <th>ms</th>
               <th>Sessione</th>
+              <th>Utente</th>
               <th>IP</th>
               <th>User-agent</th>
               <th>Referer</th>
             </tr>
           </thead>
           <tbody id="logsBody">
-            <tr><td colspan="8">Caricamento...</td></tr>
+            <tr><td colspan="9">Caricamento...</td></tr>
           </tbody>
         </table>
       </div>

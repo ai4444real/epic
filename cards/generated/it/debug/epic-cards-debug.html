@@ -1,0 +1,810 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>EPiC · Revisione carte</title>
+  <style>
+    :root{--ink:#17202a;--muted:#667085;--line:#d8dee8;--paper:#fff;--bg:#eef1f5;--cog:#2878d0;--emo:#e76f2e;--comp:#15956f;--low:#d8ecff;--hot:#ffe39b}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.42 system-ui,-apple-system,"Segoe UI",sans-serif}
+    nav{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:7px;padding:10px 18px;background:rgba(23,32,42,.94);color:#fff;box-shadow:0 2px 10px #0003}
+    nav strong{margin-right:auto}nav a{color:#fff;text-decoration:none;border:1px solid #ffffff55;border-radius:5px;padding:3px 7px;font-size:12px}nav a:hover{background:#fff;color:#111}
+    main{max-width:1500px;margin:auto;padding:22px}.pattern{scroll-margin-top:58px;background:var(--paper);border:1px solid var(--line);border-radius:12px;margin:0 0 28px;padding:22px;box-shadow:0 4px 16px #1d29391a}
+    .pattern-head{display:flex;align-items:baseline;gap:12px}.pattern-id{font:800 22px/1 ui-monospace,monospace;color:var(--muted)}h2{font-size:30px;margin:0 0 12px}
+    .energies{display:flex;gap:10px;flex-wrap:wrap;border-block:1px solid var(--line);padding:12px 0}.energy{width:128px;display:grid;grid-template-columns:34px 24px 1fr;align-items:center;gap:5px;border-radius:8px;padding:5px 7px;border:1px solid var(--line)}
+    .energy img{width:32px;height:32px;object-fit:contain}.energy span{font-weight:800}.energy small{font-size:11px;line-height:1.1}.energy.low.high{background:var(--low)}.energy.high-temp.high{background:var(--hot)}.energy.medium{filter:grayscale(1);background:#edf0f3}.energy.off{opacity:.25}
+    .legend{display:flex;gap:16px;justify-content:flex-end;color:var(--muted);font-size:11px;margin:5px 0 13px}.legend span:before{content:"";display:inline-block;width:9px;height:9px;margin-right:5px;border-radius:50%;background:#333}.legend-medium:before{opacity:.45}.legend-off:before{opacity:.15}
+    .pattern-fields,.intervention-fields,.rescues{display:grid;grid-template-columns:minmax(125px,180px) 1fr;border-top:1px solid var(--line)}.field-label,.field-value{padding:8px 10px;border-bottom:1px solid var(--line)}.field-label{color:var(--muted);font:700 11px/1.3 ui-monospace,monospace;background:#f7f8fa}.field-value{white-space:pre-line}.empty{color:#b42318;background:#fff2f0;font-style:italic}
+    .interventions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:18px}.intervention{border:1px solid var(--line);border-top:6px solid;border-radius:8px;overflow:hidden}.intervention.Cog{border-top-color:var(--cog)}.intervention.Emo{border-top-color:var(--emo)}.intervention.Comp{border-top-color:var(--comp)}
+    .intervention header{padding:12px 14px 8px}.intervention header span{font-weight:800;font-size:12px}.intervention.Cog header span{color:var(--cog)}.intervention.Emo header span{color:var(--emo)}.intervention.Comp header span{color:var(--comp)}h3{font-size:19px;line-height:1.15;margin:4px 0;text-transform:none}.how-to{min-height:66px;padding:0 14px 12px;font-size:16px;font-weight:650}.intervention-fields,.rescues{grid-template-columns:112px 1fr}.rescues{margin-top:12px;border-top:3px solid #344054}.missing{padding:14px;color:#b42318}
+    @media(max-width:1100px){main{padding:12px}.pattern{padding:15px}.interventions{gap:7px}.intervention header{padding:9px 9px 6px}h3{font-size:15px}.how-to{min-height:58px;padding:0 9px 9px;font-size:13px}.intervention-fields,.rescues{grid-template-columns:82px 1fr}.field-label,.field-value{padding:6px;font-size:12px}.field-label{font-size:10px}}
+    @media(max-width:650px){main{padding:6px}.pattern{padding:9px}.interventions{gap:4px}.pattern-fields{grid-template-columns:1fr}.intervention-fields,.rescues{grid-template-columns:1fr}.field-label{padding-bottom:2px}.field-value{padding-top:2px}.intervention header{padding:6px}.intervention header span{font-size:10px}h3{font-size:12px}.how-to{min-height:0;padding:0 6px 7px;font-size:11px}.intervention-fields .field-value,.rescues .field-value{font-size:10px}nav a{display:none}}
+    @media print{body{background:#fff}nav{display:none}main{max-width:none;padding:0}.pattern{box-shadow:none;break-before:page;border:0;margin:0;padding:10mm}.pattern:first-child{break-before:auto}.interventions{gap:8px}.field-label,.field-value{padding:5px 7px}}
+  </style>
+</head>
+<body>
+  <nav><strong>EPiC · Revisione carte</strong><a href="#P1">P1</a><a href="#P2">P2</a><a href="#P3">P3</a><a href="#P4">P4</a><a href="#P5">P5</a><a href="#P6">P6</a><a href="#P7">P7</a><a href="#P8">P8</a><a href="#P9">P9</a><a href="#P10">P10</a><a href="#P11">P11</a><a href="#P12">P12</a></nav>
+  <main><section class="pattern" id="P1">
+      <div class="pattern-head"><div class="pattern-id">P1</div><h2>Perfezione</h2></div>
+      <div class="energies"><div class="energy high low" title="Ansia · energia prioritaria">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy high high-temp" title="Stress / Pressione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">standard irrealistici
+autocritica costante
+paura errore
+iper-preparazione</div><div class="field-label">shorts</div><div class="field-value">Non è mai abbastanza
+Non è ancora pronto
+Mi manca qualcosa</div><div class="field-label">why</div><div class="field-value">Blocca l’azione perché nulla sembra abbastanza buono.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>RIDIMENSIONARE: Scegliere il “buono abbastanza”</h3></header>
+        <div class="how-to">definisci il requisito minimo utile → scegli l’opzione che lo soddisfa.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Esplorare il minimo accettabile e sostenibile.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Aiuta a ridurre rigidità e pressione interna.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Scegli uno standard “abbastanza buono” da applicare a un compito reale.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è un risultato “abbastanza buono” per te qui?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: perfezione → “abbastanza bene”</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>DISACCOPPIARE: Disaccoppiare la scelta dalla tensione</h3></header>
+        <div class="how-to">riconosci la tensione legata allo “standard ideale” e concediti di non doverla risolvere ora</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>La tensione segnala uno standard interno attivo, non un divieto di agire.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Permette di scegliere senza aspettare che la tensione sparisca.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Nota la sensazione di “non è abbastanza” e fai comunque il passo minimo previsto</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Se la tensione resta, quale scelta rimane comunque valida per te?</div>
+          <div class="field-label">fallback</div><div class="field-value">Fai un respiro lento e scegli comunque un micro-passo.</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>ALLEGGERIRE: Riduci il costo della perfezione</h3></header>
+        <div class="how-to">elenca cosa serve per farlo “perfetto” → tieni solo ciò che crea valore e agisci.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Ridurre lo standard per agire.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Permette di procedere con risorse realistiche.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Togli un singolo requisito non essenziale.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Dove il 100% ti sta rallentando inutilmente?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi rendere questo passo più leggero, ora?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P2">
+      <div class="pattern-head"><div class="pattern-id">P2</div><h2>Sfiducia</h2></div>
+      <div class="energies"><div class="energy medium low" title="Ansia · altra energia">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy high low" title="Paura · energia prioritaria">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy medium low" title="Apatia / Tristezza · altra energia">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy medium high-temp" title="Stress / Pressione · altra energia">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">sfiducia nelle risorse
+minimizzazione successi
+auto-svalutazione
+dipendenza guida</div><div class="field-label">shorts</div><div class="field-value">Mi sento incapace
+Non io
+Cosa ho io da dare?</div><div class="field-label">why</div><div class="field-value">Riduce l’iniziativa e aumenta dipendenza da conferme esterne.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>RICONOSCERE CAPACITÀ: Riconoscere competenze già dimostrate</h3></header>
+        <div class="how-to">identifica un risultato già ottenuto → collegalo all’azione imminente come prova.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Riscoprire competenze già usate con successo.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Evidenzia capacità esistenti, facilitando la scelta.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Riconosci una capacità già usata in situazioni simili e decidi come riattivarla.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quando hai gestito qualcosa di simile con successo?</div>
+          <div class="field-label">fallback</div><div class="field-value">Quale pezzo puoi riusare subito?</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>RIATTIVARE: Riconoscere momenti di padronanza</h3></header>
+        <div class="how-to">ricorda un momento in cui hai gestito qualcosa di simile → nota cosa avevi fatto</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>I piccoli successi mostrano capacità già presenti.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Richiama esperienze riuscite, riducendo l’incertezza e facilitando l’avvio.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Identifica un elemento di quel successo che puoi riusare ora</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quando ti sei sentito capace in qualcosa di simile?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: incapace → capace-abbastanza</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>DIMOSTRARE: Agire subito con un passo semplice</h3></header>
+        <div class="how-to">scegli un micro-passo che puoi fare ora → fallo subito per generare prova.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Scegliere un'azione a basso rischio e alta utilità.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Costruisce autoefficacia tramite prove rapide.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Prova una versione ridotta dell’azione che avevi in mente.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è un’azione minima, dimostrativa, che potresti provare ora?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi fare un passo ancora più piccolo, adesso?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P3">
+      <div class="pattern-head"><div class="pattern-id">P3</div><h2>Attribuzione</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy high high-temp" title="Frustrazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy high high-temp" title="Rabbia / Irritazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">attribuzione intenzioni
+rigidità percettiva
+lettura della mente
+giudizio rapido</div><div class="field-label">shorts</div><div class="field-value">Lo fa contro di me
+Pensa che io...
+Lo fa apposta
+So già cosa pensa</div><div class="field-label">why</div><div class="field-value">Complica relazioni e genera conflitti evitabili.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>CONSIDERARE ALTERNATIVE: Vedere l’altra prospettiva</h3></header>
+        <div class="how-to">formula almeno una seconda possibile interpretazione dell’intenzione altrui.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Rileggere le intenzioni altrui.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce attribuzioni negative automatiche.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Formula e annota un’interpretazione alternativa plausibile.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Che altra intenzione potresti ipotizzare?</div>
+          <div class="field-label">fallback</div><div class="field-value">Quale intenzione alternativa potresti ipotizzare?</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>RICONOSCERE: Riconosci il bisogno alla base</h3></header>
+        <div class="how-to">nomina l’emozione → identifica il bisogno correlato.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Riconoscere il bisogno dietro l’emozione protettiva.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Sposta l'attenzione da &quot;colpa loro&quot; a &quot;cosa mi serve&quot;.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Riconosci e formula il tuo bisogno legittimo.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quale tuo bisogno importante senti toccato qui?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: colpa loro → bisogno mio</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>COINVOLGERE: Chiarire il punto di vista altrui</h3></header>
+        <div class="how-to">formula una domanda che esplori il significato o l’intenzione dietro la loro azione.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Comprendere strategicamente la posizione altrui.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Chiarisce interessi e limiti, permettendo passi utili anche nel disaccordo.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Poni una domanda genuina per chiarire la loro intenzione.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Cosa ti serve capire meglio della loro prospettiva?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi fare una domanda che chiarisca la loro intenzione?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P4">
+      <div class="pattern-head"><div class="pattern-id">P4</div><h2>Confini</h2></div>
+      <div class="energies"><div class="energy medium low" title="Ansia · altra energia">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy high high-temp" title="Stress / Pressione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy high high-temp" title="Frustrazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy high high-temp" title="Rabbia / Irritazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">difficoltà dire no
+sovraccarico
+paura giudizio
+fusione identitaria</div><div class="field-label">shorts</div><div class="field-value">Non riesco a dire no
+Mi adatto
+Faccio io</div><div class="field-label">why</div><div class="field-value">Porta sovraccarico, risentimento e perdita di identità.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>SELEZIONARE: Proteggere i propri valori chiave</h3></header>
+        <div class="how-to">identifica a cosa diresti “no” per difendere un valore chiave.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Riconoscere i costi nascosti protegge ciò che è importante.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Rende esplicite le priorità e i valori, facilitando prese di posizione autonome.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Identifica un valore personale a rischio quando dici “sì”.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Cosa vai a sacrificare quando dici “sì”?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: No → protettivo</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>ONORARE: Onorare la propria dignità</h3></header>
+        <div class="how-to">nota cosa stai accettando e chiediti se è ok per te</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>La dignità precede l’adattamento.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Fa emergere il confine prima di spiegare.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Fermati un attimo prima di adattarti e verifica se stai rispettando te.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Questo, così com’è, è davvero ok per te?</div>
+          <div class="field-label">fallback</div><div class="field-value">Qual è il limite minimo che tieni ora?</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>DEFINIRE CONFINI: Dire “no” in modo assertivo</h3></header>
+        <div class="how-to">allena formulazione di un “no” rispettoso</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Dire “no” tutela valori e priorità.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Definisce confini chiari, proteggendo ciò che conta senza danneggiare la relazione.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Prepara una frase di “no” che rispetti te e l’altro.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Come puoi dire “no” proteggendo te e la relazione?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi esprimere il tuo “no” con chiarezza e rispetto?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P5">
+      <div class="pattern-head"><div class="pattern-id">P5</div><h2>Evitamento</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy high low" title="Paura · energia prioritaria">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy high low" title="Apatia / Tristezza · energia prioritaria">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy medium high-temp" title="Rabbia / Irritazione · altra energia">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">procrastinazione
+congelamento
+minimizzazione rischio</div><div class="field-label">shorts</div><div class="field-value">Non adesso
+Ci penso
+Vediamo</div><div class="field-label">why</div><div class="field-value">Protegge dal rischio ma blocca crescita e cambiamento.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>VALUTARE CONSEGUENZE: Valutare il costo di non agire</h3></header>
+        <div class="how-to">considera gli effetti futuri del non agire.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Rendere visibili le conseguenze future.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Avvicina il costo di “poi”, facilitando la scelta ora.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Considera le conseguenze di restare fermi rispetto al tema attuale.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quanto vale quello che stai perdendo?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: inazione → costo elevato</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>CONSENTIRE: Consentire l’avvio senza slancio</h3></header>
+        <div class="how-to">nota la spinta a rimandare e consenti un primo passo minimo</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>L’azione può iniziare senza motivazione.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce l’attesa di “sentirsi pronti”.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Avvia un gesto minimo anche mentre senti resistenza.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Se non servisse sentirti pronto, quale passo faresti ora?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: non pronto → posso iniziare</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>SBLOCCARE: Rompere il blocco con micro-azione</h3></header>
+        <div class="how-to">scegli un’azione minima che puoi fare subito e falla.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Definire un micro-passo sostenibile.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce lo stallo con passi ridicolmente piccoli.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Definisci il primo passo utile per sciogliere lo stallo.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è un primo movimento semplice?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi rendere il primo passo ancora più semplice?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P6">
+      <div class="pattern-head"><div class="pattern-id">P6</div><h2>Rimuginazione</h2></div>
+      <div class="energies"><div class="energy high low" title="Ansia · energia prioritaria">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy medium low" title="Apatia / Tristezza · altra energia">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy medium high-temp" title="Stress / Pressione · altra energia">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">loop analitici
+iper-analisi
+blocco decisionale</div><div class="field-label">shorts</div><div class="field-value">Ci devo pensare ancora
+Devo capirlo bene
+Non sono sicuro</div><div class="field-label">why</div><div class="field-value">Consuma energia e impedisce scelte utili.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>VALUTARE UTILITÀ: Distinguere pensieri utili da rumore</h3></header>
+        <div class="how-to">chiediti se il pensiero ti è utile per la scelta attuale.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Valutare l'utilità reale del pensiero.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce il rumore e allenta la presa del pensiero ripetitivo.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Se ti vedessi da fuori, cosa ti diresti di fare ora?</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Se ti vedessi da fuori, cosa penseresti di questa preoccupazione?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: pensiero → evento mentale</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>ACCORGERSI: Accorgersi della presenza</h3></header>
+        <div class="how-to">nota il loop mentale e senti un punto del corpo</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Accorgersi del presente interrompe l’identificazione.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Crea spazio dal loop mentale, rendendo possibile la scelta.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Nota cosa stai facendo — o non facendo — mentre il pensiero gira.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Dove sei adesso, proprio in questo momento?</div>
+          <div class="field-label">fallback</div><div class="field-value">Nota tre cose che vedi ora.</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>INTERROMPERE: Interrompere il loop con il corpo</h3></header>
+        <div class="how-to">fai un gesto fisico semplice (respiro, movimento) per spezzare il loop.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Interrompere tramite il corpo.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riporta al presente, riducendo rumore mentale e aprendo spazio decisionale.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Usa un gesto o respiro per riportare presenza quando serve.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Cosa potrebbe aiutare il tuo corpo a tornare presente?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi usare il corpo per tornare presente, ora?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P7">
+      <div class="pattern-head"><div class="pattern-id">P7</div><h2>Perdita</h2></div>
+      <div class="energies"><div class="energy medium low" title="Ansia · altra energia">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy high low" title="Paura · energia prioritaria">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy medium high-temp" title="Stress / Pressione · altra energia">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy medium high-temp" title="Frustrazione · altra energia">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy medium high-temp" title="Rabbia / Irritazione · altra energia">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">prudenza eccessiva
+focalizzazione perdita</div><div class="field-label">shorts</div><div class="field-value">E se poi va male?
+Non voglio rischiare</div><div class="field-label">why</div><div class="field-value">Mantiene abitudini sicure e frena opportunità.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>PESARE RISCHI E BENEFICI: Valutare rischi e benefici</h3></header>
+        <div class="how-to">confronta cosa rischi davvero e cosa puoi invece ottenere</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Valutare realisticamente rischi e benefici.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riporta la percezione da minaccia a rischio valutabile.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Scrivi un rischio reale e un possibile beneficio concreto.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è il rischio reale?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: perdita → possibilità</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>RICONNETTERE: Contattare ciò che conta davvero</h3></header>
+        <div class="how-to">collega l’emozione a ciò che potresti ottenere o far crescere.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Sentire ciò che conta riduce la paura.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Collega l’emozione a un valore personale.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Nomina il valore che rende questa scelta significativa.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Per cosa vale la pena provarci?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: perdita → valore</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>SONDARE: Micro-test reversibile</h3></header>
+        <div class="how-to">definisci una prova piccola e reversibile per raccogliere un primo feedback.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Stimolare una micro-azione reversibile.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce incertezza e rassicura attraverso feedback reale a basso costo.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Fai una prova ridotta e osserva cosa impari.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è una prova piccola e reversibile che puoi fare?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi renderlo ancora più piccolo e reversibile?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P8">
+      <div class="pattern-head"><div class="pattern-id">P8</div><h2>Miopia</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy high low" title="Apatia / Tristezza · energia prioritaria">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">scarsa visione
+difficoltà investimento</div><div class="field-label">shorts</div><div class="field-value">Ci penserò
+Viviamo oggi
+Si vive una volta sola</div><div class="field-label">why</div><div class="field-value">Compromette scelte strategiche e disciplina utile.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>COLLEGARE FUTURO: Consultare il proprio Sé futuro</h3></header>
+        <div class="how-to">proietta la tua vita dopo aver agito e nota cosa cambia.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Immaginare il sé futuro.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Amplia la prospettiva temporale.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Guarda questa scelta come il tuo sé futuro e scrivi cosa faresti.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Che consiglio ti darebbe il tuo “io futuro”?</div>
+          <div class="field-label">fallback</div><div class="field-value">Se fossi il tuo sé futuro, cosa sceglieresti ora?</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>RITROVARSI: Ritrovarsi nel sé futuro</h3></header>
+        <div class="how-to">richiama il tuo sé futuro e nota se questa scelta ti rappresenta</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Sentire continuità con il sé futuro.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Rafforza il legame emotivo con il proprio futuro.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Porta alla mente il tuo sé futuro e verifica se questa scelta ti somiglia.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Questo passo è qualcosa in cui ti ritrovi davvero?</div>
+          <div class="field-label">fallback</div><div class="field-value">Che scelta fai oggi che ti semplifica il futuro?</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>ALLINEARE: Agire oggi per l’obiettivo futuro</h3></header>
+        <div class="how-to">guida la scelta di un gesto allineato al tuo futuro</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Agire in coerenza con il sé futuro.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Rende il futuro rilevante nel presente.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Scegli un’azione che ti permetta di avvicinarti, anche poco, al tuo futuro.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è il gesto più piccolo che puoi fare ora?</div>
+          <div class="field-label">fallback</div><div class="field-value">Qual è l’azione più semplice, allineata?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P9">
+      <div class="pattern-head"><div class="pattern-id">P9</div><h2>Impostura</h2></div>
+      <div class="energies"><div class="energy medium low" title="Ansia · altra energia">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy medium low" title="Paura · altra energia">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy off high-temp" title="Frustrazione · non associata">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">attribuzione fortuna
+paura di essere smascherato
+autosabotaggio</div><div class="field-label">shorts</div><div class="field-value">Non me lo merito
+È stato solo fortuna
+Prima o poi mi sgamano</div><div class="field-label">why</div><div class="field-value">Erode sicurezza e visibilità del proprio valore.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>ATTRIBUIRE: Riconoscere meriti</h3></header>
+        <div class="how-to">identifica azioni/decisioni proprie che hanno portato al risultato</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Appropriarsi del proprio contributo ai risultati.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce il dubbio restituendo la paternità ai propri successi.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Identifica almeno un’azione concreta che ha prodotto il risultato</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quali tue scelte/azioni hanno contribuito a questo risultato?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: fortuna → competenza</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>NOTARE EMOZIONE: Accogliere l’emozione senza giudizio</h3></header>
+        <div class="how-to">riconosci l’emozione senza giudicarla, poi resta un attimo con essa</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>L’emozione è un segnale, non un verdetto.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Normalizza l’emozione, riconoscendola, mantenendo accesso alla scelta.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Nomina l’emozione e concedile spazio per un attimo.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Cosa ti sta proteggendo questa emozione, proprio adesso?</div>
+          <div class="field-label">fallback</div><div class="field-value">Datti il permesso di sentire questo, poi scegli un passo piccolo.</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>ESPORSI: Esporsi con contributo concreto</h3></header>
+        <div class="how-to">condividi un contributo concreto senza giustificarlo o sminuirlo</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Esporsi con un contributo reale.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Trasforma la paura di “non meritare” in azione.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Fai una proposta concreta senza premettere scuse o giustificazioni.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Cosa potresti portare ora, senza spiegarti?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: ritiro → presenza attiva</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P10">
+      <div class="pattern-head"><div class="pattern-id">P10</div><h2>Conformità</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy medium low" title="Paura · altra energia">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy medium low" title="Apatia / Tristezza · altra energia">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy medium high-temp" title="Stress / Pressione · altra energia">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy medium high-temp" title="Frustrazione · altra energia">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy medium high-temp" title="Rabbia / Irritazione · altra energia">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">ricerca approvazione
+ipersensibilità al giudizio
+insicurezza
+conformismo relazionale
+paura del successo</div><div class="field-label">shorts</div><div class="field-value">Mi serve che piaccia
+Dimmi se va bene
+Se non va bene?</div><div class="field-label">why</div><div class="field-value">Porta a scelte guidate dagli altri, non da ciò che conta per sé.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>DISTINGUERE: Spostare la sorgente del valore</h3></header>
+        <div class="how-to">separa ciò che pensi tu da ciò che pensano gli altri e nota la differenza.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Spostare il valore dall’esterno all’interno.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riorienta il criterio di valore.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Definisci almeno un &quot;criterio interno&quot; per valutare il risultato dell’azione</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è il tuo criterio, qui?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: esterno → interno</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>VERIFICARE CONGRUENZA: Riconnettersi al proprio metro interno</h3></header>
+        <div class="how-to">identifica un segnale interno che ti indica “Ok per me”.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Riconnettersi ai segnali interni.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Rende sicuro affidarsi a sé perché il corpo segnala quando qualcosa è giusto.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Nota un segnale fisico che per te significa “ok”.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Come ti accorgi nel corpo che qualcosa è davvero ‘a posto’ per te?</div>
+          <div class="field-label">fallback</div><div class="field-value">Se segui il tuo sì interno, cosa fai?</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>AUTORIZZARSI: Autorizzarsi all’azione</h3></header>
+        <div class="how-to">fai una scelta concreta senza chiedere conferma</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Agire senza conferma rafforza l’autonomia.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Trasforma la dipendenza dal giudizio esterno in scelta attiva.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Prendi una piccola decisione senza consultare altri.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Se non dovessi chiedere a nessuno, cosa faresti ora?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: approvazione → iniziativa</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P11">
+      <div class="pattern-head"><div class="pattern-id">P11</div><h2>Rigidità</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy medium low" title="Paura · altra energia">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy high low" title="Apatia / Tristezza · energia prioritaria">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy high high-temp" title="Frustrazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy off high-temp" title="Rabbia / Irritazione · non associata">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">rigidità binaria
+catastrofizzazione
+polarizzazione</div><div class="field-label">shorts</div><div class="field-value">O così o niente
+Se non ho questo non parto nemmeno</div><div class="field-label">why</div><div class="field-value">Ostacola progressi graduali.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>SFUMARE: Riconoscere la zona grigia</h3></header>
+        <div class="how-to">trasforma l'obiettivo da binario a scalare (0-100)</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Riconoscere progressi parziali.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Apre spazio per apprendere dai progressi.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Definisci almeno un criterio intermedio che ti dica che stai avanzando.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quali risultati intermedi esistono tra il fallimento totale e il successo pieno?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: giusto/sbagliato → utile/inutile</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>APRIRE: Aprire uno spazio intermedio</h3></header>
+        <div class="how-to">nota la rigidità interna e cerca una posizione più morbida</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Un minimo di apertura emotiva rende tollerabile un’opzione non estrema.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce la rigidità emotiva davanti all’incertezza.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Scegli un passo di mezzo, anche imperfetto.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quale via di mezzo sarebbe accettabile adesso?</div>
+          <div class="field-label">fallback</div><div class="field-value">Reframing: estremo → intermedio</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>PROCEDERE: Agire nella zona grigia</h3></header>
+        <div class="how-to">definisci una micro-azione che porti un vantaggio parziale.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Spostare l’azione da “tutto o nulla” a “un passo”.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Abbassa la soglia d’azione, permettendo il movimento anche senza perfezione.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Esegui un’azione minima che crea un avanzamento reale.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Qual è un passo piccolo che è comunque meglio di zero?</div>
+          <div class="field-label">fallback</div><div class="field-value">Qual è un passo utile, anche imperfetto?</div>
+        </div>
+      </article></div>
+    </section>
+<section class="pattern" id="P12">
+      <div class="pattern-head"><div class="pattern-id">P12</div><h2>Conferma</h2></div>
+      <div class="energies"><div class="energy off low" title="Ansia · non associata">
+        <img src="../../../print-v1/built/images/E1b.png" alt="">
+        <span>E1</span><small>Ansia</small>
+      </div><div class="energy off low" title="Paura · non associata">
+        <img src="../../../print-v1/built/images/E2b.png" alt="">
+        <span>E2</span><small>Paura</small>
+      </div><div class="energy off low" title="Apatia / Tristezza · non associata">
+        <img src="../../../print-v1/built/images/E6b.png" alt="">
+        <span>E6</span><small>Apatia / Tristezza</small>
+      </div><div class="energy off high-temp" title="Stress / Pressione · non associata">
+        <img src="../../../print-v1/built/images/E4b.png" alt="">
+        <span>E4</span><small>Stress / Pressione</small>
+      </div><div class="energy medium high-temp" title="Frustrazione · altra energia">
+        <img src="../../../print-v1/built/images/E3b.png" alt="">
+        <span>E3</span><small>Frustrazione</small>
+      </div><div class="energy high high-temp" title="Rabbia / Irritazione · energia prioritaria">
+        <img src="../../../print-v1/built/images/E5b.png" alt="">
+        <span>E5</span><small>Rabbia / Irritazione</small>
+      </div></div>
+      <div class="legend"><span class="legend-high">energia prioritaria</span><span class="legend-medium">altra energia</span><span class="legend-off">non associata</span></div>
+      <div class="pattern-fields"><div class="field-label">segnali</div><div class="field-value">resistenza alla disconferma
+visione parziale
+filtraggio informativo</div><div class="field-label">shorts</div><div class="field-value">Ho già capito
+Lo so già</div><div class="field-label">why</div><div class="field-value">Limita apprendimento e blocca nuove possibilità.</div></div>
+      <div class="interventions"><article class="intervention Cog">
+        <header><span>Cog</span><h3>FALSIFICARE: Raccogliere contro-evidenze</h3></header>
+        <div class="how-to">formula l’ipotesi opposta e cerca dati o prospettive che la supportano.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Cercare dati contrari alla propria idea.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Libera nuove opzioni.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Annota un dato che contraddice la tua idea.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quali elementi indicano che la tua idea non è completa o è errata?</div>
+          <div class="field-label">fallback</div><div class="field-value">Quale verifica concreta fai adesso?</div>
+        </div>
+      </article><article class="intervention Emo">
+        <header><span>Emo</span><h3>AMMETTERE: Ammettere il dubbio</h3></header>
+        <div class="how-to">nota la chiusura e resta un attimo nel dubbio</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Sostenere il dubbio per verificare.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce la chiusura difensiva, aprendo alla verifica.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Lascia aperta un’ipotesi diversa per un momento.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Quale dubbio puoi sostenere per un attimo?</div>
+          <div class="field-label">fallback</div><div class="field-value">Resta un attimo nel dubbio, poi fai una domanda.</div>
+        </div>
+      </article><article class="intervention Comp">
+        <header><span>Comp</span><h3>TESTARE: Testare la realtà con piccoli esperimenti</h3></header>
+        <div class="how-to">esegui un test che potrebbe falsificare l’idea → osserva il risultato.</div>
+        <div class="intervention-fields">
+          <div class="field-label">principle</div><div class="field-value"><strong>Testare attivamente l'ipotesi opposta.</strong></div>
+          <div class="field-label">why</div><div class="field-value"><em>Riduce la rigidità attraverso l’azione.</em></div>
+          <div class="field-label">example_C</div><div class="field-value">Progetta un mini-test che possa smentire la tua ipotesi.</div>
+        </div>
+        <div class="rescues">
+          <div class="field-label">example_q</div><div class="field-value">Che piccolo esperimento puoi fare per verificare?</div>
+          <div class="field-label">fallback</div><div class="field-value">Come puoi renderlo ancora più semplice da provare?</div>
+        </div>
+      </article></div>
+    </section></main>
+</body>
+</html>

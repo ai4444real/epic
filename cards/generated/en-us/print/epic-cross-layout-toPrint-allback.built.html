@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <link rel="stylesheet" href="_shared.css" />
+  <title>EPiC Cross Layout toPrint All</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 8mm;
+    }
+
+    :root {
+      --page-pad: 8mm;
+      /* Compact (75%): 2 crosses per A4 */
+      --card-w: 47mm;
+      --card-h: 66mm;
+      --card-content-scale: 0.95;
+      --gap: 1mm;
+      --crosses-per-page: 2;
+      --radius: 5px;
+      --pad: 8px;
+      --e-icon-size: 5.8mm;
+      --e-icons-gap: 1.1mm;
+      --fs-xxs: 7px;
+      --fs-xs: 8px;
+      --fs-sm: 9px;
+      --fs-md: 10px;
+      --fs-lg: 12px;
+      --fg: #0a0a0a;
+      --muted: #71717a;
+      --muted-light: #a1a1aa;
+      --border: #ccc;
+      --border-light: #e4e4e7;
+      --type-cog: #3b82f6;
+      --type-comp: #10b981;
+      --type-emo: #fb923c;
+      --type-p: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      font: 400 10px/1.4 "Inter", "Source Sans 3", system-ui, sans-serif;
+      background: #fff;
+      color: var(--fg);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* ---- A4 page container ---- */
+    .a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: var(--page-pad);
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .a4-page:last-child {
+      page-break-after: auto;
+    }
+
+    .page-label {
+      position: absolute;
+      top: 3mm;
+      right: 5mm;
+      font-size: 8px;
+      color: #ccc;
+    }
+
+    /* ---- Fixed print layout ---- */
+    .page-content {
+      position: absolute;
+      inset: var(--page-pad);
+      display: grid;
+      justify-items: center;
+      align-items: center;
+    }
+
+    .page-content.layout-1 {
+      grid-template-rows: 1fr;
+    }
+
+    .page-content.layout-2 {
+      grid-template-rows: 1fr auto 1fr;
+    }
+
+    .cross-slot {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 0;
+    }
+
+    /* ---- Cross layout ---- */
+    .cross {
+      display: grid;
+      grid-template-areas:
+        ".   cog  ."
+        "emo pat comp";
+      grid-template-columns: var(--card-w) var(--card-w) var(--card-w);
+      grid-template-rows: var(--card-h) var(--card-h);
+      gap: 0;
+      align-items: stretch;
+      justify-items: stretch;
+    }
+
+    .cross.back-side {
+      grid-template-areas:
+        ".    cog  ."
+        "comp pat  emo";
+    }
+
+    .cross-cog { grid-area: cog; }
+    .cross-emo { grid-area: emo; }
+    .cross-pat { grid-area: pat; }
+    .cross-comp { grid-area: comp; }
+
+    .cross-cog,
+    .cross-emo,
+    .cross-pat,
+    .cross-comp {
+      position: relative;
+      width: var(--card-w);
+      height: var(--card-h);
+    }
+
+    /* ---- Card ---- */
+    .card {
+      width: var(--card-w);
+      height: var(--card-h);
+      border: 0;
+      border-radius: 0;
+      padding: var(--pad);
+      display: flex;
+      flex-direction: column;
+      background: transparent;
+      overflow: hidden;
+      position: relative;
+      transform: scale(var(--card-content-scale));
+      transform-origin: center center;
+    }
+
+    /* Type colors */
+    .card.Cog { background: transparent; }
+    .card.Comp { background: transparent; }
+    .card.Emo { background: transparent; }
+    .card.P { background: transparent; }
+
+    .p-lab-front {
+      padding: 0;
+      display: grid;
+      grid-template-columns: 46px 1fr 46px;
+      grid-template-rows: 34px 1fr 24px;
+      grid-template-areas:
+        "top top top"
+        "left main right"
+        "bottom bottom bottom";
+    }
+
+    .p-margin-note {
+      position: relative;
+      font-size: 9px;
+      line-height: 1;
+      color: var(--muted);
+      letter-spacing: 0.01em;
+    }
+
+    .p-margin-note .note-copy {
+      display: block;
+    }
+
+    .p-margin-note strong {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-top: 6px;
+      letter-spacing: 0.03em;
+      line-height: 1;
+    }
+
+    .p-margin-note.top strong {
+      color: var(--type-cog);
+    }
+
+    .p-margin-note.left strong {
+      color: var(--type-emo);
+    }
+
+    .p-margin-note.right strong {
+      color: var(--type-comp);
+    }
+
+    .p-margin-note.top {
+      grid-area: top;
+      align-self: center;
+      justify-self: stretch;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .p-margin-note.left,
+    .p-margin-note.right {
+      align-self: center;
+      justify-self: center;
+      width: 176px;
+      display: block;
+      text-align: center;
+      transform-origin: center center;
+      white-space: nowrap;
+    }
+
+    .p-margin-note.left {
+      grid-area: left;
+      transform: rotate(-90deg);
+    }
+
+    .p-margin-note.right {
+      grid-area: right;
+      transform: rotate(90deg);
+    }
+
+    .p-main {
+      grid-area: main;
+      min-width: 0;
+      padding: 10px 6px 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .p-text-area {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+    }
+
+    .p-text-area > *:not(.p-epic-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .p-epic-watermark {
+      position: absolute;
+      left: 50%;
+      bottom: 3mm;
+      width: 58.8mm;
+      height: auto;
+      opacity: 0.24;
+      object-fit: contain;
+      pointer-events: none;
+      transform: translateX(-50%) rotate(0deg);
+      z-index: 0;
+    }
+
+    .p-main-visual {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .p-main-visual img {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+
+    .p-bottom {
+      grid-area: bottom;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    /* Card head */
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 4px;
+    }
+
+    .card-id {
+      font-size: var(--fs-xxs);
+      color: var(--muted-light);
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .type-pill {
+      font-size: var(--fs-xxs);
+      padding: 1px 4px;
+      border-radius: 3px;
+      text-transform: uppercase;
+      font-weight: 600;
+    }
+
+    .Cog .type-pill { background: rgba(59,130,246,0.1); color: var(--type-cog); }
+    .Comp .type-pill { background: rgba(16,185,129,0.1); color: var(--type-comp); }
+    .Emo .type-pill { background: rgba(251,146,60,0.1); color: var(--type-emo); }
+    .P .type-pill { background: rgba(56,189,248,0.1); color: var(--type-p); }
+
+    .intervention-card {
+      padding: 8px;
+      position: relative;
+      display: grid;
+      grid-template-rows: auto minmax(20mm, 1fr) auto;
+      row-gap: 5px;
+    }
+
+    .intervention-card > * {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intervention-lever {
+      position: relative;
+      padding: 1.5mm 2mm 1mm;
+      overflow: hidden;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .intervention-lever > *:not(.intervention-watermark) {
+      position: relative;
+      z-index: 1;
+    }
+
+    .intervention-watermark {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 27mm;
+      height: auto;
+      opacity: 0.22;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .Cog .intervention-watermark {
+      left: 50%;
+      top: 39%;
+      width: 21.6mm;
+    }
+
+    .Emo .intervention-watermark {
+      left: 22%;
+      top: 47%;
+    }
+
+    .Comp .intervention-watermark {
+      left: 78%;
+      top: 61%;
+    }
+
+    .intervention-type-row {
+      display: flex;
+      justify-content: flex-end;
+      min-height: 11px;
+    }
+
+    .intervention-header {
+      min-height: 0;
+    }
+
+    .intervention-main {
+      padding-top: 3mm;
+      margin-bottom: 0;
+    }
+
+    .intervention-principle {
+      font-size: var(--fs-lg);
+      font-weight: 700;
+      line-height: 1.18;
+      margin: 4px 0 7px;
+      text-align: center;
+    }
+
+    .Cog .intervention-principle { color: var(--type-cog); }
+    .Comp .intervention-principle { color: var(--type-comp); }
+    .Emo .intervention-principle { color: var(--type-emo); }
+
+    .intervention-howto {
+      font-size: var(--fs-sm);
+      color: var(--fg);
+      line-height: 1.32;
+    }
+
+    .intervention-aka {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      font-style: italic;
+      line-height: 1.25;
+      margin: -3px 0 6px;
+      text-align: center;
+    }
+
+    .intervention-verb {
+      font-size: 11px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: 0.03em;
+      text-align: center;
+      color: var(--fg);
+    }
+
+    .intervention-task {
+      font-size: var(--fs-sm);
+      line-height: 1.28;
+      color: var(--fg);
+      margin-top: 2px;
+      text-align: center;
+    }
+
+    .rescue-box {
+      position: relative;
+      margin-top: 0;
+      padding: 6px 6px 6px;
+      border: 1px solid rgba(0,0,0,0.12);
+      border-radius: 5px;
+      background: rgba(255,255,255,0.68);
+    }
+
+    .rescue-badge {
+      position: absolute;
+      top: -1.7mm;
+      right: -1.4mm;
+      width: 4mm;
+      height: 4mm;
+      border-radius: 50%;
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--fg);
+      box-shadow: 0 0 0 1px rgba(0,0,0,0.12);
+    }
+
+    .rescue-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+    }
+
+    .rescue-grid .rescue-line + .rescue-line {
+      border-left: 1px solid rgba(0,0,0,0.12);
+      padding-left: 5px;
+    }
+
+    .rescue-line {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      align-items: start;
+      font-size: var(--fs-xs);
+      line-height: 1.24;
+      color: var(--fg);
+    }
+
+    .rescue-icon {
+      width: 3mm;
+      height: 3mm;
+      display: block;
+      color: var(--fg);
+      opacity: 0.72;
+    }
+
+    .title {
+      font-size: var(--fs-lg);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .aliases-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 3px;
+    }
+
+    .principle-line {
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 3px;
+    }
+
+    .howto-line {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      line-height: 1.3;
+    }
+
+    .front-extra {
+      margin-top: 10px;
+    }
+
+    .howto-line strong {
+      color: var(--fg);
+      font-weight: 600;
+    }
+
+    .section {
+      margin-top: 3px;
+    }
+
+    .section-title {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1px;
+    }
+
+    .section-content {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+    }
+
+    .section-content ul {
+      margin: 0;
+      padding-left: 10px;
+    }
+
+    .shorts-line {
+      font-size: var(--fs-xs);
+      color: var(--muted);
+      line-height: 1.3;
+      margin-top: 3px;
+    }
+
+    .why-line {
+      font-size: var(--fs-sm);
+      line-height: 1.35;
+      color: var(--fg);
+      margin-top: 10px;
+    }
+
+    /* Back card */
+    .card.back-card {
+      border-left-width: 1px;
+      padding: 9mm 8mm;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .back-brand-card {
+      padding: 14mm 10mm 12mm;
+    }
+
+    .back-logo {
+      width: 35mm;
+      height: auto;
+      display: block;
+      margin-bottom: 5mm;
+    }
+
+    .back-chain {
+      font-size: 7px;
+      line-height: 1.2;
+      color: var(--muted);
+      letter-spacing: 0;
+      margin-bottom: 3mm;
+      text-align: left;
+      width: 34mm;
+    }
+
+    .back-chain span {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .back-chain .step-2 { padding-left: 5mm; }
+    .back-chain .step-3 { padding-left: 10mm; }
+    .back-chain .step-4 { padding-left: 15mm; }
+    }
+
+    .back-brand {
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 3mm;
+      letter-spacing: 0;
+    }
+
+    .back-url {
+      font-size: 10px;
+      color: var(--muted);
+      margin-bottom: 8mm;
+      letter-spacing: 0.01em;
+    }
+
+    .back-type-label {
+      min-width: 31mm;
+      padding: 2.2mm 4mm;
+      border-top: 1px solid var(--border-light);
+      border-bottom: 1px solid var(--border-light);
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--type-p);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .back-instruction-title {
+      font-size: var(--fs-lg);
+      line-height: 1.15;
+      font-weight: 700;
+      max-width: 42mm;
+      margin: 0 auto 3mm;
+    }
+
+    .back-instruction-lead {
+      font-size: var(--fs-sm);
+      line-height: 1.25;
+      font-weight: 600;
+      max-width: 42mm;
+      margin: 0 auto 1.5mm;
+    }
+
+    .back-instruction-note {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+      color: var(--muted);
+      max-width: 42mm;
+      margin: 0 auto 5mm;
+    }
+
+    .back-visual {
+      width: 100%;
+      min-height: 24mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 5.5mm 0 4mm;
+      position: relative;
+    }
+
+    .card.Emo.back-card .back-visual {
+      margin-top: -1.5mm;
+      margin-bottom: 6mm;
+    }
+
+    .back-caption {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+      color: var(--muted);
+      max-width: 42mm;
+      margin: 0 auto;
+    }
+
+    .back-energy-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 9.5mm);
+      gap: 2.3mm 2.8mm;
+      justify-content: center;
+      align-content: center;
+    }
+
+    .back-energy-dot {
+      width: 9.5mm;
+      height: 9.5mm;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .back-energy-dot img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .back-energy-dot.pick::after {
+      content: "";
+      position: absolute;
+      inset: -1.5mm;
+      border: 0.45mm solid #111;
+      border-radius: 50%;
+    }
+
+    .back-energy-dot.pick::before {
+      content: "";
+      position: absolute;
+      right: -3.2mm;
+      bottom: -1.5mm;
+      width: 4.2mm;
+      height: 4.2mm;
+      border-right: 0.55mm solid #111;
+      border-bottom: 0.55mm solid #111;
+      transform: rotate(-15deg);
+    }
+
+    .back-energy-scan {
+      position: relative;
+      width: 41mm;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .back-energy-scan img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+    }
+
+    .back-energy-lens {
+      position: relative;
+      width: 7.2mm;
+      height: 7.2mm;
+      object-fit: contain;
+      margin-top: -1.2mm;
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+
+    .back-pattern-stack {
+      display: grid;
+      grid-template-columns: repeat(3, 13mm);
+      gap: 2mm;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .back-pattern-token {
+      height: 18mm;
+      border: 0.35mm solid #111;
+      border-radius: 2mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--muted);
+      background: rgba(56,189,248,0.04);
+      overflow: hidden;
+      padding: 0.7mm;
+    }
+
+    .back-pattern-token:nth-child(3) {
+      transform: translateY(2mm);
+    }
+
+    .back-pattern-token img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .back-lever-choice {
+      display: grid;
+      grid-template-columns: repeat(3, 12mm);
+      gap: 1.6mm;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .back-lever-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1mm;
+    }
+
+    .back-lever-img {
+      width: 12mm;
+      height: 13mm;
+      object-fit: contain;
+    }
+
+    .back-lever-img.pick {
+      transform: none;
+    }
+
+    .back-lever-name {
+      font-size: var(--fs-xxs);
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .block {
+      margin-bottom: 4px;
+    }
+
+    .block:last-child { margin-bottom: 0; }
+
+    .label {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 1px;
+    }
+
+    .block-content {
+      font-size: var(--fs-xs);
+      line-height: 1.3;
+    }
+
+    .aka-line {
+      font-size: var(--fs-xxs);
+      color: var(--muted);
+      font-style: italic;
+      margin-bottom: 4px;
+    }
+
+    /* E icons on P cards */
+    .e-icons {
+      display: flex;
+      gap: var(--e-icons-gap);
+      justify-content: center;
+      align-items: center;
+      padding: 2px 0 1px;
+    }
+
+    .e-icon {
+      width: var(--e-icon-size);
+      height: var(--e-icon-size);
+      border-radius: 50%;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .e-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+    }
+
+    .e-lever {
+      position: absolute;
+      z-index: 2;
+      bottom: -0.35mm;
+      width: 3mm;
+      height: 3mm;
+      background: url("../../../print-v1/built/app/images/goccia.svg") center / contain no-repeat;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .e-lever.Cog {
+      left: 50%;
+      transform: translateX(-50%) rotate(0deg);
+    }
+
+    .e-lever.Emo {
+      left: 50%;
+      transform: translateX(-50%) rotate(-90deg);
+    }
+
+    .e-lever.Comp {
+      left: 50%;
+      transform: translateX(-50%) rotate(90deg);
+    }
+
+    /* Not linked: gray and faded */
+    .e-icon.none {
+      opacity: 1;
+    }
+
+    .e-icon.none img {
+      opacity: 0.2;
+      filter: grayscale(1);
+    }
+
+    /* Medium: black outline, no background */
+    .e-icon.medium {
+      opacity: 1;
+      filter: none;
+    }
+
+    /* High: with colored background circle */
+    .e-icon.high {
+      opacity: 1;
+      filter: none;
+      box-shadow: 0 0 0 0.5px rgba(0,0,0,0.15);
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .e-icon.high.energy-low {
+      background: rgba(147, 197, 253, 0.45);
+    }
+
+    .e-icon.high.energy-high {
+      background: rgba(251, 191, 36, 0.45);
+    }
+
+    .empty-slot {
+      width: var(--card-w);
+      height: var(--card-h);
+      border: 1px dashed #ddd;
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--fs-xs);
+      color: #ccc;
+    }
+
+    .trim-svg {
+      position: absolute;
+      width: calc(var(--card-w) + 6.2mm);
+      height: calc(var(--card-h) + 6.2mm);
+      left: -3.1mm;
+      top: -3.1mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    /* Cross label */
+    .cross-label {
+      font-size: 8px;
+      color: #bbb;
+      text-align: center;
+      margin-bottom: 2mm;
+    }
+
+    .cross-label.back-spacer {
+      visibility: hidden;
+    }
+
+    /* Separator between two crosses on same page */
+    .cross-separator {
+      width: 80%;
+      border: none;
+      border-top: 1px dashed #ddd;
+      margin: 0;
+      align-self: center;
+    }
+
+    /* ---- Registration marks ---- */
+    .reg-svg {
+      position: absolute;
+      width: 8mm;
+      height: 8mm;
+      pointer-events: none;
+      overflow: visible;
+    }
+
+    .reg-top {
+      top: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-bottom {
+      bottom: calc(var(--page-pad) / 2 - 4mm);
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .reg-left {
+      left: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .reg-right {
+      right: calc(var(--page-pad) / 2 - 4mm);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    /* Toolbar (screen only) */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #333;
+      color: #fff;
+      padding: 8px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 13px;
+      font-family: system-ui, sans-serif;
+    }
+
+    .toolbar label { font-weight: 500; }
+
+    .toolbar select {
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid #555;
+      background: #444;
+      color: #fff;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    /* Full size: 1 cross per A4 */
+    body.full-size .a4-page {
+      justify-content: center;
+    }
+
+    /* Screen-only styles */
+    @media screen {
+      body { background: #eee; padding: 0; }
+      #output { padding: 20px; }
+      .a4-page {
+        background: #fff;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin: 20px auto;
+      }
+    }
+
+    /* Print: hide screen-only elements */
+    @media print {
+      .toolbar { display: none; }
+      .page-label { display: none; }
+      .e-icon.high.energy-low {
+        background: rgb(191, 219, 254);
+      }
+      .e-icon.high.energy-high {
+        background: rgb(253, 230, 138);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <label>Cross Layout toPrint:</label>
+    <select id="sizeSelector">
+      <option value="full">Originale — 100% (63×88mm) — 1 croce/foglio</option>
+      <option value="compact">Compatta — 75% (47×66mm) — 2 croci/foglio</option>
+    </select>
+    <span id="sideLabel">Back</span>
+  </div>
+  <div id="output"></div>
+
+  <script>
+    var EPIC_DATA = {"E":[{"id":"E1","label":"Anticipatory tension","fronte":{"aliases":{"_label":"Aliases","items":["agitation","tension","apprehension","pit in the stomach"]},"subtypes":{"_label":"Subtypes","items":["Performance-related","Relational","Anticipatory Focus"]},"quando_la_vedi":{"_label":"When you see it","items":["high activation","future focus → imagining negative outcomes","strong urge to prepare extensively"]},"non_e_questa_se":{"_label":"It is not this if","items":["low energy → see E6","no anticipatory focus → see E2/P7"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P1","P6","P9","P10"],"medium":["P2","P4","P7"]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["absence of activation","marked apathy","indifference","lack of future focus"]},"hint":"high activation + future focus → check P7","porta_I":"I-P6-Emo"},"original_label":"Ansia","clinical_flag":"Mediated from 'Anxiety' to avoid psychiatric diagnosis connotations (DSM-5 Anxiety Disorder)."},{"id":"E2","label":"Threat signal / alarm","fronte":{"aliases":{"_label":"Aliases","items":["avoidance","difficulty acting","internal alarm","stepping back"]},"subtypes":{"_label":"Subtypes","items":["Exposure Alarm","Uncertainty Alarm","Consequence Alarm"]},"quando_la_vedi":{"_label":"When you see it","items":["threat orientation","strong avoidance"]},"non_e_questa_se":{"_label":"It is not this if","items":["no perceived threat → see E1","self-criticism focused on self-worth → see P9"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P2","P5","P7","P10"],"medium":["P4","P9","P11"]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["absence of threat","widespread confusion","deep apathy","total withdrawal"]},"hint":"specific avoidance → check P7","porta_I":"I-P5-Emo"},"original_label":"Paura","clinical_flag":"Framed as 'Threat Signal / Alarm State' to steer clear of clinical phobias/panic disorders."},{"id":"E3","label":"Frustration / friction","fronte":{"aliases":{"_label":"Aliases","items":["powerlessness","irritation","stagnation","lack of forward movement"]},"subtypes":{"_label":"Subtypes","items":["Goal Block","Perceived Injustice","Prolonged Delay"]},"quando_la_vedi":{"_label":"When you see it","items":["repeated attempts without progress","'it's not fair' feeling"]},"non_e_questa_se":{"_label":"It is not this if","items":["high outward energy → see E5","very low energy → see E6"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P3","P11"],"medium":["P4","P12"]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["absence of tension","absence of objective","marked fatigue"]},"hint":"\"not working / not fair\" → check interpretation vs. request","porta_I":"I-P3-Comp"},"original_label":"Frustrazione","clinical_flag":"Standard coaching vector for system friction."},{"id":"E4","label":"Operational pressure / overload","fronte":{"aliases":{"_label":"Aliases","items":["overload","exhaustion","pressure","too much to hold together"]},"subtypes":{"_label":"Subtypes","items":["System Overload","Insufficient Recovery","Lack of Clarity"]},"quando_la_vedi":{"_label":"When you see it","items":["too many demands → none clear","fatigue + difficulty choosing"]},"non_e_questa_se":{"_label":"It is not this if","items":["significant physical/functional impairment → healthcare referral","outward-oriented energy → see E5"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P4","P1"],"medium":["P6","P2","P7","P10"]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["absence of overload","high angry energy","trance state","unmotivated immobility"]},"hint":"too much + unclear → check overload","porta_I":"I-P4-Emo"},"original_label":"Stress / Pressione","clinical_flag":"Mediated to 'Operational Pressure / Overload' to prevent association with clinical burnout or chronic stress syndrome."},{"id":"E5","label":"Anger / boundary friction","fronte":{"aliases":{"_label":"Aliases","items":["annoyance","resentment","internal surge","rising tension"]},"subtypes":{"_label":"Subtypes","items":["Opposition/Resistance","Interpersonal Friction","Unexpected Obstacle"]},"quando_la_vedi":{"_label":"When you see it","items":["high energy","outward drive"]},"non_e_questa_se":{"_label":"It is not this if","items":["very low energy → E6","directed inward → see P9"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P3","P12"],"medium":[]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["low energy","predominant sadness","passive avoidance","non-existent action"]},"hint":"high outward activation → check boundary / need","porta_I":"I-P4-Comp"},"original_label":"Rabbia / Irritazione","clinical_flag":"Framed as 'Boundary Friction / Assertion' rather than clinical intermittent explosive tendencies."},{"id":"E6","label":"Energy depletion / low state","fronte":{"aliases":{"_label":"Aliases","items":["emptiness","disconnection","shutdown","drained of energy"]},"subtypes":{"_label":"Subtypes","items":["Motivation Drop","Withdrawal","Loss of confidence"]},"quando_la_vedi":{"_label":"When you see it","items":["low energy","loss of drive → 'it doesn't matter anyway'"]},"non_e_questa_se":{"_label":"It is not this if","items":["high activation → E3/E5"]},"pattern_da_esplorare":{"_label":"Patterns to explore","high":["P5","P8","P11"],"medium":["P2","P10"]}},"retro":{"_label":"Back","red_flags":{"_label":"Red flags","items":["high energy","agitation","struggling","repeated attempts without withdrawal"]},"hint":"low energy → check avoidance + purpose","porta_I":"I-P8-Emo"},"original_label":"Apatia / Tristezza","clinical_flag":"CRITICAL MEDIATION: Translated as 'Energy Depletion / Low State' to explicitly avoid 'Depression' or clinical affective disorders."}],"P":[{"id":"P1","label":"Perfectionism","hint_leva":"E1:Emo,E4:Comp","fronte":{"aliases":{"_label":"Aliases","items":["impossible standards","need for control","never-enough"]},"non_e_questo_se":{"_label":"It is not this if","items":["0/100 binary thinking → see P11"]},"shorts":{"_label":"Short","items":["It's never good enough","It's not ready yet","I'm missing something"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["unrealistic standards","constant self-criticism","fear of mistakes","over-preparation"]},"hint":"define 'good enough'","porta_I":"I-P1-Cog","why":"Stalls action because nothing meets the required high threshold."},"original_label":"Perfezione"},{"id":"P2","label":"Self-doubt","hint_leva":"E2:Emo","fronte":{"aliases":{"_label":"Aliases","items":["low self-efficacy","self-devaluation","sense of inadequacy"]},"non_e_questo_se":{"_label":"It is not this if","items":["fear of loss → see P7"]},"shorts":{"_label":"Short","items":["I feel incapable","Not me","I don't think I can do this."]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["distrust in own resources","doubting one's ability to perform","self-deprecating filter","guidance dependency"]},"hint":"show evidence of existing capability","porta_I":"I-P2-Cog","why":"Reduces initiative by weakening confidence in one's ability to act."},"original_label":"Sfiducia"},{"id":"P3","label":"Assumed intentions","hint_leva":"E5:Emo,E3:Cog","fronte":{"aliases":{"_label":"Aliases","items":["relational bias","intent projection","hostile attribution"]},"non_e_questo_se":{"_label":"It is not this if","items":["adapting to avoid disapproval → see P4"]},"shorts":{"_label":"Short","items":["It's personal","They think I...","Done on purpose","I know what they think"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["attributing intentions","fixed interpretation","mind reading","snap judgment"]},"hint":"find underlying need → reduce intent attribution","porta_I":"I-P3-Comp","why":"Creates avoidable relational friction."},"original_label":"Attribuzione"},{"id":"P4","label":"Boundary management","hint_leva":"E4:Comp,E3:Cog","fronte":{"aliases":{"_label":"Aliases","items":["people-pleasing","over-accommodation","relational merging"]},"non_e_questo_se":{"_label":"It is not this if","items":["perceiving bad intention → see P3"]},"shorts":{"_label":"Short","items":["I can't say no","I just adapt","I'll do it myself"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["difficulty saying no","systemic overload","fear of disapproval","blurred personal boundaries"]},"hint":"identify the boundary → state it clearly","porta_I":"I-P4-Comp","why":"Leads to overload, resentment and losing sight of one's own needs."},"original_label":"Confini"},{"id":"P5","label":"Avoidance / inertia","hint_leva":"E2:Emo,E6:Comp","fronte":{"aliases":{"_label":"Aliases","items":["procrastination","difficulty deciding"]},"non_e_questo_se":{"_label":"It is not this if","items":["inaction due to fear of loss → see P7"]},"shorts":{"_label":"Short","items":["Not right now","I'll deal with it later","We'll see"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["procrastination","difficulty acting","repeated postponement"]},"hint":"micro-step → operational hook","porta_I":"I-P5-Comp","why":"Protects against perceived risk but keeps action stuck."},"original_label":"Evitamento"},{"id":"P6","label":"Cognitive loop / overthinking","hint_leva":"E1:Emo","fronte":{"aliases":{"_label":"Aliases","items":["mental loop","overthinking","hyper-analysis"]},"non_e_questo_se":{"_label":"It is not this if","items":["the focus is on merit or feeling exposed → see P9"]},"shorts":{"_label":"Short","items":["I need to think about it more","I must understand it fully","I'm not sure"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["analytical loops","hyper-analysis","decision block"]},"hint":"separate: thought → mental event","porta_I":"I-P6-Emo","why":"Drains mental energy and blocks decisions."},"original_label":"Rimuginazione","clinical_flag":"Translated as 'Cognitive Loop / Overthinking' rather than 'Clinical Rumination' to maintain a coaching framing."},{"id":"P7","label":"Loss aversion","hint_leva":"E2:Emo","fronte":{"aliases":{"_label":"Aliases","items":["loss aversion","overprotection","excessive caution"]},"non_e_questo_se":{"_label":"It is not this if","items":["feeling incapable → see P2"]},"shorts":{"_label":"Short","items":["What if it goes wrong?","I don't want to risk it","Better not to lose what I already have."]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["excessive caution","focus on potential loss","status quo protection"]},"hint":"reversible micro-test","porta_I":"I-P7-Comp","why":"Protects what is already secured, but can block worthwhile opportunities."},"original_label":"Perdita"},{"id":"P8","label":"Short-sightedness / present bias","hint_leva":"E6:Comp","fronte":{"aliases":{"_label":"Aliases","items":["future self discounting","present bias","short-term focus"]},"non_e_questo_se":{"_label":"It is not this if","items":["identity/external benchmark theme → see P10"]},"shorts":{"_label":"Short","items":["I'll think about it later","Live for today","You only live once"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["narrow perspective","difficulty investing in the future"]},"hint":"align with the future self","porta_I":"I-P8-Cog","why":"Limits long-term growth and breaks good habits."},"original_label":"Miopia"},{"id":"P9","label":"Imposter pattern","hint_leva":"E2:Emo","fronte":{"aliases":{"_label":"Aliases","items":["fraud perception","competence devaluation","self-worth discount"]},"non_e_questo_se":{"_label":"It is not this if","items":["looping thought pattern → see P6"]},"shorts":{"_label":"Short","items":["I don't deserve this","It was just luck","Sooner or later they'll find out"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["attribution to luck","fear of exposure","self-sabotage"]},"hint":"acknowledge contribution → normalize","porta_I":"I-P9-Cog","why":"Erodes confidence and visibility of personal value."},"original_label":"Impostura","clinical_flag":"CRITICAL MEDIATION: Uses 'Imposter Pattern' instead of 'Imposter Syndrome' ('Syndrome' sounds medical)."},{"id":"P10","label":"External validation","hint_leva":"E6:Emo","fronte":{"aliases":{"_label":"Aliases","items":["approval seeking","external benchmarking","judgment dependency"]},"non_e_questo_se":{"_label":"It is not this if","items":["avoiding friction → see P4"]},"shorts":{"_label":"Short","items":["What will they think?","Need to check first","Need approval"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["approval seeking","hypersensitivity to judgment","insecurity","relational conformism","fear of success"]},"hint":"shift to internal metric","porta_I":"I-P10-Cog","why":"Driven by approval, not personal values."},"original_label":"Conformità"},{"id":"P11","label":"Rigid polarization","hint_leva":"E6:Comp","fronte":{"aliases":{"_label":"Aliases","items":["all-or-nothing thinking","binary logic","extreme framing"]},"non_e_questo_se":{"_label":"It is not this if","items":["extremely high standard → see P1"]},"shorts":{"_label":"Short","items":["Either this way or not at all","If I don't have this, I won't even start"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["binary rigidity","catastrophizing","polarization"]},"hint":"find the gray zone","porta_I":"I-P11-Cog","why":"Blocks gradual progress and flexible choices."},"original_label":"Rigidità"},{"id":"P12","label":"Confirmation bias","hint_leva":"E5:Emo","fronte":{"aliases":{"_label":"Aliases","items":["confirmation bias","selective filtering","narrative lock-in"]},"non_e_questo_se":{"_label":"It is not this if","items":["avoidance or postponement is primary → see P5/P7"]},"shorts":{"_label":"Short","items":["I already get it","I already know that"]}},"retro":{"_label":"Back","segnali":{"_label":"Signals","items":["resistance to disconfirmation","partial perspective","information filtering"]},"hint":"introduce a second hypothesis","porta_I":"I-P12-Cog","why":"Limits learning and closes off new possibilities."},"original_label":"Conferma"}],"I":[{"id":"I-P1-Cog","label":"Choosing 'good enough'","type":"cognitive","pattern":"P1","fronte":{"principle":"Explore the minimum acceptable and sustainable threshold.","why":"Helps reduce rigidity and internal pressure.","serve_a":"define a practical minimum standard","verbo_mentale":"ADJUST STANDARD","how_to":"define viable baseline requirement → choose the option that fulfills it"},"retro":{"aka":["sustainable standards","sufficient quality"],"example_q":"What does a 'good enough' outcome look like for you here?","example_C":"Select a 'good enough' standard and apply it to a real task.","fallback":"Reframing: perfection → 'good enough'","tags":["perfectionism","standard","threshold"],"note":""}},{"id":"I-P1-Comp","label":"Reduce the cost of perfection","type":"behavioral","pattern":"P1","fronte":{"principle":"Lower the standard to initiate action.","why":"Allows progress using realistic resources.","serve_a":"reduce wasted energy pursuing perfection","verbo_mentale":"LIGHTEN","how_to":"list what is needed to make it 'perfect' → keep only what creates actual value and act"},"retro":{"aka":["simplify","streamline"],"example_q":"Where is aiming for 100% slowing you down unnecessarily?","example_C":"Remove a single non-essential requirement.","fallback":"What can you do imperfectly right now?","tags":["micro_action","minimum_standard"],"note":""}},{"id":"I-P1-Emo","label":"Uncouple choice from tension","type":"emotional","pattern":"P1","fronte":{"principle":"Read tension as an active internal standard, not a stop signal.","why":"Enables decision-making without waiting for tension to vanish.","serve_a":"reduce internal pressure enough to enable choice","verbo_mentale":"UNCOUPLE","how_to":"acknowledge the tension linked to the 'ideal standard' and allow yourself not to solve it now"},"retro":{"aka":["tension ≠ criterion","valid choice","internal_pressure"],"example_q":"If the tension remains, which choice is still valid for you?","example_C":"Notice the feeling of 'it's not enough' and take the planned minimum step anyway.","fallback":"Take a slow breath and choose a micro-step anyway.","tags":["perfectionism","pressure","choice"],"note":""}},{"id":"I-P2-Cog","label":"Recognize demonstrated competencies","type":"cognitive","pattern":"P2","fronte":{"principle":"Rediscover skills previously used with success.","why":"Highlights existing capabilities, facilitating choice.","serve_a":"recognize existing resources and capabilities","verbo_mentale":"RECOGNIZE CAPABILITY","how_to":"identify a past result → connect it to the upcoming action as proof"},"retro":{"aka":["recognize capability","focus resources"],"example_q":"When have you successfully managed something similar?","example_C":"Recognize a capability used in similar situations and decide how to reactivate it.","fallback":"Which element can you reuse right away?","tags":["self_efficacy","resources"],"note":""}},{"id":"I-P2-Comp","label":"Act immediately with a simple step","type":"behavioral","pattern":"P2","fronte":{"principle":"Choose a low-risk, high-utility action.","why":"Builds self-efficacy through quick trials.","serve_a":"rebuild self-efficacy with rapid proof","verbo_mentale":"DEMONSTRATE","how_to":"choose a micro-step you can do now → execute it immediately to generate evidence"},"retro":{"aka":["first moves","quick tests"],"example_q":"What is a minimal, demonstrative action you could test right now?","example_C":"Try a scaled-down version of the action you had in mind.","fallback":"How can you take an even smaller step right now?","tags":["self_efficacy","action"],"note":""}},{"id":"I-P2-Emo","label":"Recall moments of mastery","type":"emotional","pattern":"P2","fronte":{"principle":"Reconnect with the felt sense of having managed before.","why":"Recalls successful experiences, reducing uncertainty and easing initiation.","serve_a":"reduce self-doubt by recalling successful experiences","verbo_mentale":"REACTIVATE","how_to":"recall a moment when you managed something similar → notice the sense of capability"},"retro":{"aka":["familiarity","traces of success"],"example_q":"When did you feel capable in something similar?","example_C":"Notice what shifts when you remember handling something similar well.","fallback":"Reframing: incapable → capable-enough","tags":["past_success","self_efficacy"],"note":""}},{"id":"I-P3-Cog","label":"See the other perspective","type":"cognitive","pattern":"P3","fronte":{"principle":"Generate alternative hypotheses about others' intentions.","why":"Reduces automatic negative intent attributions.","serve_a":"see alternative intentions and perspectives","verbo_mentale":"CONSIDER ALTERNATIVES","how_to":"formulate at least one alternative interpretation of the other person's intent"},"retro":{"aka":["meta-position","second reading","other_perspective"],"example_q":"What other intent could you hypothesize here?","example_C":"Formulate and note a plausible alternative interpretation.","fallback":"Reframing: certainty → hypothesis","tags":["relationship","perspective"],"note":""}},{"id":"I-P3-Comp","label":"Clarify the other's point of view","type":"behavioral","pattern":"P3","fronte":{"principle":"Strategically understand the other's position.","why":"Clarifies the other person's perspective, enabling useful steps even in disagreement.","serve_a":"act while better understanding the other's viewpoint","verbo_mentale":"ENGAGE","how_to":"formulate a question that explores the meaning or intent behind their action"},"retro":{"aka":["clarifying questions","strategic empathy"],"example_q":"What do you need to better understand about their perspective?","example_C":"Ask a genuine question to clarify their intent.","fallback":"How can you ask a question to clarify their intention?","tags":["relationship","empathy"],"note":""}},{"id":"I-P3-Emo","label":"Identify the underlying need","type":"emotional","pattern":"P3","fronte":{"principle":"Recognize the core need behind protective activation.","why":"Shifts focus from 'their fault' to 'what I need'.","serve_a":"recognize emotional need to reduce reactivity","verbo_mentale":"RECOGNIZE NEED","how_to":"notice the emotion → identify the need underneath"},"retro":{"aka":["core need","legitimize"],"example_q":"Which important need of yours feels touched here?","example_C":"Recognize and state your legitimate need.","fallback":"Reframing: their fault → my need","tags":["need","legitimization"],"note":""}},{"id":"I-P4-Cog","label":"Protect core values","type":"cognitive","pattern":"P4","fronte":{"principle":"Recognizing hidden costs protects what is important.","why":"Makes priorities and values explicit, enabling autonomous choices.","serve_a":"clarify values and costs of saying 'yes'","verbo_mentale":"SELECT","how_to":"identify what you would say 'no' to in order to defend a key value"},"retro":{"aka":["guiding values","internal priorities"],"example_q":"What are you sacrificing when you say 'yes'?","example_C":"Identify a personal value at risk when saying 'yes'.","fallback":"Reframing: No → protection","tags":["boundaries","values"],"note":""}},{"id":"I-P4-Comp","label":"Say 'no' assertively","type":"behavioral","pattern":"P4","fronte":{"principle":"Saying 'no' protects values and priorities.","why":"Defines clear boundaries, protecting what matters without damaging the relationship.","serve_a":"construct effective 'no' communications","verbo_mentale":"DEFINE BOUNDARIES","how_to":"practice formulating a respectful 'no'"},"retro":{"aka":["assertiveness","boundary negotiation"],"example_q":"How can you say 'no' while protecting yourself and the relationship?","example_C":"Prepare a respectful 'no' statement that honors both you and the other.","fallback":"What is the smallest 'no' you can state?","tags":["boundaries","assertiveness"],"note":""}},{"id":"I-P4-Emo","label":"Honor personal dignity","type":"emotional","pattern":"P4","fronte":{"principle":"Dignity precedes accommodation.","why":"Let the boundary emerge before justifying.","serve_a":"feel authorized to set a boundary","verbo_mentale":"HONOR","how_to":"notice what you are accepting and ask if it is really okay for you"},"retro":{"aka":["self-respect","internal limit"],"example_q":"Is this, as it is, truly okay for you?","example_C":"Pause before adapting and check if you are respecting yourself.","fallback":"What is the minimum boundary you hold right now?","tags":["dignity","boundaries","self_respect"],"note":""}},{"id":"I-P5-Cog","label":"Evaluate the cost of inaction","type":"cognitive","pattern":"P5","fronte":{"principle":"Make future consequences visible.","why":"Brings the cost of 'later' closer, facilitating choice now.","serve_a":"make the cost of non-action evident","verbo_mentale":"EVALUATE CONSEQUENCES","how_to":"consider the future effects of not taking action"},"retro":{"aka":["inaction cost","time projection"],"example_q":"What is it costing you to keep waiting?","example_C":"Consider the consequences of staying still regarding this issue.","fallback":"Reframing: inaction → cost","tags":["cost_of_delay","choice"],"note":""}},{"id":"I-P5-Comp","label":"Break the block with a micro-action","type":"behavioral","pattern":"P5","fronte":{"principle":"Define a sustainable micro-step.","why":"Reduces deadlock with ridiculously small steps.","serve_a":"remove blocks with tiny steps","verbo_mentale":"UNBLOCK","how_to":"choose a minimal action you can take right now and do it"},"retro":{"aka":["micro-step","minimal action"],"example_q":"What is a simple first movement?","example_C":"Take the smallest useful first step now.","fallback":"Reframing: whole task → next move","tags":["avoidance","action"],"note":""}},{"id":"I-P5-Emo","label":"Allow initiation without momentum","type":"emotional","pattern":"P5","fronte":{"principle":"Action can begin without initial motivation.","why":"Reduces waiting to 'feel ready'.","serve_a":"feel that initiation is possible without momentum","verbo_mentale":"ALLOW","how_to":"notice the urge to postpone and allow a minimal first step"},"retro":{"aka":["start without motivation","internal permission"],"example_q":"If you didn't need to feel ready, what step would you take now?","example_C":"Initiate a minimal action even while feeling resistance.","fallback":"Reframing: not ready → I can start","tags":["avoidance","initiation","permission"],"note":""}},{"id":"I-P6-Cog","label":"Distinguish useful thoughts from noise","type":"cognitive","pattern":"P6","fronte":{"principle":"Evaluate the real utility of the thought.","why":"Reduces noise and loosens the grip of repetitive thoughts.","serve_a":"distinguish useful thinking from background noise","verbo_mentale":"EVALUATE UTILITY","how_to":"ask yourself if the thought is useful for the current choice"},"retro":{"aka":["distinguish utility","disarm noise"],"example_q":"Is this thought helping you make the current choice?","example_C":"Identify one recurring thought that is not helping the current decision.","fallback":"Reframing: thought → mental event","tags":["looping","cognitive_distance"],"note":""}},{"id":"I-P6-Comp","label":"Interrupt the loop via the body","type":"behavioral","pattern":"P6","fronte":{"principle":"Break the loop with a simple movement.","why":"Returns focus to the present, reducing mental noise and opening decision space.","serve_a":"interrupt cognitive loop and return to present","verbo_mentale":"INTERRUPT","how_to":"make a simple physical gesture (breath, movement) to break the loop"},"retro":{"aka":["body pause","somatic_grounding"],"example_q":"What could help your body return to the present moment?","example_C":"Use a small movement or a breath to return your attention to the present.","fallback":"Shift: thinking → movement","tags":["looping","presence"],"note":""}},{"id":"I-P6-Emo","label":"Notice present awareness","type":"emotional","pattern":"P6","fronte":{"principle":"Present-moment awareness creates distance from the mental loop.","why":"Creates distance from mental loops, enabling choice.","serve_a":"create emotional distance from the thought","verbo_mentale":"NOTICE","how_to":"notice the mental loop and feel a physical point in the body"},"retro":{"aka":["being here","contact with now"],"example_q":"Where are you right now, in this exact moment?","example_C":"Notice one physical sensation that brings you back to the present.","fallback":"Notice three things you see right now.","tags":["presence","distance_from_thought"],"note":""}},{"id":"I-P7-Cog","label":"See the real trade-off","type":"cognitive","pattern":"P7","fronte":{"principle":"Realistically evaluate risks and benefits.","why":"Shifts perception from threat to manageable risk.","serve_a":"realistically evaluate risks and benefits","verbo_mentale":"WEIGH RISKS AND BENEFITS","how_to":"compare what you truly risk against what you could gain"},"retro":{"aka":["risk evaluation","trade-off analysis"],"example_q":"What is the actual, tangible risk?","example_C":"Write down one real risk and one concrete potential benefit.","fallback":"Reframing: loss → opportunity","tags":["loss_aversion","risk_evaluation"],"note":""}},{"id":"I-P7-Emo","label":"Connect with what truly matters","type":"emotional","pattern":"P7","fronte":{"principle":"Reconnect with what matters before evaluating the risk.","why":"Connects the emotion to a personal value.","serve_a":"remember what truly matters","verbo_mentale":"RECONNECT","how_to":"connect the emotion to what you could achieve or grow"},"retro":{"aka":["core value","choice alignment","protection"],"example_q":"What makes this worth trying for you?","example_C":"Name the value that makes this choice meaningful.","fallback":"Reframing: loss → value","tags":["value","priorities"],"note":""}},{"id":"I-P7-Comp","label":"Reversible micro-test","type":"behavioral","pattern":"P7","fronte":{"principle":"Stimulate a reversible micro-action.","why":"Reduces uncertainty through low-cost, real-world feedback.","serve_a":"test possibilities while minimizing risk","verbo_mentale":"PROBE","how_to":"define a small, reversible trial to gather initial feedback"},"retro":{"aka":["minimal trial","quick experiment"],"example_q":"What is a small, reversible test you can run?","example_C":"Run a scaled-down trial and observe what you learn.","fallback":"What makes this trial easy to stop if needed?","tags":["micro_trial","controlled_risk"],"note":""}},{"id":"I-P8-Cog","label":"Bring future consequences closer","type":"cognitive","pattern":"P8","fronte":{"principle":"Reduce distance between today’s choice and tomorrow’s outcome.","why":"Broadens temporal perspective.","serve_a":"make future consequences concrete in the current choice","verbo_mentale":"MAKE THE FUTURE CONCRETE","how_to":"identify one likely later consequence of choosing or not choosing now"},"retro":{"aka":["future self","retro-projection"],"example_q":"What becomes different later if you choose this now?","example_C":"Write down one concrete later consequence of today's choice.","fallback":"What changes later if you do nothing now?","tags":["future_self","perspective"],"note":""}},{"id":"I-P8-Comp","label":"Taking a step for the future","type":"behavioral","pattern":"P8","fronte":{"principle":"Act in coherence with the future self.","why":"Makes the future relevant in the present moment.","serve_a":"act as your future self would","verbo_mentale":"TAKE ACTION FOR THE FUTURE","how_to":"select a small step aligned with your future direction"},"retro":{"aka":["daily action","alignment"],"example_q":"What is the smallest step you can take now for your future?","example_C":"Choose an action that moves you closer to your future self.","fallback":"What can you do today that your future self will notice?","tags":["future_self","alignment"],"note":""}},{"id":"I-P8-Emo","label":"Connecting with your future self","type":"emotional","pattern":"P8","fronte":{"principle":"Feel continuity with the future self.","why":"Strengthens emotional bond with one's future.","serve_a":"make a distant choice emotionally relevant today","verbo_mentale":"SEE YOURSELF IN THE FUTURE","how_to":"call up your future self and check if this choice represents you"},"retro":{"aka":["personal continuity","temporal identity"],"example_q":"Is this step something in which you truly recognize yourself?","example_C":"Bring to mind your future self and check if this choice resembles you.","fallback":"What choice today simplifies your future?","tags":["future","identity","continuity"],"note":""}},{"id":"I-P9-Cog","label":"Recognize your contribution","type":"cognitive","pattern":"P9","fronte":{"principle":"Claim ownership of personal contributions to results.","why":"Reduces doubt by restoring authorship to accomplishments.","serve_a":"claim ownership of personal contribution","verbo_mentale":"OWN YOUR VALUE","how_to":"identify specific choices/actions of yours that contributed to the outcome"},"retro":{"aka":["internal attribution","recognition"],"example_q":"Which of your choices or actions contributed to this result?","example_C":"Identify at least one concrete action that produced the result.","fallback":"Reframing: luck → contribution","tags":["ownership","merit"],"note":""}},{"id":"I-P9-Emo","label":"Acknowledge state without judgment","type":"emotional","pattern":"P9","fronte":{"principle":"Treat the feeling as a signal, not a verdict.","why":"Normalizes state activation, preserving access to choice.","serve_a":"reduce self-judgment by normalizing the internal state","verbo_mentale":"NOTICE STATE","how_to":"acknowledge the feeling without judging it, then stay with it briefly"},"retro":{"aka":["accepting state","functional view"],"example_q":"Can this feeling be present without defining you?","example_C":"Name the state and allow it space for a moment.","fallback":"Reframing: feeling → information","tags":["self_worth","function","acceptance"],"note":""}},{"id":"I-P9-Comp","label":"Step up with a concrete contribution","type":"behavioral","pattern":"P9","fronte":{"principle":"Step up with a tangible contribution.","why":"Transforms hesitation into visible action.","serve_a":"reduce self-sabotage through active contribution","verbo_mentale":"STEP UP","how_to":"share a concrete contribution without pre-empting with excuses"},"retro":{"aka":["visibility","active presence"],"example_q":"What could you bring right now without downplaying it?","example_C":"Make a concrete proposal without starting with an apology.","fallback":"Reframing: holding back → contributing","tags":["imposter_pattern","action","visibility"],"note":""}},{"id":"I-P10-Cog","label":"Shift the source of value","type":"cognitive","pattern":"P10","fronte":{"principle":"Shift validation from external expectations to internal criteria.","why":"Re-orients the criteria for success.","serve_a":"clarify internal source of evaluation","verbo_mentale":"SET INTERNAL CRITERIA","how_to":"separate what you think from what others think and notice the difference"},"retro":{"aka":["internal compass","own criteria"],"example_q":"What is your own internal metric here?","example_C":"Define at least one 'internal criterion' to evaluate the outcome.","fallback":"Reframing: external → internal","tags":["internal_value","identity"],"note":""}},{"id":"I-P10-Comp","label":"Authorize autonomous action","type":"behavioral","pattern":"P10","fronte":{"principle":"Acting without confirmation reinforces autonomy.","why":"Transforms reliance on external approval into active choice.","serve_a":"reduce dependency on external validation through autonomous action","verbo_mentale":"AUTHORIZE","how_to":"make a concrete choice without asking for confirmation"},"retro":{"aka":["personal initiative","internal permission"],"example_q":"If you didn't have to ask anyone, what would you do now?","example_C":"Make a small decision without consulting others.","fallback":"Reframing: approval → initiative","tags":["compliance","autonomy","action"],"note":""}},{"id":"I-P10-Emo","label":"Check what is truly yours","type":"emotional","pattern":"P10","fronte":{"principle":"Distinguish internal agreement from external approval.","why":"Helps distinguish personal agreement from external approval.","serve_a":"reconnect to internal compass guiding choices","verbo_mentale":"VERIFY CONGRUENCE","how_to":"notice whether the choice feels internally endorsed or externally borrowed"},"retro":{"aka":["authenticity","self-trust"],"example_q":"Does this feel right for you, or just acceptable to others?","example_C":"Notice one sign that the choice feels genuinely yours.","fallback":"Reframing: approval → ownership","tags":["internal_trust","autonomy"],"note":""}},{"id":"I-P11-Cog","label":"Recognize the gray zone","type":"cognitive","pattern":"P11","fronte":{"principle":"Recognize partial progress.","why":"Makes room to learn from small steps.","serve_a":"recognize intermediate progress","verbo_mentale":"SOFTEN / GRADUATE","how_to":"transform the objective from binary (0/100) to a continuum"},"retro":{"aka":["gradient","intermediate spectrum"],"example_q":"What intermediate outcomes exist between total failure and complete success?","example_C":"Define at least one intermediate milestone that signals progress.","fallback":"Reframing: right/wrong → useful/not useful","tags":["all_or_nothing","gray_zone"],"note":""}},{"id":"I-P11-Comp","label":"Act in the gray zone","type":"behavioral","pattern":"P11","fronte":{"principle":"Shift action from 'all or nothing' to 'one step'.","why":"Lowers threshold for action, allowing movement without perfection.","serve_a":"proceed through non-perfect actions","verbo_mentale":"PROCEED","how_to":"define a micro-action that creates partial progress"},"retro":{"aka":["imperfect step","useful compromise"],"example_q":"What is a small step that is still better than zero?","example_C":"Execute a minimal action that creates real progress.","fallback":"Reframing: everything → something","tags":["binary","gray_zone","micro_action"],"note":""}},{"id":"I-P11-Emo","label":"Open an intermediate space","type":"emotional","pattern":"P11","fronte":{"principle":"Make room for a middle position without forcing certainty.","why":"Reduces rigidity in the face of uncertainty.","serve_a":"make a middle ground possible","verbo_mentale":"OPEN SPACE","how_to":"notice internal rigidity and seek a softer position"},"retro":{"aka":["openness","middle ground"],"example_q":"Which middle ground would be acceptable right now?","example_C":"Choose a middle step, even if imperfect.","fallback":"Reframing: extreme → intermediate","tags":["rigidity","openness","middle_ground"],"note":""}},{"id":"I-P12-Cog","label":"Gather counter-evidence","type":"cognitive","pattern":"P12","fronte":{"principle":"Seek data that challenges your assumption.","why":"Frees up new perspectives.","serve_a":"test assumptions against reality","verbo_mentale":"FALSIFY","how_to":"formulate the opposite hypothesis and look for data supporting it"},"retro":{"aka":["second hypothesis","contrary evidence"],"example_q":"Which elements suggest your idea might be incomplete or inaccurate?","example_C":"Note one piece of data that contradicts your initial assumption.","fallback":"Reframing: certainty → counter-evidence","tags":["confirmation_bias","counter_evidence"],"note":""}},{"id":"I-P12-Comp","label":"Test reality with small experiments","type":"behavioral","pattern":"P12","fronte":{"principle":"Actively test the alternative hypothesis.","why":"Reduces cognitive lock-in through real action.","serve_a":"test alternative hypotheses in reality","verbo_mentale":"TEST","how_to":"run a test that could challenge your assumption → observe the outcome"},"retro":{"aka":["mini-experiment","reality check"],"example_q":"What small experiment could you run to test this?","example_C":"Design a mini-test that could disprove your hypothesis.","fallback":"Reframing: assumption → experiment","tags":["confirmation","experiment"],"note":""}},{"id":"I-P12-Emo","label":"Allow room for doubt","type":"emotional","pattern":"P12","fronte":{"principle":"Sustain doubt briefly to enable verification.","why":"Reduces defensive closure, opening space for verification.","serve_a":"allow entry of disconfirming information","verbo_mentale":"ADMIT DOUBT","how_to":"notice defensiveness and hold the doubt for a moment"},"retro":{"aka":["tolerance for uncertainty","openness to disconfirmation"],"example_q":"What doubt can you hold for just a moment?","example_C":"Leave an alternative hypothesis open for a moment.","fallback":"Hold the doubt briefly, then ask a question.","tags":["doubt","openness"],"note":""}}]};
+  </script>
+  <script>
+    const patterns = EPIC_DATA.P || [];
+    const interventions = EPIC_DATA.I || [];
+    const printSide = 'back';
+    const energyOrder = ['E1', 'E2', 'E6', 'E4', 'E3', 'E5'];
+
+    function escapeHTML(str) {
+      return String(str ?? '').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+    }
+
+    function getIntervention(patternId, type) {
+      const suffix = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
+      return interventions.find(i => i.id === 'I-' + patternId + '-' + type);
+    }
+
+    // ---- FRONT renderers ----
+    // Build E→P reverse map
+    const emotions = EPIC_DATA.E || [];
+    const ePMap = {};
+    emotions.forEach(e => {
+      const high = e.fronte?.pattern_da_esplorare?.high || [];
+      const med = e.fronte?.pattern_da_esplorare?.medium || [];
+      high.forEach(pid => { if (!ePMap[pid]) ePMap[pid] = {}; ePMap[pid][e.id] = 'high'; });
+      med.forEach(pid => { if (!ePMap[pid]) ePMap[pid] = {}; if (!ePMap[pid][e.id]) ePMap[pid][e.id] = 'medium'; });
+    });
+
+    const eImages = {
+      E1: '../../../print-v1/built/images/E1b.png',
+      E2: '../../../print-v1/built/images/E2b.png',
+      E3: '../../../print-v1/built/images/E3b.png',
+      E4: '../../../print-v1/built/images/E4b.png',
+      E5: '../../../print-v1/built/images/E5b.png',
+      E6: '../../../print-v1/built/images/E6b.png'
+    };
+
+    function parseLeverHints(value) {
+      const hints = {};
+      String(value || '').split(',').forEach(part => {
+        const [eidRaw, typeRaw] = part.split(':').map(v => String(v || '').trim());
+        if (!/^E[1-6]$/.test(eidRaw)) return;
+        const type = { Cog: 'Cog', Emo: 'Emo', Comp: 'Comp' }[typeRaw];
+        if (!type) return;
+        if (!hints[eidRaw]) hints[eidRaw] = [];
+        hints[eidRaw].push(type);
+      });
+      return hints;
+    }
+
+    function renderLeverHints(types) {
+      return (types || []).map(type => '<span class="e-lever ' + type + '" aria-hidden="true"></span>').join('');
+    }
+
+    function renderEIcons(pattern) {
+      const map = ePMap[pattern.id] || {};
+      const leverHints = parseLeverHints(pattern.hint_leva);
+      let icons = '';
+      for (const eid of energyOrder) {
+        const level = map[eid] || 'none';
+        const energyClass = (eid === 'E1' || eid === 'E2' || eid === 'E6') ? 'energy-low' : 'energy-high';
+        icons += '<span class="e-icon ' + level + ' ' + energyClass + '">' +
+          renderLeverHints(leverHints[eid]) +
+          '<img src="' + eImages[eid] + '" alt="' + eid + '">' +
+        '</span>';
+      }
+      return '<div class="e-icons">' + icons + '</div>';
+    }
+
+    function interventionMarginCopy(i) {
+      if (!i) return { label: '', verb: '' };
+      return {
+        label: escapeHTML(i.label || ''),
+        verb: escapeHTML(i.fronte?.verbo_mentale || '')
+      };
+    }
+
+    function renderPFront(p) {
+      const signals = (p.retro?.segnali?.items || []).map(s => escapeHTML(s)).join(', ');
+      const shorts = (p.fronte?.shorts?.items || []).map(s => escapeHTML(s)).join(', ');
+      const why = p.retro?.why ? escapeHTML(p.retro.why) : '';
+      const topCopy = interventionMarginCopy(getIntervention(p.id, 'Cog'));
+      const leftCopy = interventionMarginCopy(getIntervention(p.id, 'Emo'));
+      const rightCopy = interventionMarginCopy(getIntervention(p.id, 'Comp'));
+      return '<div class="card P front p-lab-front">' +
+        '<div class="p-margin-note top"><span class="note-copy">' + topCopy.label + '</span><strong>' + topCopy.verb + '</strong></div>' +
+        '<div class="p-margin-note left"><span class="note-copy">' + leftCopy.label + '</span><strong>' + leftCopy.verb + '</strong></div>' +
+        '<div class="p-margin-note right"><span class="note-copy">' + rightCopy.label + '</span><strong>' + rightCopy.verb + '</strong></div>' +
+        '<div class="p-main">' +
+        '<div class="p-main-visual"><img src="../../../print-v1/built/images/' + escapeHTML(p.id) + '.png" alt="' + escapeHTML(p.id) + '"></div>' +
+        '<div class="p-text-area">' +
+        '<img class="p-epic-watermark" src="../../../print-v1/built/app/images/pattern.png" alt="">' +
+        '<div class="title">' + escapeHTML(p.label) + '</div>' +
+        (signals ? '<div class="aliases-line">' + signals + '</div>' : '') +
+        (shorts ? '<div class="shorts-line">' + shorts + '</div>' : '') +
+        (why ? '<div class="why-line">' + why + '</div>' : '') +
+        '</div>' +
+        '</div>' +
+        '<div class="p-bottom">' + renderEIcons(p) + '</div>' +
+      '</div>';
+    }
+
+    function renderIFront(i) {
+      if (!i) return '<div class="empty-slot">n/a</div>';
+      const typeMap = { cognitive: 'Cog', behavioral: 'Comp', emotional: 'Emo' };
+      const t = typeMap[(i.type || '').toLowerCase()] || i.type;
+      const watermarkMap = { Cog: 'cog.png', Emo: 'emo.png', Comp: 'comp.png' };
+      const watermark = watermarkMap[t] || 'cog.png';
+      const why = i.fronte?.why
+        ? i.fronte.why
+        : ((Array.isArray(i.retro?.aka) && i.retro.aka.length > 0) ? i.retro.aka.join(' · ') : '');
+      const whyLine = why ? '<div class="intervention-aka">' + avoidWidow(why) + '</div>' : '';
+      return '<div class="card ' + t + ' front intervention-card">' +
+        '<div class="intervention-header">' +
+        '<div class="intervention-type-row"><div class="type-pill">' + escapeHTML(String(t).toUpperCase()) + '</div></div>' +
+        '<div class="intervention-main">' +
+        '<div class="intervention-principle">' + escapeHTML(i.fronte?.principle) + '</div>' +
+        whyLine +
+        '<div class="intervention-howto">' + avoidWidow(i.retro?.example_C) + '</div>' +
+        '</div>' +
+        '</div>' +
+        '<div class="intervention-lever">' +
+        '<img class="intervention-watermark" src="../../../print-v1/built/app/images/' + watermark + '" alt="">' +
+        '<div class="intervention-verb">' + escapeHTML(formatVerb(i.fronte?.verbo_mentale)) + '</div>' +
+        renderTask(i.fronte?.how_to) +
+        '</div>' +
+        renderRescueBox(i) +
+      '</div>';
+    }
+
+    // ---- BACK renderers ----
+    function renderPBack(p) {
+      return '<div class="card P back-card back-brand-card">' +
+        '<img class="back-logo" src="../../../print-v1/built/app/images/logo/epic_logo.png" alt="EPiC">' +
+        '<div class="back-chain">' +
+          '<span>ENERGY</span>' +
+          '<span class="step-2">-&gt; PATTERN</span>' +
+          '<span class="step-3">-&gt; INTERVENTION</span>' +
+          '<span class="step-4">-&gt; BEHAVIOR</span>' +
+        '</div>' +
+        '<div class="back-brand">EPiC</div>' +
+        '<div class="back-url">simonegenini.com/epic</div>' +
+        '<div class="back-type-label">Pattern</div>' +
+      '</div>';
+    }
+
+    function renderBackEnergyChoice() {
+      return '<div class="back-energy-scan">' +
+        '<img src="../../../print-v1/built/app/images/new/energie.png" alt="Energies">' +
+      '</div>';
+    }
+
+    function renderBackPatternChoice() {
+      return '<div class="back-pattern-stack">' +
+        '<div class="back-pattern-token"><img src="../../../print-v1/built/app/images/new/P1.png" alt="P1"></div>' +
+        '<div class="back-pattern-token"><img src="../../../print-v1/built/app/images/new/P11.png" alt="P11"></div>' +
+        '<div class="back-pattern-token"><img src="../../../print-v1/built/app/images/new/P5.png" alt="P5"></div>' +
+      '</div>';
+    }
+
+    function renderBackLeverChoice() {
+      return '<div class="back-lever-choice">' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="../../../print-v1/built/app/images/cog.png" alt="Cog"><div class="back-lever-name">Cog</div></div>' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="../../../print-v1/built/app/images/emo.png" alt="Emo"><div class="back-lever-name">Emo</div></div>' +
+        '<div class="back-lever-item"><img class="back-lever-img" src="../../../print-v1/built/app/images/comp.png" alt="Comp"><div class="back-lever-name">Comp</div></div>' +
+      '</div>';
+    }
+
+    function renderInstructionBack(kind) {
+      const cfg = {
+        energy: {
+          cls: 'Cog',
+          title: '1 - (E)NERGY',
+          lead: 'Recognize the prevailing Energy',
+          note: 'This is the force that<br>fuels the pattern',
+          visual: renderBackEnergyChoice(),
+          caption: ''
+        },
+        pattern: {
+          cls: 'Comp',
+          title: '2 - (P)ATTERN',
+          lead: 'Identify the Patterns at play',
+          note: 'This is the structure that<br>maintains the block',
+          visual: renderBackPatternChoice(),
+          caption: ''
+        },
+        lever: {
+          cls: 'Emo',
+          title: '3 - (I)NTERVENTION',
+          lead: 'Choose the most useful lever',
+          note: 'Emo regulates, Cog guides,<br>Comp moves',
+          visual: renderBackLeverChoice(),
+          caption: ''
+        }
+      }[kind];
+      return '<div class="card ' + cfg.cls + ' back-card">' +
+        '<div class="back-instruction-title">' + cfg.title + '</div>' +
+        '<div class="back-instruction-lead">' + cfg.lead + '</div>' +
+        '<div class="back-instruction-note">' + cfg.note + '</div>' +
+        '<div class="back-visual">' + cfg.visual + '</div>' +
+        (cfg.caption ? '<div class="back-caption">' + cfg.caption + '</div>' : '') +
+      '</div>';
+    }
+
+    function renderBlock(label, value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      let content;
+      if (Array.isArray(value)) {
+        content = value.map(v => escapeHTML(v)).join(' · ');
+      } else {
+        content = escapeHTML(value);
+      }
+      return '<div class="block"><div class="label">' + label + '</div><div class="block-content">' + content + '</div></div>';
+    }
+
+    function renderIcon(kind) {
+      if (kind === 'life') {
+        return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M7 7l3 3M17 7l-3 3M17 17l-3-3M7 17l3-3" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+      }
+      if (kind === 'question') {
+        return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2"/><path d="M9.5 9a2.7 2.7 0 0 1 5 1.4c0 2-2.5 2.2-2.5 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="18" r="1" fill="currentColor"/></svg>';
+      }
+      return '<svg class="rescue-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7H5v5h5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5 12c2-4 5-6 9-5 3.5.8 5.5 3.3 5.5 6.2 0 3.6-2.8 6.3-6.7 6.3-2.2 0-4.1-.8-5.3-2.1" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    }
+
+    function renderTask(value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      const content = Array.isArray(value) ? value.map(v => escapeHTML(v)).join(' · ') : escapeHTML(value);
+      return '<div class="intervention-task">' + content + '</div>';
+    }
+
+    function avoidWidow(value) {
+      const safe = escapeHTML(value).trim().replace(/(\d)-(\d)/g, '$1&#8209;$2');
+      return safe.replace(/\s+(\S+)\s+(\S+)$/, '&nbsp;$1&nbsp;$2');
+    }
+
+    function formatVerb(value) {
+      const text = String(value || '').trim();
+      if (!text) return '';
+      const lower = text.toLocaleLowerCase('it-IT');
+      return lower.charAt(0).toLocaleUpperCase('it-IT') + lower.slice(1);
+    }
+
+    function renderRescueLine(kind, value) {
+      if (!value) return '';
+      if (Array.isArray(value) && value.length === 0) return '';
+      const content = Array.isArray(value) ? value.map(v => escapeHTML(v)).join(' · ') : escapeHTML(value);
+      return '<div class="rescue-line">' + renderIcon(kind) + '<div>' + content + '</div></div>';
+    }
+
+    function renderRescueBox(i) {
+      const question = renderRescueLine('question', i.retro?.example_q);
+      const fallback = renderRescueLine('fallback', i.retro?.fallback);
+      const lines = question + fallback;
+      if (!lines) return '';
+      return '<div class="rescue-box">' +
+        '<div class="rescue-badge">' + renderIcon('life') + '</div>' +
+        '<div class="rescue-grid">' + lines + '</div>' +
+      '</div>';
+    }
+
+    function wrapCard(html, sides) {
+      if (!sides || sides.length === 0) return html;
+      const lines = [];
+      if (sides.includes('top')) {
+        lines.push('<line x1="-3.1" y1="0" x2="-0.8" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+        lines.push('<line x1="63.8" y1="0" x2="66.1" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('top-left-h')) {
+        lines.push('<line x1="-3.1" y1="0" x2="-0.8" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('top-right-h')) {
+        lines.push('<line x1="63.8" y1="0" x2="66.1" y2="0" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom')) {
+        lines.push('<line x1="-3.1" y1="88" x2="-0.8" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+        lines.push('<line x1="63.8" y1="88" x2="66.1" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom-left-h')) {
+        lines.push('<line x1="-3.1" y1="88" x2="-0.8" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('bottom-right-h')) {
+        lines.push('<line x1="63.8" y1="88" x2="66.1" y2="88" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('left')) {
+        lines.push('<line x1="0" y1="-3.1" x2="0" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('right')) {
+        lines.push('<line x1="63" y1="-3.1" x2="63" y2="-0.8" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('left-bottom')) {
+        lines.push('<line x1="0" y1="88.8" x2="0" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      if (sides.includes('right-bottom')) {
+        lines.push('<line x1="63" y1="88.8" x2="63" y2="91.1" stroke="#000" stroke-width="0.22" vector-effect="non-scaling-stroke"/>');
+      }
+      return '<svg class="trim-svg" viewBox="-3.1 -3.1 69.2 94.2" aria-hidden="true">' + lines.join('') + '</svg>' + html;
+    }
+
+    // ---- Build crosses ----
+    function buildCrossFront(p) {
+      const cog = getIntervention(p.id, 'Cog');
+      const emo = getIntervention(p.id, 'Emo');
+      const comp = getIntervention(p.id, 'Comp');
+      return '<div class="cross-label">' + escapeHTML(p.id) + ' — ' + escapeHTML(p.label) + '</div>' +
+        '<div class="cross">' +
+        '<div class="cross-cog">' + wrapCard(renderIFront(cog), ['top','left','right']) + '</div>' +
+        '<div class="cross-emo">' + wrapCard(renderIFront(emo), ['left','top-left-h','bottom-left-h','left-bottom']) + '</div>' +
+        '<div class="cross-pat">' + wrapCard(renderPFront(p), ['top','left','right','bottom','left-bottom','right-bottom']) + '</div>' +
+        '<div class="cross-comp">' + wrapCard(renderIFront(comp), ['right','top-right-h','bottom-right-h','right-bottom']) + '</div>' +
+        '</div>';
+    }
+
+    function buildCrossBack(p) {
+      const cog = getIntervention(p.id, 'Cog');
+      const emo = getIntervention(p.id, 'Emo');
+      const comp = getIntervention(p.id, 'Comp');
+      // Mirrored: emo and comp swap positions
+      return '<div class="cross-label back-spacer" aria-hidden="true">retro</div>' +
+        '<div class="cross back-side">' +
+        '<div class="cross-cog">' + wrapCard(renderInstructionBack('energy'), ['top','left','right']) + '</div>' +
+        '<div class="cross-emo">' + wrapCard(renderInstructionBack('lever'), ['right','top-right-h','bottom-right-h','right-bottom']) + '</div>' +
+        '<div class="cross-pat">' + wrapCard(renderPBack(p), ['top','left','right','bottom','left-bottom','right-bottom']) + '</div>' +
+        '<div class="cross-comp">' + wrapCard(renderInstructionBack('pattern'), ['left','top-left-h','bottom-left-h','left-bottom']) + '</div>' +
+        '</div>';
+    }
+
+    // ---- Size configs ----
+    const SIZES = {
+      compact: { cardW: '47mm', cardH: '66mm', gap: '1mm', perPage: 2, radius: '5px', pad: '8px',
+                 eIconSize: '5.8mm', eIconsGap: '1.1mm',
+                 fsXxs: '7px', fsXs: '8px', fsSm: '9px', fsMd: '10px', fsLg: '12px' },
+      full:    { cardW: '63mm', cardH: '88mm', gap: '1mm', perPage: 1, radius: '6px', pad: '10px',
+                 eIconSize: '8.5mm', eIconsGap: '1.5mm',
+                 fsXxs: '8px', fsXs: '9px', fsSm: '10px', fsMd: '11px', fsLg: '14px' }
+    };
+
+    function applySize(mode) {
+      const s = SIZES[mode];
+      const r = document.documentElement.style;
+      r.setProperty('--card-w', s.cardW);
+      r.setProperty('--card-h', s.cardH);
+      r.setProperty('--gap', s.gap);
+      r.setProperty('--radius', s.radius);
+      r.setProperty('--pad', s.pad);
+      r.setProperty('--e-icon-size', s.eIconSize);
+      r.setProperty('--e-icons-gap', s.eIconsGap);
+      r.setProperty('--fs-xxs', s.fsXxs);
+      r.setProperty('--fs-xs', s.fsXs);
+      r.setProperty('--fs-sm', s.fsSm);
+      r.setProperty('--fs-md', s.fsMd);
+      r.setProperty('--fs-lg', s.fsLg);
+      document.body.classList.toggle('full-size', mode === 'full');
+      renderPages(s.perPage);
+    }
+
+    function buildCrossForSide(p) {
+      return printSide === 'back' ? buildCrossBack(p) : buildCrossFront(p);
+    }
+
+    function renderPages(perPage) {
+      let html = '';
+      const step = perPage;
+      for (let i = 0; i < patterns.length; i += step) {
+        const group = patterns.slice(i, i + step);
+        const pageNum = Math.floor(i / step) + 1;
+        const layoutClass = group.length === 1 ? 'layout-1' : (perPage === 1 ? 'layout-1' : 'layout-2');
+        const pageLabel = printSide === 'back' ? 'Back' : 'Front';
+
+        html += '<div class="a4-page">';
+        html += '<div class="page-label">' + pageLabel + ' — Pag ' + pageNum + '</div>';
+        html += renderRegistrationMarks();
+        html += '<div class="page-content ' + layoutClass + '">';
+        html += '<div class="cross-slot">' + buildCrossForSide(group[0]) + '</div>';
+        if (group[1]) {
+          html += '<hr class="cross-separator">';
+          html += '<div class="cross-slot">' + buildCrossForSide(group[1]) + '</div>';
+        }
+        html += '</div>';
+        html += '</div>';
+
+      }
+      document.getElementById('output').innerHTML = html;
+    }
+
+    function renderRegistrationMarks() {
+      return '' +
+        '<svg class="reg-svg reg-top" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-right" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-bottom" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>' +
+        '<svg class="reg-svg reg-left" viewBox="0 0 8 8" aria-hidden="true"><line x1="4" y1="0" x2="4" y2="8" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><line x1="0" y1="4" x2="8" y2="4" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/><circle cx="4" cy="4" r="2" fill="none" stroke="#000" stroke-width="0.28" vector-effect="non-scaling-stroke"/></svg>';
+    }
+
+    // ---- Init ----
+    document.getElementById('sizeSelector').addEventListener('change', function() {
+      applySize(this.value);
+    });
+    applySize('full');
+  </script>
+</body>
+</html>
