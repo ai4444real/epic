@@ -257,18 +257,18 @@
 .intervention-key { color: var(--orange); }
 .behavior-key { color: var(--purple); }
 
-.archetype-cta {
+.pattern-cta {
   text-align: center;
   background: var(--epic-panel);
 }
 
-.archetype-cta > p {
+.pattern-cta > p {
   font-size: clamp(24px, 5vw, 38px);
   line-height: 1.14;
   letter-spacing: -.8px;
 }
 
-.archetype-cta a {
+.pattern-cta a {
   display: inline-flex;
   align-items: center;
   gap: 28px;
@@ -281,7 +281,7 @@
   font-weight: 700;
 }
 
-.archetype-cta a span {
+.pattern-cta a span {
   color: var(--green);
   font-size: 19px;
 }

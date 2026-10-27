@@ -142,6 +142,13 @@ def create_app() -> FastAPI:
     async def health() -> JSONResponse:
         return JSONResponse({"status": "healthy", "service": SERVICE_NAME})
 
+    @app.get("/archetipi-epic.html")
+    async def legacy_patterns_page(request: Request) -> Response:
+        target = "/pattern-epic.html"
+        if request.url.query:
+            target += "?" + request.url.query
+        return RedirectResponse(target, status_code=301)
+
     @app.get("/login")
     async def login() -> Response:
         return page_response(APP_ROOT / "login.html")

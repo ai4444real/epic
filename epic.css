@@ -526,7 +526,7 @@ p {
   font-weight: 700;
 }
 
-.symptom-reveal .archetype-link {
+.symptom-reveal .pattern-link {
   display: table;
   margin: 15px auto 0;
   border-bottom-color: rgba(34, 38, 41, .38);
@@ -534,7 +534,7 @@ p {
   font-size: 13px;
 }
 
-.symptom-reveal .archetype-link:hover {
+.symptom-reveal .pattern-link:hover {
   color: var(--ink);
   border-bottom-color: var(--ink);
 }

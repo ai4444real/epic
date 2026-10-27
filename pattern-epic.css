@@ -1,8 +1,8 @@
-.archetypes-page {
+.patterns-page {
   background: var(--epic-white);
 }
 
-.archetypes-hero {
+.patterns-hero {
   position: relative;
   min-height: 430px;
   padding: 58px 24px 52px;
@@ -13,12 +13,12 @@
   border-bottom: 1px solid var(--line);
 }
 
-.archetypes-hero > *:not(.map-grid) {
+.patterns-hero > *:not(.map-grid) {
   position: relative;
   z-index: 1;
 }
 
-.archetypes-hero h1 {
+.patterns-hero h1 {
   max-width: 980px;
   margin-top: 18px;
   font-size: clamp(40px, 7.4vw, 66px);
@@ -27,7 +27,7 @@
   letter-spacing: -1.8px;
 }
 
-.archetypes-lead {
+.patterns-lead {
   max-width: 760px;
   margin-top: 22px;
   color: var(--ink);
@@ -36,7 +36,7 @@
   letter-spacing: -.7px;
 }
 
-.archetypes-hero > p:not(.section-index):not(.archetypes-lead) {
+.patterns-hero > p:not(.section-index):not(.patterns-lead) {
   max-width: 720px;
   margin-top: 24px;
   color: var(--muted);
@@ -44,7 +44,7 @@
   line-height: 1.52;
 }
 
-.archetypes-hero-visual {
+.patterns-hero-visual {
   width: min(100%, 360px);
   aspect-ratio: 3 / 1;
   margin: 28px auto 0;
@@ -53,24 +53,24 @@
   background: #fff;
 }
 
-.archetypes-hero-visual img {
+.patterns-hero-visual img {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.archetypes-hero .primary-button,
+.patterns-hero .primary-button,
 .closing .primary-button {
   width: 236px;
 }
 
-.archetype-section {
+.pattern-section {
   padding: 58px 24px;
   border-bottom: 1px solid var(--line);
   background: #fff;
 }
 
-.archetype-section h2 {
+.pattern-section h2 {
   max-width: 900px;
   margin-top: 15px;
   color: var(--ink);
@@ -288,13 +288,13 @@
 }
 
 @media (min-width: 760px) {
-  .archetypes-hero,
-  .archetype-section {
+  .patterns-hero,
+  .pattern-section {
     padding-left: 7vw;
     padding-right: 7vw;
   }
 
-  .archetypes-hero {
+  .patterns-hero {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
     grid-template-rows: repeat(5, auto);
@@ -302,11 +302,11 @@
     column-gap: 6vw;
   }
 
-  .archetypes-hero > :not(.map-grid):not(.archetypes-hero-visual) {
+  .patterns-hero > :not(.map-grid):not(.patterns-hero-visual) {
     grid-column: 1;
   }
 
-  .archetypes-hero-visual {
+  .patterns-hero-visual {
     width: 100%;
     max-width: 340px;
     margin: 0;
@@ -343,8 +343,8 @@
 }
 
 @media (min-width: 1180px) {
-  .archetypes-hero,
-  .archetype-section {
+  .patterns-hero,
+  .pattern-section {
     padding-left: max(calc((100vw - 1180px) / 2), 40px);
     padding-right: max(calc((100vw - 1180px) / 2), 40px);
   }

@@ -17,17 +17,18 @@ Il click su ciascun pallino deve aprire la pagina e portare direttamente alla se
 
 Ogni sezione deve richiamare il colore del pallino cliccato. Il testo definitivo verra fornito dal Product Owner al momento opportuno.
 
-## Pagina Archetipi
+## Pagina Pattern EPiC
 
-Stato: completata.
+Stato: completata; terminologia corretta.
 
-Pagina: `archetipi-epic.html`.
+Pagina: `pattern-epic.html`, collegata dalle pagine EPiC e "Perche non sono uguali".
+Il precedente URL `archetipi-epic.html` reindirizza permanentemente alla nuova pagina.
 
-Nella pagina "Perche non sono uguali", il link finale attualmente punta alla stessa pagina.
+Terminologia da mantenere in tutto il sito:
 
-Quel link dovra puntare a una nuova pagina "Archetipi", ancora da creare, nello stesso stile delle altre pagine EPiC.
-
-Il contenuto definitivo verra fornito dal Product Owner al momento opportuno.
+- **Pattern**: una dinamica ricorrente, identificata da codici come P1, P5 e P6.
+- **Personaggio**: la rappresentazione narrativa di un singolo Pattern, come Davide o Giulia.
+- **Archetipo**: un gruppo di Pattern. Termine riservato a questo livello, da non usare per i singoli Pattern o i personaggi.
 
 ## Pagina Ordina il Mazzo
 
