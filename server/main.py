@@ -6,6 +6,7 @@ import secrets
 import sqlite3
 import time
 import uuid
+from contextlib import closing
 from datetime import datetime, timedelta, timezone
 from hashlib import sha256
 from pathlib import Path
@@ -542,9 +543,11 @@ def should_log_access(path: str, method: str) -> bool:
     return not suffix or suffix == ".html"
 
 
+# Use closing(...) outside the connection context: commit/rollback must run
+# before close(), including when a query raises or a function returns early.
 def init_access_db() -> None:
     DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS access_log (
@@ -577,7 +580,7 @@ def init_access_db() -> None:
 
 def init_auth_db() -> None:
     AUTH_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS users (
@@ -625,7 +628,7 @@ def init_auth_db() -> None:
 
 def init_content_db() -> None:
     CONTENT_DB_PATH.parent.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         conn.execute(
             """
             CREATE TABLE IF NOT EXISTS scenarios (
@@ -688,7 +691,7 @@ def seed_scenarios_from_file() -> None:
     scenarios = json.loads(SCENARIOS_SEED_PATH.read_text(encoding="utf-8"))
     if not isinstance(scenarios, list):
         raise RuntimeError(f"Invalid scenarios seed: {SCENARIOS_SEED_PATH}")
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         for scenario in scenarios:
             if not isinstance(scenario, dict) or not scenario.get("id"):
                 continue
@@ -729,7 +732,7 @@ def list_scenarios(random_order: bool = False, limit: int | None = None) -> list
     if limit:
         sql += " LIMIT ?"
         params = (limit,)
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         rows = conn.execute(sql, params).fetchall()
     return [json.loads(row[0]) for row in rows]
 
@@ -740,7 +743,7 @@ def normalize_room_id(room_id: str) -> str:
 
 def list_live_rooms(limit: int = 30) -> list[dict]:
     safe_limit = min(max(limit or 30, 1), 100)
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         rows = conn.execute(
             """
             SELECT room_id, payload, updated_at
@@ -758,7 +761,7 @@ def get_live_room(room_id: str) -> dict | None:
     normalized = normalize_room_id(room_id)
     if not normalized:
         return None
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         row = conn.execute(
             """
             SELECT room_id, payload, updated_at
@@ -783,7 +786,7 @@ def save_live_room(room_id: str, payload: dict, user: dict) -> dict:
     payload["updated_at"] = updated_at
     payload_text = json.dumps(payload, ensure_ascii=False, sort_keys=True)
     owner_email = user.get("email") or ""
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         conn.execute(
             """
             INSERT INTO live_rooms (room_id, owner_email, payload, updated_at, deleted_at)
@@ -807,7 +810,7 @@ def delete_live_room(room_id: str) -> bool:
     if not normalized:
         return False
     deleted_at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         cur = conn.execute(
             """
             UPDATE live_rooms
@@ -850,7 +853,7 @@ def create_deck_order(payload: dict, request: Request) -> dict:
     user_agent = normalize_text(request.headers.get("user-agent", ""), max_length=500)
     order_id = secrets.token_hex(8)
 
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         conn.execute(
             """
             INSERT INTO deck_orders (
@@ -896,7 +899,7 @@ def list_deck_orders(limit: int = 200, status: str = "", email: str = "") -> dic
         params.append("%" + escape_like(email_filter) + "%")
     where_sql = "WHERE " + " AND ".join(clauses) if clauses else ""
 
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             f"""
@@ -940,7 +943,7 @@ def update_deck_order_status(public_id: str, status: str) -> dict | None:
     if not order_id:
         return None
     normalized_status = normalize_deck_order_status(status)
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         cur = conn.execute(
             """
             UPDATE deck_orders
@@ -955,7 +958,7 @@ def update_deck_order_status(public_id: str, status: str) -> dict | None:
     for order in orders["orders"]:
         if order["public_id"] == order_id:
             return order
-    with sqlite3.connect(CONTENT_DB_PATH) as conn:
+    with closing(sqlite3.connect(CONTENT_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         row = conn.execute(
             """
@@ -983,7 +986,7 @@ def get_client_ip(request: Request) -> str:
 
 def upsert_user(google_sub: str, email: str, name: str, picture: str) -> str:
     role_override = "admin" if email in BOOTSTRAP_ADMIN_EMAILS else None
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         existing = conn.execute("SELECT role FROM users WHERE google_sub = ? OR email = ?", (google_sub, email)).fetchone()
         if existing:
             role = role_override or existing[0]
@@ -1024,7 +1027,7 @@ def normalize_role(role: str) -> str:
 
 
 def list_users() -> list[dict]:
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             """
@@ -1045,7 +1048,7 @@ def get_user_by_email(email: str) -> dict | None:
     normalized = normalize_email(email)
     if not normalized:
         return None
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         row = conn.execute(
             """
@@ -1066,7 +1069,7 @@ def create_pending_user(email: str, role: str) -> dict:
         raise ValueError("Invalid email")
     normalized_role = normalize_role(role or "public")
     google_sub = "pending:" + normalized_email
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         try:
             conn.execute(
                 """
@@ -1086,7 +1089,7 @@ def create_pending_user(email: str, role: str) -> dict:
 def seed_bootstrap_admins() -> None:
     if not BOOTSTRAP_ADMIN_EMAILS:
         return
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         for email in sorted(BOOTSTRAP_ADMIN_EMAILS):
             google_sub = "pending:" + email
             conn.execute(
@@ -1109,7 +1112,7 @@ def update_user_role(email: str, role: str, current_admin_email: str) -> dict | 
         return None
     if existing["role"] == "admin" and normalized_role != "admin":
         ensure_not_last_admin(normalized_email)
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.execute(
             """
             UPDATE users
@@ -1138,7 +1141,7 @@ def delete_user(email: str, current_admin_email: str) -> bool:
         return False
     if existing["role"] == "admin":
         ensure_not_last_admin(normalized_email)
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.execute(
             """
             DELETE FROM auth_sessions
@@ -1151,7 +1154,7 @@ def delete_user(email: str, current_admin_email: str) -> bool:
 
 
 def ensure_not_last_admin(email_to_change: str) -> None:
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         row = conn.execute(
             "SELECT COUNT(*) FROM users WHERE role = 'admin' AND email <> ?",
             (normalize_email(email_to_change),),
@@ -1188,7 +1191,7 @@ def get_access_log_report(
         traffic=traffic,
         outcome=outcome,
     )
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             f"""
@@ -1425,7 +1428,7 @@ def escape_like(value: str) -> str:
 def create_auth_session(email: str, google_sub: str) -> str:
     token = secrets.token_urlsafe(48)
     token_hash = hash_token(token)
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         user = conn.execute(
             "SELECT id FROM users WHERE google_sub = ? AND email = ?",
             (google_sub, email),
@@ -1443,7 +1446,7 @@ def create_auth_session(email: str, google_sub: str) -> str:
 
 
 def delete_auth_session(token: str) -> None:
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.execute("DELETE FROM auth_sessions WHERE token_hash = ?", (hash_token(token),))
 
 
@@ -1451,7 +1454,7 @@ def get_current_user(request: Request) -> dict | None:
     token = request.cookies.get(SESSION_COOKIE_NAME)
     if not token:
         return None
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         row = conn.execute(
             """
@@ -1476,7 +1479,7 @@ def write_auth_event(event_type: str, email: str, request: Request) -> None:
     normalized_email = normalize_email(email)
     if not normalized_email or event_type not in {"login_success", "logout"}:
         return
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.execute(
             """
             INSERT INTO auth_events (event_type, email, session_id, client_ip, user_agent)
@@ -1509,7 +1512,7 @@ def list_auth_events(email: str = "", date: str = "", limit: int = 30) -> list[d
             clauses.append("created_at >= ? AND created_at < ?")
             params.extend((day.isoformat(), (day + timedelta(days=1)).isoformat()))
     where_sql = "WHERE " + " AND ".join(clauses) if clauses else ""
-    with sqlite3.connect(AUTH_DB_PATH) as conn:
+    with closing(sqlite3.connect(AUTH_DB_PATH)) as conn, conn:
         conn.row_factory = sqlite3.Row
         rows = conn.execute(
             f"""
@@ -1536,7 +1539,7 @@ def write_access_log(
     if not client_ip and request.client:
         client_ip = request.client.host
 
-    with sqlite3.connect(DB_PATH) as conn:
+    with closing(sqlite3.connect(DB_PATH)) as conn, conn:
         conn.execute(
             """
             INSERT INTO access_log (
